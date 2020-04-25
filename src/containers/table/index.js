@@ -11,57 +11,71 @@ const TableContainer = ({ headerNames, tableData, ...props }) => {
     },
   } = useIntl();
 
-  const [column, setColumn] = useState();
-  const [data, setData] = useState(tableData);
-  const [direction, setDirection] = useState();
-  const [pageSize, changePageSize] = useState(5);
-  const [page, changePage] = useState(1);
+  const [state, setState] = useState({
+    column: null,
+    direction: null,
+    pageSize: 5,
+    page: 1,
+  });
 
-  const handleChangePageSize = (e, data) => changePageSize(data.value);
+  const { column, direction, pageSize, page } = state;
+
+  let displayedData = tableData.slice((page - 1) * pageSize, page * pageSize);
+
+  const { length } = tableData;
+
+  let pageCount = Math.ceil(length / pageSize);
+
+  length % pageSize !== 0 && pageCount++;
+
+  const handlers = {
+    handleChangePageSize: (e, { value }) =>
+      setState({ ...state, pageSize: value }),
+    handleChangePage: (value) => setState({ ...state, page: value }),
+  };
 
   const headerProto = {
     handleSort: function () {
-      if (column !== this.name) {
-        setColumn(this.name);
-        setData(sortBy(data, [this.name]));
-        setDirection("ascending");
+      if (column !== this.accessor) {
+        displayedData = sortBy(tableData, [this.accessor]);
+        setState({
+          ...state,
+          column: this.accessor,
+          direction: "ascending",
+        });
 
         return;
       }
 
-      setData(data.reverse());
-      setDirection(direction === "ascending" ? "descending" : "ascending");
+      displayedData = tableData.reverse();
+      setState({
+        ...state,
+
+        direction: direction === "ascending" ? "descending" : "ascending",
+      });
     },
     isSorted: function () {
-      return column === this.name ? direction : null;
+      return column === this.accessor ? direction : null;
     },
   };
 
   const headerCells = headerNames(columnNames).map((item) => {
-    const cell = Object.create(headerProto);
+    const cell = Object.create({ ...headerProto });
     cell.accessor = item.accessor;
     cell.title = item.title;
 
     return cell;
   });
 
-  const displayedData = data.slice((page - 1) * pageSize, page * pageSize);
-
-  const { length } = data;
-
-  let pageCount = Math.ceil(length / pageSize);
-
-  length % pageSize !== 0 && pageCount++;
-
   return (
     <TableComponent
       headerCells={headerCells}
       pageSize={pageSize}
       data={displayedData}
-      changePage={changePage}
+      changePage={handlers.handleChangePage}
       page={page}
       pageCount={pageCount}
-      handleChangePageSize={handleChangePageSize}
+      handleChangePageSize={handlers.handleChangePageSize}
       {...props}
     />
   );

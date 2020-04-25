@@ -8,12 +8,32 @@ export const messages_en = {
   },
   mail: {
     empty: "Empty",
+    searchPlaceholder: "Search...",
+    buttons: {
+      checkAll: "Select all",
+      uncheckAll: "Remove selection",
+      checkAsImportant: "Check as important",
+      removeToTrash: "Remove to trash",
+      remove: "Remove",
+    },
+    tabs: {
+      all: "All",
+      read: "Read",
+      unread: "Unread",
+      important: "Important",
+      trash: "Trash",
+    },
   },
   settings: {
     theme: "Dark theme",
     language: "Language",
     password: "Change password",
-    userData: "change contact information",
+    userData: "Change contact information",
+    enterPasswordPlaceholder: "Enter new password",
+    repeatPasswordPlaceholder: "Repeat new password",
+    savePassword: "Save",
+    reset: "Reset settings",
+    resetButton: "agree",
   },
   home: {
     title: "Welcome, Administrator",

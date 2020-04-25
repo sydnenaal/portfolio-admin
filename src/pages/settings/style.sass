@@ -1,3 +1,38 @@
+
+.passwordChange[data-open=close]
+    animation: close 1s
+    display: none
+    max-height: 500px
+    overflow: hidden
+    font-size: 15px
+    margin-top: 20px
+
+.passwordChange[data-open=open]
+    animation: open 1s
+    font-size: 15px
+    margin-top: 20px
+    display: block
+    heihgt: auto
+    max-height: 500px
+
+@keyframes open
+    from
+        display: none
+        max-height: 0
+
+    to
+        display: block
+        max-height: auto
+
+@keyframes close
+    from
+        display: block
+        max-height: auto
+
+    to
+        display: none
+        height: 0
+
 .settingsBody
     width: 100%
     padding: 30px
@@ -14,8 +49,20 @@
         align-items: flex-start
         justify-content: center
 
-        #theme, #language
+        #theme, #language, #reset, .passordChangeHeader
             width: 100%
             display: flex
             align-items: center
             justify-content: space-between
+
+            .passwordChange
+                height: 0
+
+        .passwordChange
+
+            &-input
+                height: 50px
+
+.chevronIcon
+    cursor: pointer
+    transition: all .3s ease-in

@@ -67,7 +67,7 @@ const TablePagination = ({
               />
             </span>
 
-            <Menu floated="right" pagination>
+            <Menu size="mini" floated="right" pagination>
               <Menu.Item
                 icon
                 onClick={handlers.handleChevronLeft}

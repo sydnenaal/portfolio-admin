@@ -12,6 +12,7 @@ const PageWithHeaderComponent = ({
   drawerItems,
   handleDrawerVisible,
   title,
+  subtitle,
   children,
 }) => {
   const theme = useContext(ThemeContext);
@@ -29,6 +30,8 @@ const PageWithHeaderComponent = ({
             </div>
 
             <div className="headerTitle">{title}</div>
+
+            {subtitle && <div className="headerSubtitle">/{subtitle}</div>}
           </div>
         </div>
 
@@ -40,4 +43,4 @@ const PageWithHeaderComponent = ({
   );
 };
 
-export default PageWithHeaderComponent;
+export default React.memo(PageWithHeaderComponent);

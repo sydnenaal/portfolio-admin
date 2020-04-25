@@ -38,7 +38,7 @@ export const tableData = [
     createDate: Date.now(),
   },
   {
-    name: "desi",
+    name: "de",
     type: "design",
     client: "Leslie",
     createDate: Date.now(),

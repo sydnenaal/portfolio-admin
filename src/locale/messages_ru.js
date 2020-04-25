@@ -8,12 +8,32 @@ export const messages_ru = {
   },
   mail: {
     empty: "Пусто",
+    searchPlaceholder: "Найти...",
+    buttons: {
+      checkAll: "Выделить все",
+      uncheckAll: "Снять выделение",
+      checkAsImportant: "Отметить как важное",
+      removeToTrash: "Поместить в корзину",
+      remove: "Удалить",
+    },
+    tabs: {
+      all: "Все",
+      read: "Прочитанные",
+      unread: "Непрочитанные",
+      important: "Важные",
+      trash: "Корзина",
+    },
   },
   settings: {
     theme: "Темная тема",
     language: "Язык",
     password: "Изменить пароль",
     userData: "Изменить контактные данные",
+    enterPasswordPlaceholder: "Введите новый пароль",
+    repeatPasswordPlaceholder: "Повторите новый пароль",
+    savePassword: "Сохранить",
+    reset: "Сброс настроек",
+    resetButton: "Подтвердить",
   },
   home: {
     title: "Добро пожаловать, Администратор",

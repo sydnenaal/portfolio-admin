@@ -26,8 +26,8 @@ const TableComponent = ({
           <Table.Row>
             {headerCells.map((item, index) => (
               <Table.HeaderCell
-                sorted={item.isSorted()}
                 onClick={item.handleSort.bind(item)}
+                sorted={item.isSorted()}
                 key={index}>
                 {item.title}
               </Table.HeaderCell>

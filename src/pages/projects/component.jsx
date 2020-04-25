@@ -11,7 +11,13 @@ import ThemeContext from "../../contexts/theme";
 import { headerNames, tableData } from "../../constants/tableConstants";
 import ThemeStyle from "../../constants/themingStyles";
 
-const ProjectsPageComponent = ({ compact, handleChange, ...props }) => {
+const ProjectsPageComponent = ({
+  compact,
+  handleChange,
+  handleChangeFilter,
+  handleFilterData,
+  ...props
+}) => {
   const {
     messages: { titles, projects },
   } = useIntl();
@@ -47,7 +53,11 @@ const ProjectsPageComponent = ({ compact, handleChange, ...props }) => {
                   </div>
                 </div>
 
-                <Input icon="search" placeholder={projects.search} />
+                <Input
+                  icon="search"
+                  placeholder={projects.search}
+                  onChange={handleChangeFilter}
+                />
               </div>
 
               <div className="projectsTable">
@@ -55,7 +65,7 @@ const ProjectsPageComponent = ({ compact, handleChange, ...props }) => {
                   showPagination={true}
                   compact={compact}
                   headerNames={headerNames}
-                  tableData={tableData}
+                  tableData={handleFilterData(tableData)}
                 />
               </div>
             </div>
