@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { Icon } from "semantic-ui-react";
 
 import "./style.sass";
 
@@ -22,13 +21,11 @@ const PageWithHeaderComponent = ({
       drawerVisible={drawerVisible}
       drawerItems={drawerItems}
       handleDrawerVisible={handleDrawerVisible}>
-      <div className="pageWithHeader">
+      <div
+        className="pageWithHeader"
+        style={{ marginLeft: drawerVisible ? "220px" : "70px" }}>
         <div className="header" style={ThemeStyle[theme]}>
           <div className="headerContent">
-            <div className="drawerButton" onClick={handleDrawerVisible}>
-              <Icon name="bars" size="big" cursor="pointer" />
-            </div>
-
             <div className="headerTitle">{title}</div>
 
             {subtitle && <div className="headerSubtitle">/{subtitle}</div>}

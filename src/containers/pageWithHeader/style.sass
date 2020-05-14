@@ -1,47 +1,142 @@
-.pageWithHeader
-    width: 100%
-    height: 100vh
+.icon_header
+    min-height: 70px
 
-    .header
-        width: 100%
-        height: 7%
-        box-shadow: 0 0 7px rgba(0,0,0,0.4)
+#nav-icon4
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: center
+    width: 30px
+    height: 30px
+    position: relative
+    cursor: pointer
 
-        .headerContent
+    & span
+        display: block
+        position: absolute
+        height: 3px
+        width: 30px
+        background-color: white
+        border-radius: 15px
+        opacity: 1
+        left: 0
+        will-change: top, left, opacity, transform
+        transition: .15s ease-in-out
+
+    & span:nth-child(1)
+        top: 0px
+        transform-origin: left center
+
+    & span:nth-child(2)
+        top: 11px
+        transform-origin: left center
+
+    & span:nth-child(3)
+        top: 22px
+        transform-origin: left center
+
+    &.open span:nth-child(1)
+        transform: rotate(45deg)
+        top: 0px
+        left: 3px
+
+    &.open span:nth-child(2)
+        width: 0%
+        opacity: 0
+
+    &.open span:nth-child(3)
+        transform: rotate(-45deg)
+        top: 21px
+        left: 3px
+
+.drawer
+    display: flex
+
+    .sidebar
+        height: 100vh
+        position: fixed
+        overflow: hidden
+        background-color: #333
+        color: white
+        will-change: max-width
+        transition: max-width 0.3s ease
+
+        .sidebar-item
             display: flex
-            align-items: center
-            padding-left: 20px
-            width: 100%
-            height: 100%
+            cursor: pointer
 
-            .drawerButton
-                width: 50px
+            &:hover
+                background-color: rgba(3,3,3,0.1)
+
+            &__title
+                height: 50px
+                min-width: 150px
+                padding-right: 15px
+                font-size: 18px
+                display: flex
+                flex-direction: column
+                align-items: flex-start
+                justify-content: center
+
+            &__icon
+                cursor: pointer
+                width: 70px
+                min-width: 70px
                 height: 50px
                 display: flex
-                cursor: pointer
                 flex-direction: column
                 align-items: center
                 justify-content: center
 
-            .headerTitle
-                display: flex
-                flex-direction: column
-                align-items: flex-end
-                justify-content: center
-                height: 30px
-                padding-left: 20px
-                font-size: 30px
-                margin-right: 5px
+            .icon_head
+                height: 70px
 
-            .headerSubtitle
-                height: 30px
-                font-size: 20px
-                line-height: 21px
-                display: flex
-                flex-direction: column
-                align-items: flex-end
-                justify-content: flex-end
-
-    .body
+    .pageWithHeader
+        will-change: margin-left
+        transition: margin-left 0.3s ease
         width: 100%
-        min-height: 93%
+        height: 100vh
+
+        .header
+            width: 100%
+            height: 7%
+            box-shadow: 0 0 7px rgba(0,0,0,0.4)
+
+            .headerContent
+                display: flex
+                align-items: center
+                padding-left: 20px
+                width: 100%
+                height: 100%
+
+                .drawerButton
+                    width: 50px
+                    height: 50px
+                    display: flex
+                    cursor: pointer
+                    flex-direction: column
+                    align-items: center
+                    justify-content: center
+
+                .headerTitle
+                    display: flex
+                    flex-direction: column
+                    align-items: flex-end
+                    justify-content: center
+                    height: 30px
+                    padding-left: 20px
+                    font-size: 30px
+                    margin-right: 5px
+
+                .headerSubtitle
+                    height: 30px
+                    font-size: 20px
+                    line-height: 21px
+                    display: flex
+                    flex-direction: column
+                    align-items: flex-end
+                    justify-content: flex-end
+
+        .body
+            width: 100%
+            min-height: 93%

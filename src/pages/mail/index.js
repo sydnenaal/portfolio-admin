@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 import { NotificationManager } from "react-notifications";
 import MainPageComponent from "./component";
 
@@ -15,13 +17,14 @@ const tabFilter = {
 const helpUserNotify = () => {
   const isShow = localStorage.getItem("mailNotify");
 
-  !isShow &&
+  if (!isShow) {
+    localStorage.setItem("mailNotify", "showed");
     NotificationManager.info(
       "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
       "Подсказка",
-      25000,
-      () => localStorage.setItem("mailNotify", "showed")
+      25000
     );
+  }
 };
 
 const MailPageContainer = () => {
@@ -59,22 +62,33 @@ const MailPageContainer = () => {
     countChecked(checkedMessages);
   };
 
-  const fetchMessages = async () => {
-    setLoading(true);
-    const response = await getMessages();
-    response &&
-      setMessages(
-        response.map((item) => ({
+  useEffect(() => {
+    let source = axios.CancelToken.source();
+
+    const fetchMessages = async () => {
+      setLoading(true);
+
+      const response = await getMessages({
+        cancelToken: source.token,
+      });
+
+      if (response) {
+        const responseWithChecked = response.map((item) => ({
           ...item,
           isChecked: false,
-        }))
-      );
-    setLoading(false);
-    helpUserNotify();
-  };
+        }));
 
-  useEffect(() => {
+        setMessages(responseWithChecked);
+        helpUserNotify();
+        setLoading(false);
+      }
+    };
+
     fetchMessages();
+
+    return () => {
+      source.cancel();
+    };
   }, []);
 
   return (

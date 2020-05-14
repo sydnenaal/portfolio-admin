@@ -3,12 +3,18 @@ import { NotificationManager } from "react-notifications";
 
 import { serverPath } from "./";
 
-export const getMessages = async () => {
+export const getMessages = async ({ cancelToken }) => {
   try {
-    const response = await axios.get(`${serverPath}/messages`);
+    const response = await axios.get(`${serverPath}/messages`, {
+      cancelToken: cancelToken,
+    });
 
     return response.data;
   } catch (error) {
-    NotificationManager.error("Не удалось загрузить сообщения");
+    if (axios.isCancel(error)) {
+      console.log("Отмена запроса");
+    } else {
+      NotificationManager.error("Не удалось загрузить сообщения");
+    }
   }
 };

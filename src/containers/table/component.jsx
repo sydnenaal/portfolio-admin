@@ -3,50 +3,72 @@ import { Table } from "semantic-ui-react";
 
 import ThemeContext from "../../contexts/theme";
 
-import TablePagination from "./components/pagination";
+import TablePagination from "../pagination/component";
+
+const inlineStyle = { overflow: "visible" };
 
 const TableComponent = ({
   headerCells,
   data,
   compact,
+  handlers,
   showPagination,
   ...props
 }) => {
   const theme = useContext(ThemeContext);
 
+  const colSpan = headerCells.length;
+
+  const tableParams = {
+    compact: compact ? "very" : null,
+    inverted: theme === "dark",
+  };
+
+  const header = headerCells.map((item, index) => {
+    const handleSort = handlers.handleSort.bind(item);
+    const isSorted = handlers.isSorted.bind(item)();
+
+    return (
+      <Table.HeaderCell onClick={handleSort} sorted={isSorted} key={index}>
+        {item.title}
+      </Table.HeaderCell>
+    );
+  });
+
+  const tableData = data.map((item, index) => {
+    const cells = headerCells.map((headerItem, index) => (
+      <Table.Cell key={index}>{item[headerItem.accessor]}</Table.Cell>
+    ));
+
+    return <Table.Row key={index}>{cells}</Table.Row>;
+  });
+
   return (
     <>
       <Table
-        compact={compact ? "very" : null}
-        inverted={theme === "dark"}
+        compact={tableParams.compact}
+        inverted={tableParams.inverted}
         sortable
         celled
         fixed>
         <Table.Header>
-          <Table.Row>
-            {headerCells.map((item, index) => (
-              <Table.HeaderCell
-                onClick={item.handleSort.bind(item)}
-                sorted={item.isSorted()}
-                key={index}>
-                {item.title}
-              </Table.HeaderCell>
-            ))}
-          </Table.Row>
+          <Table.Row>{header}</Table.Row>
         </Table.Header>
 
-        <Table.Body>
-          {data.map((item, index) => (
-            <Table.Row key={index}>
-              {headerCells.map((headerItem, index) => (
-                <Table.Cell key={index}>{item[headerItem.accessor]}</Table.Cell>
-              ))}
-            </Table.Row>
-          ))}
-        </Table.Body>
+        <Table.Body>{tableData}</Table.Body>
 
         {showPagination && (
-          <TablePagination headerCells={headerCells} {...props} />
+          <Table.Footer fullWidth>
+            <Table.Row>
+              <Table.HeaderCell style={inlineStyle} colSpan={colSpan}>
+                <TablePagination
+                  headerCells={headerCells}
+                  handlers={handlers}
+                  {...props}
+                />
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
         )}
       </Table>
     </>

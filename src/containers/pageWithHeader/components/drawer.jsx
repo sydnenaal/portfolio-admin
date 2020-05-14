@@ -1,6 +1,6 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { Icon, Menu, Sidebar } from "semantic-ui-react";
+import { Icon } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 
 import { drawerItems } from "../../../constants/drawerConstants";
@@ -12,42 +12,65 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
 
   const history = useHistory();
 
-  const handleLogout = () => {
-    localStorage.clear();
-    history.push("/auth");
-  };
+  const { pathname } = history.location;
 
   function handleClick() {
-    history.push(this.path);
-    handleDrawerVisible();
+    if (this.path === "/auth") {
+      localStorage.removeItem("isAuth");
+      history.push("/auth");
+    } else {
+      history.push(this.path);
+      handleDrawerVisible();
+    }
   }
 
-  return (
-    <Sidebar.Pushable>
-      <Sidebar
-        as={Menu}
-        animation="push"
-        icon="labeled"
-        inverted
-        vertical={true}
-        visible={drawerVisible}
-        width="thin">
-        {drawerItems(titles).map((item, index) => (
-          <Menu.Item
-            onClick={
-              item.path === "/auth" ? handleLogout : handleClick.bind(item)
-            }
-            key={index}>
-            <Icon name={item.icon} />
-            {item.title}
-          </Menu.Item>
-        ))}
-      </Sidebar>
+  const handleMouseLeave = () => {
+    drawerVisible && handleDrawerVisible();
+  };
 
-      <Sidebar.Pusher style={{ overflow: "visible" }}>
-        {children}
-      </Sidebar.Pusher>
-    </Sidebar.Pushable>
+  const itemStyle = {
+    backgroundColor: "rgba(0,0,0,0.3)",
+  };
+
+  const drawerStyle = { maxWidth: drawerVisible ? "220px" : "70px" };
+
+  return (
+    <div className="drawer">
+      <div
+        className="sidebar"
+        style={drawerStyle}
+        onMouseLeave={handleMouseLeave}>
+        <div className="sidebar-item">
+          <div
+            className="sidebar-item__icon icon_header"
+            onClick={handleDrawerVisible}>
+            <div id="nav-icon4" className={`${drawerVisible ? " open" : ""}`}>
+              <span></span>
+
+              <span></span>
+
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        {drawerItems(titles).map((item, index) => (
+          <div
+            className="sidebar-item"
+            onClick={handleClick.bind(item)}
+            style={pathname === item.path ? itemStyle : {}}
+            key={index}>
+            <div className="sidebar-item__icon">
+              <Icon name={item.icon} size="big" />
+            </div>
+
+            <div className="sidebar-item__title">{item.title}</div>
+          </div>
+        ))}
+      </div>
+
+      <>{children}</>
+    </div>
   );
 };
 

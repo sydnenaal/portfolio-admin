@@ -34,8 +34,12 @@ const SettingsPageComponent = ({
 
   const theme = useContext(ThemeContext);
 
-  const style = {
+  const chevronStyle = {
     transform: `rotate(${isPasswordChangeShow ? 180 : 0}deg)`,
+  };
+
+  const contentStyle = {
+    maxHeight: `${isPasswordChangeShow ? 300 : 0}px`,
   };
 
   return (
@@ -48,6 +52,46 @@ const SettingsPageComponent = ({
                 <p>{settings.theme}</p>
 
                 <Radio slider checked={isDark} onChange={handleChangeTheme} />
+              </div>
+            </Card.Content>
+          </Card>
+        </div>
+
+        <div className="settingsItem">
+          <Card fluid style={ThemeStyle[theme]}>
+            <Card.Content>
+              <div>
+                <div
+                  className="passwordChangeHeader"
+                  onClick={handleOpenPasswordChange}>
+                  <p>{settings.password}</p>
+
+                  <div className="chevronIcon" style={chevronStyle}>
+                    <Icon name="chevron down"></Icon>
+                  </div>
+                </div>
+
+                <div className="passwordChange" style={contentStyle}>
+                  <div className="passwordChange-input">
+                    <Input
+                      size="small"
+                      fluid
+                      placeholder={settings.enterPasswordPlaceholder}
+                    />
+                  </div>
+
+                  <div className="passwordChange-input">
+                    <Input
+                      size="small"
+                      fluid
+                      placeholder={settings.repeatPasswordPlaceholder}
+                    />
+                  </div>
+
+                  <div className="passwordChange-button">
+                    <Button>{settings.savePassword}</Button>
+                  </div>
+                </div>
               </div>
             </Card.Content>
           </Card>
@@ -77,50 +121,7 @@ const SettingsPageComponent = ({
           <Card fluid style={ThemeStyle[theme]}>
             <Card.Content>
               <div>
-                <div className="passordChangeHeader">
-                  <p>{settings.password}</p>
-
-                  <div
-                    className="chevronIcon"
-                    onClick={handleOpenPasswordChange}
-                    style={style}>
-                    <Icon name="chevron down"></Icon>
-                  </div>
-                </div>
-
-                <div
-                  className="passwordChange"
-                  data-open={isPasswordChangeShow ? "open" : "close"}>
-                  <div className="passwordChange-input">
-                    <Input
-                      size="small"
-                      fluid
-                      placeholder={settings.enterPasswordPlaceholder}
-                    />
-                  </div>
-
-                  <div className="passwordChange-input">
-                    <Input
-                      size="small"
-                      fluid
-                      placeholder={settings.repeatPasswordPlaceholder}
-                    />
-                  </div>
-
-                  <div className="passwordChange-button">
-                    <Button>{settings.savePassword}</Button>
-                  </div>
-                </div>
-              </div>
-            </Card.Content>
-          </Card>
-        </div>
-
-        <div className="settingsItem">
-          <Card fluid style={ThemeStyle[theme]}>
-            <Card.Content>
-              <div>
-                <div className="passordChangeHeader">
+                <div className="passwordChangeHeader">
                   <p>{settings.userData}</p>
 
                   <div className="chevronIcon">

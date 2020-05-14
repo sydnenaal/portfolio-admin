@@ -1,9 +1,10 @@
 /* eslint-disable react/display-name */
 import React, { useContext } from "react";
-import { Card, Label, Menu, Loader } from "semantic-ui-react";
+import { Label, Menu, Loader } from "semantic-ui-react";
 
 import ThemeContext from "../../../contexts/theme";
 import ThemeStyle from "../../../constants/themingStyles";
+import Card from "../../../containers/card";
 
 const Pane = ({
   title,
@@ -24,8 +25,8 @@ const Pane = ({
       </Menu.Item>
     ),
     render: () => (
-      <Card fluid style={style}>
-        <Card.Content>
+      <Card>
+        <div className="messagesInnerArea">
           {loading ? (
             <Loader active inline="centered" />
           ) : content && content.length > 0 ? (
@@ -33,7 +34,7 @@ const Pane = ({
           ) : (
             "empty"
           )}
-        </Card.Content>
+        </div>
       </Card>
     ),
   };

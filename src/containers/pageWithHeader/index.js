@@ -5,7 +5,9 @@ import PageWithHeaderComponent from "./component";
 const PageWithHeaderContainer = (props) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleChangeIsVisible = () => setIsVisible(!isVisible);
+  const handleChangeIsVisible = () => {
+    setIsVisible(!isVisible);
+  };
 
   return (
     <PageWithHeaderComponent

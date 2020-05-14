@@ -12,11 +12,11 @@ const AuthPageComponent = (props) => {
         <Card fluid>
           <Card.Content>
             <div className="cardContent">
-              <div className="title">
+              <div className="cardContent_title">
                 <p>Авторизация</p>
               </div>
 
-              <div className="input">
+              <div className="cardContent_input">
                 <Input
                   fluid
                   icon="user"
@@ -27,7 +27,7 @@ const AuthPageComponent = (props) => {
                 />
               </div>
 
-              <div className="input">
+              <div className="cardContent_input">
                 <Input
                   fluid
                   icon="key"
@@ -38,7 +38,7 @@ const AuthPageComponent = (props) => {
                 />
               </div>
 
-              <div className="button">
+              <div className="cardContent_button">
                 <Button onClick={handleLogin} primary>
                   Вход
                 </Button>
