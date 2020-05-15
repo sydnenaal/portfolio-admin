@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import { useIntl } from "react-intl";
 import {
   Card,
@@ -13,7 +14,6 @@ import {
 import "./style.sass";
 
 import PageWithHeader from "../../containers/pageWithHeader";
-import ThemeContext from "../../contexts/theme";
 import ThemeStyle from "../../constants/themingStyles";
 import { languageOptions } from "../../constants/settingsConstants";
 
@@ -26,13 +26,12 @@ const SettingsPageComponent = ({
   isContactDataChangeShow,
   isPasswordChangeShow,
   handleOpenPasswordChange,
+  theme,
   ...props
 }) => {
   const {
     messages: { titles, settings },
   } = useIntl();
-
-  const theme = useContext(ThemeContext);
 
   const chevronStyle = {
     transform: `rotate(${isPasswordChangeShow ? 180 : 0}deg)`,
@@ -153,4 +152,12 @@ const SettingsPageComponent = ({
   );
 };
 
-export default React.memo(SettingsPageComponent);
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+  language: state.language.language,
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(React.memo(SettingsPageComponent));

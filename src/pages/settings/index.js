@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 import { NotificationManager } from "react-notifications";
 
+import { setTheme, setLanguage } from "../../redux/actions";
+
 import SettingsPageComponent from "./component";
-import ThemeContext from "../../contexts/theme";
 
-const SettingsPageContainer = ({ changeTheme, setLanguage, ...props }) => {
-  const theme = useContext(ThemeContext);
-
+const SettingsPageContainer = ({ setTheme, setLanguage, theme, ...props }) => {
   const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
 
   const handleChangeTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
-    changeTheme(newTheme);
+    setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
 
@@ -48,4 +48,16 @@ const SettingsPageContainer = ({ changeTheme, setLanguage, ...props }) => {
   );
 };
 
-export default SettingsPageContainer;
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+});
+
+const mapDispatchToProps = {
+  setTheme: setTheme,
+  setLanguage: setLanguage,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SettingsPageContainer);

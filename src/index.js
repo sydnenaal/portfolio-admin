@@ -6,8 +6,21 @@ import App from "./App";
 import "semantic-ui-css/semantic.min.css";
 import "react-notifications/lib/notifications.css";
 import * as serviceWorker from "./serviceWorker";
+import { createStore } from "redux";
+import { rootReducer } from "./redux";
+import { Provider } from "react-redux";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

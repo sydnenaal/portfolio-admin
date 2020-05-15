@@ -1,6 +1,6 @@
 const ThemeStyle = {
   dark: {
-    backgroundColor: "#222222",
+    backgroundColor: "#333",
     color: "white",
     transition: "all 0.5s ease",
   },

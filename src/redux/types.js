@@ -1,0 +1,5 @@
+export const SET_MESSAGES = "MESSAGES/SET_MESSAGES";
+export const SET_TAB = "MESSAGES/SET_TAB";
+export const SET_THEME = "THEME/SET_THEME";
+export const SET_LANGUAGE = "LANGUAGE/SET_LANGUAGE";
+export const SET_APP_STATE = "APP_STATE/SET_APP_STATE";

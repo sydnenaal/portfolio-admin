@@ -31,31 +31,31 @@ const AuthRoute = customRoute({
   getToken: () => !localStorage.getItem("isAuth"),
 });
 
-const Routes = (props) => {
+const Routes = () => {
   return (
     <Switch>
       <ProtectedRoute path="/mail/:message">
-        <MessageCheckPageComponent {...props} />
+        <MessageCheckPageComponent />
       </ProtectedRoute>
 
       <ProtectedRoute path="/projects">
-        <ProjectsPageComponent {...props} />
+        <ProjectsPageComponent />
       </ProtectedRoute>
 
       <ProtectedRoute path="/mail">
-        <MailPageComponent {...props} />
+        <MailPageComponent />
       </ProtectedRoute>
 
       <ProtectedRoute path="/settings">
-        <SettingsPageComponent {...props} />
+        <SettingsPageComponent />
       </ProtectedRoute>
 
       <AuthRoute path="/auth">
-        <AuthComponent {...props} />
+        <AuthComponent />
       </AuthRoute>
 
       <ProtectedRoute path="/">
-        <MainPageComponent {...props} />
+        <MainPageComponent />
       </ProtectedRoute>
     </Switch>
   );

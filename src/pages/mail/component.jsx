@@ -1,66 +1,43 @@
-import React, { useContext } from "react";
-import { Button, Input, Tab } from "semantic-ui-react";
+import React from "react";
+import { connect } from "react-redux";
+import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
 
 import "./style.sass";
 
 import PageWithHeader from "../../containers/pageWithHeader";
-import ThemeContext from "../../contexts/theme";
-import ThemeStyle from "../../constants/themingStyles";
+import { Tab, Content } from "./components/tab";
 
-import Message from "./components/message";
-import Pane from "./components/pane";
-
-const panesNames = ["all", "unread", "read", "important", "trash"];
+import Tabs from "../../containers/tabs";
 
 const MailPageComponent = ({
-  messages,
-  loading,
   handleCheck,
   handleCheckAll,
   activeTab,
-  setActiveTab,
-  tabFilter,
   checked,
-  ...props
+  tabs,
+  tabsNames,
 }) => {
-  const theme = useContext(ThemeContext);
-
   const {
     messages: { titles, mail },
   } = useIntl();
-
-  const getPane = (title, array) =>
-    Pane({
-      loading: loading,
-      locale: mail,
-      setActiveTab: setActiveTab,
-      title: title,
-      messagesCounter: array && array.length.toString(),
-      style: ThemeStyle[theme],
-      content:
-        array &&
-        array.map((item, index) => (
-          <Message
-            {...item}
-            handleCheck={handleCheck}
-            index={index}
-            key={index}
-          />
-        )),
-    });
 
   const handlers = {
     checkAll: () => handleCheckAll({ setCheck: true }),
     unCheckAll: () => handleCheckAll({ setCheck: false }),
   };
 
-  const panes = panesNames.map((item) =>
-    getPane(item, messages.filter(tabFilter[item]))
-  );
+  const renderTabs = tabsNames.map((item, index) => (
+    <Tab
+      key={index}
+      locale={mail}
+      messagesCounter={tabs[item] ? tabs[item].length.toString() : "0"}
+      title={item}
+    />
+  ));
 
   return (
-    <PageWithHeader title={titles.mail} {...props}>
+    <PageWithHeader title={titles.mail}>
       <div className="mailBody">
         <div className="mailActions">
           <div className="buttons">
@@ -84,17 +61,17 @@ const MailPageComponent = ({
           </div>
         </div>
 
-        <Tab
-          style={{ width: "100%" }}
-          menu={{
-            secondary: true,
-            pointing: true,
-          }}
-          panes={panes}
-        />
+        <Tabs tabs={renderTabs}>
+          <Content content={tabs[activeTab]} handleCheck={handleCheck} />
+        </Tabs>
       </div>
     </PageWithHeader>
   );
 };
 
-export default MailPageComponent;
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+  activeTab: state.messages.activeTab,
+});
+
+export default connect(mapStateToProps, null)(React.memo(MailPageComponent));

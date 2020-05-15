@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import { Table } from "semantic-ui-react";
-
-import ThemeContext from "../../contexts/theme";
 
 import TablePagination from "../pagination/component";
 
@@ -9,14 +8,13 @@ const inlineStyle = { overflow: "visible" };
 
 const TableComponent = ({
   headerCells,
+  theme,
   data,
   compact,
   handlers,
   showPagination,
   ...props
 }) => {
-  const theme = useContext(ThemeContext);
-
   const colSpan = headerCells.length;
 
   const tableParams = {
@@ -75,4 +73,6 @@ const TableComponent = ({
   );
 };
 
-export default React.memo(TableComponent);
+const mapStateToProps = (state) => ({ theme: state.theme.theme });
+
+export default connect(mapStateToProps, null)(React.memo(TableComponent));

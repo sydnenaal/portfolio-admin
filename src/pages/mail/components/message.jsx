@@ -1,11 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import { Icon, Checkbox } from "semantic-ui-react";
 
 import Card from "../../../containers/card";
-import ThemeContext from "../../../contexts/theme";
-import ThemeStyle from "../../../constants/themingStyles";
 
 import "../style.sass";
 
@@ -24,8 +22,6 @@ const Message = ({
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
-  const theme = useContext(ThemeContext);
-
   const iconName = isRead ? "envelope open outline" : "envelope outline";
 
   const handlers = {
@@ -33,6 +29,7 @@ const Message = ({
     handleDateParse: (date) => moment(date).format("MMM Do YY hh:mm"),
     handleChange: () => handleCheck(id),
     handleContextMenu: (e) => e.preventDefault(),
+    handleMouseLeave: () => setIsOpen(false),
     handleMouseDown: (e) => {
       e.preventDefault();
       e.button === 2 && setIsOpen(!isOpen);
@@ -56,7 +53,7 @@ const Message = ({
       </div>
 
       <div className="messageContainer">
-        <Card>
+        <Card onMouseLeave={handlers.handleMouseLeave}>
           <div
             className="messageContent"
             onContextMenu={handlers.handleContextMenu}

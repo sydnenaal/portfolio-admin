@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { IntlProvider } from "react-intl";
+import { connect } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { NotificationContainer } from "react-notifications";
 
 import Routes from "./routes";
-import ThemeContext from "./contexts/theme";
 
 import { messages_ru } from "./locale/messages_ru";
 import { messages_en } from "./locale/messages_en";
@@ -14,31 +14,22 @@ const messages = {
   ru: messages_ru,
 };
 
-const App = () => {
-  const themeByContext = useContext(ThemeContext);
+const App = ({ language }) => (
+  <>
+    <IntlProvider locale={language} messages={messages[language]}>
+      <Router>
+        <Routes language={language} />
+      </Router>
+    </IntlProvider>
 
-  const [theme, changeTheme] = useState(themeByContext);
-  const [language, setLanguage] = useState(
-    localStorage.getItem("lang") || "en"
-  );
+    <NotificationContainer />
+  </>
+);
 
-  return (
-    <>
-      <IntlProvider locale={language} messages={messages[language]}>
-        <ThemeContext.Provider value={theme}>
-          <Router>
-            <Routes
-              changeTheme={changeTheme}
-              setLanguage={setLanguage}
-              language={language}
-            />
-          </Router>
-        </ThemeContext.Provider>
-      </IntlProvider>
-
-      <NotificationContainer />
-    </>
-  );
+const mapStateToProps = (state) => {
+  return {
+    language: state.language.language,
+  };
 };
 
-export default App;
+export default connect(mapStateToProps, null)(App);

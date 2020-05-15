@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 
 import "./style.sass";
 
 import Drawer from "./components/drawer";
-import ThemeContext from "../../contexts/theme";
 import ThemeStyle from "../../constants/themingStyles";
 
 const PageWithHeaderComponent = ({
@@ -13,18 +13,18 @@ const PageWithHeaderComponent = ({
   title,
   subtitle,
   children,
+  theme,
 }) => {
-  const theme = useContext(ThemeContext);
+  const style = { marginLeft: drawerVisible ? "220px" : "70px" };
+  const styleByTheme = ThemeStyle[theme];
 
   return (
     <Drawer
       drawerVisible={drawerVisible}
       drawerItems={drawerItems}
       handleDrawerVisible={handleDrawerVisible}>
-      <div
-        className="pageWithHeader"
-        style={{ marginLeft: drawerVisible ? "220px" : "70px" }}>
-        <div className="header" style={ThemeStyle[theme]}>
+      <div className="pageWithHeader" style={style}>
+        <div className="header" style={styleByTheme}>
           <div className="headerContent">
             <div className="headerTitle">{title}</div>
 
@@ -32,7 +32,7 @@ const PageWithHeaderComponent = ({
           </div>
         </div>
 
-        <div className="body" style={ThemeStyle[theme]}>
+        <div className="body" style={styleByTheme}>
           {children}
         </div>
       </div>
@@ -40,4 +40,11 @@ const PageWithHeaderComponent = ({
   );
 };
 
-export default React.memo(PageWithHeaderComponent);
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(React.memo(PageWithHeaderComponent));

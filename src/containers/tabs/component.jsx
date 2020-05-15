@@ -2,17 +2,13 @@ import React from "react";
 
 import "./style.sass";
 
-const Tabs = ({ children, tabs }) => {
+const Tabs = ({ tabs = [], children }) => {
   return (
     <div className="ui-tabs">
-      <div className="ui-tabs_tabsContainer">
-        {tabs.map((item, index) => (
-          <div key={index}></div>
-        ))}
-      </div>
-      {children}
+      <div className="ui-tabs_tabsContainer">{tabs}</div>
+      <div className="ui-tabs_content">{children}</div>
     </div>
   );
 };
 
-export default React.memo(Card);
+export default React.memo(Tabs);

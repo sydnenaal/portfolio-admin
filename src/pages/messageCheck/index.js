@@ -1,12 +1,14 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import MessageCheckComponent from "./component";
 
-const MessageCheckPageContainer = ({ ...props }) => {
-  const { message } = useParams();
+const MessageCheckPageContainer = () => {
+  const history = useHistory();
 
-  return <MessageCheckComponent id={message} {...props} />;
+  const handleClickBack = () => history.goBack();
+
+  return <MessageCheckComponent handleClickBack={handleClickBack} />;
 };
 
 export default MessageCheckPageContainer;

@@ -5,6 +5,24 @@ import { useHistory } from "react-router-dom";
 
 import { drawerItems } from "../../../constants/drawerConstants";
 
+const BarsIcon = ({ handleDrawerVisible, drawerVisible }) => {
+  return (
+    <div className="sidebar-item">
+      <div
+        className="sidebar-item__icon icon_header"
+        onClick={handleDrawerVisible}>
+        <div id="nav-icon4" className={drawerVisible ? " open" : ""}>
+          <span></span>
+
+          <span></span>
+
+          <span></span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
   const {
     messages: { titles },
@@ -29,7 +47,7 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
   };
 
   const itemStyle = {
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "#333",
   };
 
   const drawerStyle = { maxWidth: drawerVisible ? "220px" : "70px" };
@@ -40,19 +58,10 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
         className="sidebar"
         style={drawerStyle}
         onMouseLeave={handleMouseLeave}>
-        <div className="sidebar-item">
-          <div
-            className="sidebar-item__icon icon_header"
-            onClick={handleDrawerVisible}>
-            <div id="nav-icon4" className={`${drawerVisible ? " open" : ""}`}>
-              <span></span>
-
-              <span></span>
-
-              <span></span>
-            </div>
-          </div>
-        </div>
+        <BarsIcon
+          handleDrawerVisible={handleDrawerVisible}
+          drawerVisible={drawerVisible}
+        />
 
         {drawerItems(titles).map((item, index) => (
           <div

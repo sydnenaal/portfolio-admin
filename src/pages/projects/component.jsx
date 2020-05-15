@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import { useIntl } from "react-intl";
 import { Card, Input, Button, Radio } from "semantic-ui-react";
 
@@ -6,7 +7,6 @@ import "./style.sass";
 
 import PageWithHeader from "../../containers/pageWithHeader";
 import Table from "../../containers/table";
-import ThemeContext from "../../contexts/theme";
 
 import { headerNames, tableData } from "../../constants/tableConstants";
 import ThemeStyle from "../../constants/themingStyles";
@@ -16,13 +16,12 @@ const ProjectsPageComponent = ({
   handleChange,
   handleChangeFilter,
   handleFilterData,
+  theme,
   ...props
 }) => {
   const {
     messages: { titles, projects },
   } = useIntl();
-
-  const theme = useContext(ThemeContext);
 
   return (
     <PageWithHeader title={titles.projects} {...props}>
@@ -76,4 +75,6 @@ const ProjectsPageComponent = ({
   );
 };
 
-export default ProjectsPageComponent;
+const mapStateToProps = (state) => ({ theme: state.theme.theme });
+
+export default connect(mapStateToProps, null)(ProjectsPageComponent);

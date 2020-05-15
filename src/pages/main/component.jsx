@@ -1,16 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
+import { connect } from "react-redux";
 import { useIntl } from "react-intl";
 import { Card } from "semantic-ui-react";
 
 import "./style.sass";
 
 import PageWithHeader from "../../containers/pageWithHeader";
-import ThemeContext from "../../contexts/theme";
 import ThemeStyle from "../../constants/themingStyles";
 
-const MainPageComponent = (props) => {
-  const theme = useContext(ThemeContext);
-
+const MainPageComponent = ({ theme }) => {
   const {
     messages: {
       titles,
@@ -19,7 +17,7 @@ const MainPageComponent = (props) => {
   } = useIntl();
 
   return (
-    <PageWithHeader title={titles.home} {...props}>
+    <PageWithHeader title={titles.home}>
       <div className="mainBody">
         <div className="helloWorld">
           <Card style={ThemeStyle[theme]} fluid>
@@ -65,4 +63,8 @@ const MainPageComponent = (props) => {
   );
 };
 
-export default MainPageComponent;
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+});
+
+export default connect(mapStateToProps, null)(MainPageComponent);
