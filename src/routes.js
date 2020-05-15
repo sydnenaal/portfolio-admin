@@ -7,6 +7,7 @@ import SettingsPageComponent from "./pages/settings";
 import ProjectsPageComponent from "./pages/projects";
 import MailPageComponent from "./pages/mail";
 import MessageCheckPageComponent from "./pages/messageCheck";
+import ProjectsSavePageComponent from "./pages/projectsSave";
 
 const customRoute = ({ path, getToken }) => ({ children, ...props }) => {
   const renderFunc = ({ location }) => {
@@ -36,6 +37,10 @@ const Routes = () => {
     <Switch>
       <ProtectedRoute path="/mail/:message">
         <MessageCheckPageComponent />
+      </ProtectedRoute>
+
+      <ProtectedRoute path="/projects/:project">
+        <ProjectsSavePageComponent />
       </ProtectedRoute>
 
       <ProtectedRoute path="/projects">

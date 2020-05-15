@@ -47,6 +47,7 @@ const TableComponent = ({
         compact={tableParams.compact}
         inverted={tableParams.inverted}
         sortable
+        selectable
         celled
         fixed>
         <Table.Header>

@@ -1,14 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
 import { useIntl } from "react-intl";
-import { Card, Input, Button, Radio } from "semantic-ui-react";
+import { Card, Input, Button, Radio, Loader } from "semantic-ui-react";
 
 import "./style.sass";
 
 import PageWithHeader from "../../containers/pageWithHeader";
 import Table from "../../containers/table";
 
-import { headerNames, tableData } from "../../constants/tableConstants";
+import { headerNames } from "../../constants/tableConstants";
 import ThemeStyle from "../../constants/themingStyles";
 
 const ProjectsPageComponent = ({
@@ -17,6 +17,8 @@ const ProjectsPageComponent = ({
   handleChangeFilter,
   handleFilterData,
   theme,
+  loading,
+  projectsData,
   ...props
 }) => {
   const {
@@ -60,12 +62,18 @@ const ProjectsPageComponent = ({
               </div>
 
               <div className="projectsTable">
-                <Table
-                  showPagination={true}
-                  compact={compact}
-                  headerNames={headerNames}
-                  tableData={handleFilterData(tableData)}
-                />
+                {loading ? (
+                  <Loader active inline="centered" />
+                ) : (
+                  projectsData && (
+                    <Table
+                      showPagination={true}
+                      compact={compact}
+                      headerNames={headerNames}
+                      tableData={handleFilterData(projectsData)}
+                    />
+                  )
+                )}
               </div>
             </div>
           </Card.Content>
@@ -75,6 +83,10 @@ const ProjectsPageComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({ theme: state.theme.theme });
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+  projectsData: state.projects.projects,
+  loading: state.appState.isLoading,
+});
 
 export default connect(mapStateToProps, null)(ProjectsPageComponent);

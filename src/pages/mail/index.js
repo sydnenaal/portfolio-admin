@@ -7,15 +7,13 @@ import MainPageComponent from "./component";
 
 import { getMessages } from "../../ducks";
 
-import { setAppState } from "../../redux/actions";
+import { tabsNames, tabFilter } from "../../constants/messagesConstants";
 
-const tabFilter = {
-  all: (item) => !item.isDeleted,
-  read: (item) => item.isRead && !item.isDeleted,
-  unread: (item) => !item.isRead && !item.isDeleted,
-  important: (item) => item.isImportant && !item.isDeleted,
-  trash: (item) => item.isDeleted,
-};
+import {
+  setAppState,
+  setMessages,
+  setTabSortedMessages,
+} from "../../redux/actions";
 
 const helpUserNotify = () => {
   const isShow = localStorage.getItem("mailNotify");
@@ -30,12 +28,14 @@ const helpUserNotify = () => {
   }
 };
 
-const tabsNames = ["all", "unread", "read", "important", "trash"];
-
-const MailPageContainer = ({ setAppState, activeTab }) => {
+const MailPageContainer = ({
+  setAppState,
+  activeTab,
+  messages,
+  setMessages,
+  setTabs,
+}) => {
   const [checked, setChecked] = useState(0);
-  const [messages, setMessages] = useState([]);
-  const [tabs, setTabs] = useState([]);
 
   const countChecked = (array) => {
     setChecked(
@@ -86,6 +86,7 @@ const MailPageContainer = ({ setAppState, activeTab }) => {
 
       setMessages(responseWithChecked);
       helpUserNotify();
+
       setTabs(tabs);
     }
     setAppState(false);
@@ -94,16 +95,15 @@ const MailPageContainer = ({ setAppState, activeTab }) => {
   useEffect(() => {
     let source = axios.CancelToken.source();
 
-    fetchMessages(source);
+    !messages && fetchMessages(source);
 
     return () => {
       source.cancel();
     };
-  }, []);
+  }, [fetchMessages]);
 
   return (
     <MainPageComponent
-      tabs={tabs}
       tabsNames={tabsNames}
       messages={messages}
       handleCheckAll={handleCheckAll}
@@ -115,9 +115,15 @@ const MailPageContainer = ({ setAppState, activeTab }) => {
 
 const mapStateToProps = (state) => ({
   activeTab: state.messages.activeTab,
+  tabs: state.messages.tabSortedMessages,
+  messages: state.messages.messages,
 });
 
-const mapDispatchToProps = { setAppState: setAppState };
+const mapDispatchToProps = {
+  setAppState: setAppState,
+  setMessages: setMessages,
+  setTabs: setTabSortedMessages,
+};
 
 export default connect(
   mapStateToProps,

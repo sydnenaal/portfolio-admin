@@ -71,6 +71,7 @@ const MailPageComponent = ({
 
 const mapStateToProps = (state) => ({
   theme: state.theme.theme,
+  tabs: state.messages.tabSortedMessages,
   activeTab: state.messages.activeTab,
 });
 

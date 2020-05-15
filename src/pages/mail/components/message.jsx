@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import moment from "moment";
 import { Icon, Checkbox } from "semantic-ui-react";
 
 import Card from "../../../containers/card";
 
+import { setActiveMessage } from "../../../redux/actions";
+import { dateParse } from "../../../utils";
+
 import "../style.sass";
 
 const Message = ({
+  setActiveMessage,
   title,
   text,
   isRead,
@@ -17,31 +21,40 @@ const Message = ({
   isChecked,
   client,
   date,
-  index,
 }) => {
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
 
   const iconName = isRead ? "envelope open outline" : "envelope outline";
 
+  const style = {
+    paddingLeft: isOpen ? "100px" : "5px",
+  };
+
   const handlers = {
-    handleClick: () => history.push(`mail/${id}`),
-    handleDateParse: (date) => moment(date).format("MMM Do YY hh:mm"),
     handleChange: () => handleCheck(id),
     handleContextMenu: (e) => e.preventDefault(),
-    handleMouseLeave: () => setIsOpen(false),
+    handleMouseLeave: () => isOpen && setIsOpen(false),
     handleMouseDown: (e) => {
       e.preventDefault();
       e.button === 2 && setIsOpen(!isOpen);
+    },
+    handleClick: () => {
+      setActiveMessage({
+        title: title,
+        text: text,
+        client: client,
+        date: date,
+      });
+      history.push(`mail/${id}`);
     },
   };
 
   return (
     <div
       className="messageComponent"
-      style={{
-        paddingLeft: isOpen ? "100px" : "5px",
-      }}>
+      onMouseLeave={handlers.handleMouseLeave}
+      style={style}>
       <div className="deleteMessage">
         <div className="actionIcon">
           <Icon size="big" name="trash alternate" />
@@ -53,7 +66,7 @@ const Message = ({
       </div>
 
       <div className="messageContainer">
-        <Card onMouseLeave={handlers.handleMouseLeave}>
+        <Card>
           <div
             className="messageContent"
             onContextMenu={handlers.handleContextMenu}
@@ -84,7 +97,7 @@ const Message = ({
                     <strong>{client}</strong>
                   </div>
 
-                  <div className="date">{handlers.handleDateParse(date)}</div>
+                  <div className="date">{dateParse(date)}</div>
                 </div>
 
                 <div className="messageText">
@@ -103,4 +116,8 @@ const Message = ({
   );
 };
 
-export default React.memo(Message);
+const mapDispatchToProps = {
+  setActiveMessage: setActiveMessage,
+};
+
+export default connect(null, mapDispatchToProps)(React.memo(Message));

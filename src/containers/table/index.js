@@ -19,7 +19,7 @@ const TableContainer = ({ headerNames, tableData, ...props }) => {
   const [column, setColumn] = useState();
   const [direction, setDirection] = useState();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [displayData, setDisplayData] = useState(tableData);
   const [pageCount, setPageCount] = useState();
 

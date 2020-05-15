@@ -37,7 +37,7 @@ export const Content = connect(
             />
           ))
         ) : (
-          "empty"
+          <div className="emptyMessage">Empty</div>
         )}
       </div>
     </Card>
