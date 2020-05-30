@@ -1,20 +1,23 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { useIntl } from "react-intl";
 import { Card } from "semantic-ui-react";
 
 import "./style.sass";
+import { selectTheme } from "redux/selectors";
 
-import PageWithHeader from "../../containers/pageWithHeader";
-import ThemeStyle from "../../constants/themingStyles";
+import PageWithHeader from "containers/pageWithHeader";
+import ThemeStyle from "constants/themingStyles";
 
-const MainPageComponent = ({ theme }) => {
+const MainPageComponent = () => {
   const {
     messages: {
       titles,
       home: { title, visitors, messages },
     },
   } = useIntl();
+
+  const theme = useSelector(selectTheme);
 
   return (
     <PageWithHeader title={titles.home}>
@@ -63,8 +66,4 @@ const MainPageComponent = ({ theme }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.theme.theme,
-});
-
-export default connect(mapStateToProps, null)(MainPageComponent);
+export default MainPageComponent;

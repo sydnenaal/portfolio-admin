@@ -1,19 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, memo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import { NotificationManager } from "react-notifications";
 import MainPageComponent from "./component";
 
-import { getMessages } from "../../ducks";
-
-import { tabsNames, tabFilter } from "../../constants/messagesConstants";
-
-import {
-  setAppState,
-  setMessages,
-  setTabSortedMessages,
-} from "../../redux/actions";
+import { getMessages } from "ducks";
+import { tabsNames, tabFilter } from "constants/messagesConstants";
+import { setAppState, setMessages, setTabSortedMessages } from "redux/actions";
+import { selectActiveTab, selectMessages } from "redux/selectors";
 
 const helpUserNotify = () => {
   const isShow = localStorage.getItem("mailNotify");
@@ -28,13 +23,11 @@ const helpUserNotify = () => {
   }
 };
 
-const MailPageContainer = ({
-  setAppState,
-  activeTab,
-  messages,
-  setMessages,
-  setTabs,
-}) => {
+const MailPageContainer = () => {
+  const dispatch = useDispatch();
+  const activeTab = useSelector(selectActiveTab);
+  const messages = useSelector(selectMessages);
+
   const [checked, setChecked] = useState(0);
 
   const countChecked = (array) => {
@@ -53,7 +46,7 @@ const MailPageContainer = ({
       isChecked: item.id === id ? !item.isChecked : item.isChecked,
     }));
 
-    setMessages(checkedMessages);
+    dispatch(setMessages(checkedMessages));
     countChecked(checkedMessages);
   };
 
@@ -63,44 +56,44 @@ const MailPageContainer = ({
       isChecked: tabFilter[activeTab](item) ? setCheck : item.isChecked,
     }));
 
-    setMessages(checkedMessages);
+    dispatch(setMessages(checkedMessages));
     countChecked(checkedMessages);
-  };
-
-  const fetchMessages = async (source) => {
-    setAppState(true);
-    const response = await getMessages({
-      cancelToken: source.token,
-    });
-
-    if (response) {
-      const responseWithChecked = response.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-
-      const tabs = {};
-      tabsNames.forEach((item) => {
-        tabs[item] = responseWithChecked.filter(tabFilter[item]);
-      });
-
-      setMessages(responseWithChecked);
-      helpUserNotify();
-
-      setTabs(tabs);
-    }
-    setAppState(false);
   };
 
   useEffect(() => {
     let source = axios.CancelToken.source();
+
+    const fetchMessages = async (source) => {
+      dispatch(setAppState(true));
+      const response = await getMessages({
+        cancelToken: source.token,
+      });
+
+      if (response) {
+        const responseWithChecked = response.map((item) => ({
+          ...item,
+          isChecked: false,
+        }));
+
+        const tabs = {};
+        tabsNames.forEach((item) => {
+          tabs[item] = responseWithChecked.filter(tabFilter[item]);
+        });
+
+        dispatch(setMessages(responseWithChecked));
+        helpUserNotify();
+
+        dispatch(setTabSortedMessages(tabs));
+      }
+      dispatch(setAppState(false));
+    };
 
     !messages && fetchMessages(source);
 
     return () => {
       source.cancel();
     };
-  }, [fetchMessages]);
+  }, [dispatch, messages]);
 
   return (
     <MainPageComponent
@@ -113,19 +106,4 @@ const MailPageContainer = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  activeTab: state.messages.activeTab,
-  tabs: state.messages.tabSortedMessages,
-  messages: state.messages.messages,
-});
-
-const mapDispatchToProps = {
-  setAppState: setAppState,
-  setMessages: setMessages,
-  setTabs: setTabSortedMessages,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(React.memo(MailPageContainer));
+export default memo(MailPageContainer);

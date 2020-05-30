@@ -1,14 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
 import { useIntl } from "react-intl";
-import { Card } from "semantic-ui-react";
 
 import "./style.sass";
 
-import PageWithHeader from "../../containers/pageWithHeader";
-import ThemeStyle from "../../constants/themingStyles";
+import PageWithHeader from "containers/pageWithHeader";
 
-const ProjectSavePageComponent = ({ theme }) => {
+const ProjectSavePageComponent = () => {
   const {
     messages: { titles },
   } = useIntl();
@@ -20,8 +17,4 @@ const ProjectSavePageComponent = ({ theme }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.theme.theme,
-});
-
-export default connect(mapStateToProps, null)(ProjectSavePageComponent);
+export default ProjectSavePageComponent;

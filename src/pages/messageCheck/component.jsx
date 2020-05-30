@@ -1,39 +1,36 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { useIntl } from "react-intl";
-import { Button, Loader } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
-import PageWithHeader from "../../containers/pageWithHeader";
-import { dateParse } from "../../utils";
-import Card from "../../containers/card";
+import PageWithHeader from "containers/pageWithHeader";
+import WithLoader from "containers/withLoader";
+import { dateParse } from "utils";
+import Card from "containers/card";
+
+import { selectActiveMessage } from "redux/selectors";
 
 import "./style.sass";
 
-const MessageCheckPageComponent = ({
-  handleClickBack,
-  activeMessage = {},
-  loading,
-}) => {
+const MessageCheckPageComponent = ({ handleClickBack }) => {
   const {
     messages: { titles },
   } = useIntl();
+
+  const activeMessage = useSelector(selectActiveMessage);
 
   return (
     <PageWithHeader title={titles.mail} subtitle={"read"}>
       <div className="messagePage">
         <div className="messagePage-buttons">
           <Button onClick={handleClickBack}>Назад</Button>
-
           <Button>В корзину</Button>
-
           <Button>Отметить как важное</Button>
         </div>
 
         <Card>
           <div className="messagePage-body">
-            {loading ? (
-              <Loader active inline="centered" />
-            ) : (
+            <WithLoader>
               <div>
                 <div className="messagePage-Body__date">
                   <span>Дата: </span>
@@ -52,7 +49,7 @@ const MessageCheckPageComponent = ({
                   {activeMessage && activeMessage.text}
                 </div>
               </div>
-            )}
+            </WithLoader>
           </div>
         </Card>
       </div>
@@ -60,9 +57,4 @@ const MessageCheckPageComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  loading: state.appState.isLoading,
-  activeMessage: state.messages.activeMessage,
-});
-
-export default connect(mapStateToProps, null)(MessageCheckPageComponent);
+export default MessageCheckPageComponent;

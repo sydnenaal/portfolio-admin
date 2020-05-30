@@ -1,5 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { memo } from "react";
+import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 
 import TablePagination from "../pagination/component";
@@ -8,13 +8,14 @@ const inlineStyle = { overflow: "visible" };
 
 const TableComponent = ({
   headerCells,
-  theme,
   data,
   compact,
   handlers,
   showPagination,
   ...props
 }) => {
+  const theme = useSelector((state) => state.theme.theme);
+
   const colSpan = headerCells.length;
 
   const tableParams = {
@@ -49,7 +50,8 @@ const TableComponent = ({
         sortable
         selectable
         celled
-        fixed>
+        fixed
+      >
         <Table.Header>
           <Table.Row>{header}</Table.Row>
         </Table.Header>
@@ -74,6 +76,4 @@ const TableComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({ theme: state.theme.theme });
-
-export default connect(mapStateToProps, null)(React.memo(TableComponent));
+export default memo(TableComponent);

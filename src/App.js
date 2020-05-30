@@ -1,35 +1,34 @@
 import React from "react";
 import { IntlProvider } from "react-intl";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import { NotificationContainer } from "react-notifications";
 
 import Routes from "./routes";
 
-import { messages_ru } from "./locale/messages_ru";
-import { messages_en } from "./locale/messages_en";
+import { messages_ru } from "locale/messages_ru";
+import { messages_en } from "locale/messages_en";
+import { selectLanguage } from "redux/selectors";
 
 const messages = {
   en: messages_en,
   ru: messages_ru,
 };
 
-const App = ({ language }) => (
-  <>
-    <IntlProvider locale={language} messages={messages[language]}>
-      <Router>
-        <Routes language={language} />
-      </Router>
-    </IntlProvider>
+const App = () => {
+  const language = useSelector(selectLanguage);
 
-    <NotificationContainer />
-  </>
-);
+  return (
+    <>
+      <IntlProvider locale={language} messages={messages[language]}>
+        <Router>
+          <Routes />
+        </Router>
+      </IntlProvider>
 
-const mapStateToProps = (state) => {
-  return {
-    language: state.language.language,
-  };
+      <NotificationContainer />
+    </>
+  );
 };
 
-export default connect(mapStateToProps, null)(App);
+export default App;

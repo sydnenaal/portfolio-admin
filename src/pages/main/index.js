@@ -2,8 +2,8 @@ import React from "react";
 
 import MainPageComponent from "./component";
 
-const MainPageContainer = props => {
-  return <MainPageComponent {...props} />;
+const MainPageContainer = () => {
+  return <MainPageComponent />;
 };
 
 export default MainPageContainer;

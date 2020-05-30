@@ -1,32 +1,33 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { useIntl } from "react-intl";
-import { Card, Input, Button, Radio, Loader } from "semantic-ui-react";
+import { Card, Input, Button, Radio } from "semantic-ui-react";
 
 import "./style.sass";
 
-import PageWithHeader from "../../containers/pageWithHeader";
-import Table from "../../containers/table";
+import PageWithHeader from "containers/pageWithHeader";
+import Table from "containers/table";
+import WithLoader from "containers/withLoader";
 
-import { headerNames } from "../../constants/tableConstants";
-import ThemeStyle from "../../constants/themingStyles";
+import { headerNames } from "constants/tableConstants";
+import ThemeStyle from "constants/themingStyles";
+import { selectTheme, selectProjects } from "redux/selectors";
 
 const ProjectsPageComponent = ({
   compact,
   handleChange,
   handleChangeFilter,
   handleFilterData,
-  theme,
-  loading,
-  projectsData,
-  ...props
 }) => {
   const {
     messages: { titles, projects },
   } = useIntl();
 
+  const theme = useSelector(selectTheme);
+  const projectsData = useSelector(selectProjects);
+
   return (
-    <PageWithHeader title={titles.projects} {...props}>
+    <PageWithHeader title={titles.projects}>
       <div className="projectsBody">
         <Card fluid style={ThemeStyle[theme]}>
           <Card.Content>
@@ -62,18 +63,16 @@ const ProjectsPageComponent = ({
               </div>
 
               <div className="projectsTable">
-                {loading ? (
-                  <Loader active inline="centered" />
-                ) : (
-                  projectsData && (
+                <WithLoader>
+                  {projectsData && (
                     <Table
                       showPagination={true}
                       compact={compact}
                       headerNames={headerNames}
                       tableData={handleFilterData(projectsData)}
                     />
-                  )
-                )}
+                  )}
+                </WithLoader>
               </div>
             </div>
           </Card.Content>
@@ -83,10 +82,4 @@ const ProjectsPageComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.theme.theme,
-  projectsData: state.projects.projects,
-  loading: state.appState.isLoading,
-});
-
-export default connect(mapStateToProps, null)(ProjectsPageComponent);
+export default ProjectsPageComponent;

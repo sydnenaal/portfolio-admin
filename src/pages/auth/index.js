@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
 import AuthComponent from "./component";
@@ -7,8 +7,8 @@ const AuthPageContainer = (props) => {
   const history = useHistory();
   const { from } = useLocation().state || { from: { pathname: "/" } };
 
-  const [login, setLogin] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
 
   const handlers = {
     handleChangeLogin: (e) => setLogin(e.target.value),

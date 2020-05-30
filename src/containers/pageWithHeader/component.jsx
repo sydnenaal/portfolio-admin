@@ -1,5 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { memo } from "react";
+import { useSelector } from "react-redux";
 
 import "./style.sass";
 
@@ -13,8 +13,8 @@ const PageWithHeaderComponent = ({
   title,
   subtitle,
   children,
-  theme,
 }) => {
+  const theme = useSelector((state) => state.theme.theme);
   const style = { marginLeft: drawerVisible ? "220px" : "70px" };
   const styleByTheme = ThemeStyle[theme];
 
@@ -22,7 +22,8 @@ const PageWithHeaderComponent = ({
     <Drawer
       drawerVisible={drawerVisible}
       drawerItems={drawerItems}
-      handleDrawerVisible={handleDrawerVisible}>
+      handleDrawerVisible={handleDrawerVisible}
+    >
       <div className="pageWithHeader" style={style}>
         <div className="header" style={styleByTheme}>
           <div className="headerContent">
@@ -40,11 +41,4 @@ const PageWithHeaderComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.theme.theme,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(React.memo(PageWithHeaderComponent));
+export default memo(PageWithHeaderComponent);

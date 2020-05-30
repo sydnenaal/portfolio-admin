@@ -1,31 +1,30 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { memo } from "react";
+import { useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
 
 import "./style.sass";
+import { selectActiveTab, selectSortedMessages } from "redux/selectors";
 
-import PageWithHeader from "../../containers/pageWithHeader";
+import PageWithHeader from "containers/pageWithHeader";
 import { Tab, Content } from "./components/tab";
-
-import Tabs from "../../containers/tabs";
+import Tabs from "containers/tabs";
 
 const MailPageComponent = ({
   handleCheck,
   handleCheckAll,
-  activeTab,
   checked,
-  tabs,
   tabsNames,
 }) => {
   const {
     messages: { titles, mail },
   } = useIntl();
 
-  const handlers = {
-    checkAll: () => handleCheckAll({ setCheck: true }),
-    unCheckAll: () => handleCheckAll({ setCheck: false }),
-  };
+  const tabs = useSelector(selectSortedMessages);
+  const activeTab = useSelector(selectActiveTab);
+
+  const checkAll = () => handleCheckAll({ setCheck: true });
+  const unCheckAll = () => handleCheckAll({ setCheck: false });
 
   const renderTabs = tabsNames.map((item, index) => (
     <Tab
@@ -41,11 +40,9 @@ const MailPageComponent = ({
       <div className="mailBody">
         <div className="mailActions">
           <div className="buttons">
-            <Button onClick={handlers.checkAll}>{mail.buttons.checkAll}</Button>
+            <Button onClick={checkAll}>{mail.buttons.checkAll}</Button>
 
-            <Button onClick={handlers.unCheckAll}>
-              {mail.buttons.uncheckAll}
-            </Button>
+            <Button onClick={unCheckAll}>{mail.buttons.uncheckAll}</Button>
 
             <Button disabled={checked === 0}>
               {mail.buttons.checkAsImportant}
@@ -69,10 +66,4 @@ const MailPageComponent = ({
   );
 };
 
-const mapStateToProps = (state) => ({
-  theme: state.theme.theme,
-  tabs: state.messages.tabSortedMessages,
-  activeTab: state.messages.activeTab,
-});
-
-export default connect(mapStateToProps, null)(React.memo(MailPageComponent));
+export default memo(MailPageComponent);

@@ -1,11 +1,14 @@
 import React from "react";
+
 import "./style.sass";
 
 import { Card, Input, Button } from "semantic-ui-react";
 
-const AuthPageComponent = (props) => {
-  const { handleChangeLogin, handleChangePassword, handleLogin } = props;
-
+const AuthPageComponent = ({
+  handleChangeLogin,
+  handleChangePassword,
+  handleLogin,
+}) => {
   return (
     <div className="auth">
       <div className="cardBody">
