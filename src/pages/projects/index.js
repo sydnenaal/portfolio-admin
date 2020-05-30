@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import _ from "lodash";
 
 import { getProjects } from "ducks";
 import { dateParse } from "utils";
@@ -17,26 +16,22 @@ const ProjectsPageContainer = () => {
   const projects = useSelector(selectProjects);
   const dispatch = useDispatch();
 
-  const handlers = {
-    handleChange: () => changeCompact(!compact),
-    handleChangeFilter: ({ target: { value } }) => setFilter(value),
-    handleFilterData: (data) =>
-      data.filter((item) => {
-        let isValid = false;
+  const handleChange = () => changeCompact(!compact);
+  const handleChangeFilter = ({ target: { value } }) => setFilter(value);
+  const handleFilterData = (data) =>
+    data.filter((item) => {
+      console.log(data);
+      const filtered = Object.values(item).filter((value) => {
+        const index = value
+          .toString()
+          .toLowerCase()
+          .indexOf(filter.toLowerCase());
 
-        const search = (value) => {
-          if (
-            value.toString().toLowerCase().indexOf(filter.toLowerCase()) !== -1
-          ) {
-            isValid = true;
-          }
-        };
+        return index !== -1;
+      });
 
-        _.forEach(item, search);
-
-        return isValid;
-      }),
-  };
+      return filtered.length > 0;
+    });
 
   useEffect(() => {
     let source = axios.CancelToken.source();
@@ -49,6 +44,7 @@ const ProjectsPageContainer = () => {
       });
 
       if (response) {
+        console.log(response);
         const responseWithChecked = response.map((item) => ({
           ...item,
           isChecked: false,
@@ -71,9 +67,9 @@ const ProjectsPageContainer = () => {
   return (
     <ProjectsPageComponent
       compact={compact}
-      handleChangeFilter={handlers.handleChangeFilter}
-      handleChange={handlers.handleChange}
-      handleFilterData={handlers.handleFilterData}
+      handleChangeFilter={handleChangeFilter}
+      handleChange={handleChange}
+      handleFilterData={handleFilterData}
     />
   );
 };

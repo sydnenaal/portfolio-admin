@@ -3,14 +3,15 @@ import { useIntl } from "react-intl";
 import { Icon } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 
-import { drawerItems } from "../../../constants/drawerConstants";
+import { drawerItems } from "constants";
 
 const BarsIcon = ({ handleDrawerVisible, drawerVisible }) => {
   return (
     <div className="sidebar-item">
       <div
         className="sidebar-item__icon icon_header"
-        onClick={handleDrawerVisible}>
+        onClick={handleDrawerVisible}
+      >
         <div id="nav-icon4" className={drawerVisible ? " open" : ""}>
           <span></span>
 
@@ -57,7 +58,8 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
       <div
         className="sidebar"
         style={drawerStyle}
-        onMouseLeave={handleMouseLeave}>
+        onMouseLeave={handleMouseLeave}
+      >
         <BarsIcon
           handleDrawerVisible={handleDrawerVisible}
           drawerVisible={drawerVisible}
@@ -68,7 +70,8 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
             className="sidebar-item"
             onClick={handleClick.bind(item)}
             style={pathname === item.path ? itemStyle : {}}
-            key={index}>
+            key={index}
+          >
             <div className="sidebar-item__icon">
               <Icon name={item.icon} size="big" />
             </div>

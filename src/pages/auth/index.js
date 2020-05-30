@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-import { NotificationManager } from "react-notifications";
+import { store } from "react-notifications-component";
+
+import { notificationSettings } from "constants";
+
 import AuthComponent from "./component";
 
-const AuthPageContainer = (props) => {
+const AuthPageContainer = () => {
   const history = useHistory();
   const { from } = useLocation().state || { from: { pathname: "/" } };
 
@@ -18,7 +21,12 @@ const AuthPageContainer = (props) => {
         localStorage.setItem("isAuth", true);
         history.replace(from);
       } else {
-        NotificationManager.error("Неверный логин или пароль", "Ошибка");
+        store.addNotification({
+          ...notificationSettings,
+          title: "Ошибка",
+          message: "Неверный логин или пароль",
+          type: "danger",
+        });
       }
     },
   };
@@ -28,7 +36,6 @@ const AuthPageContainer = (props) => {
       handleChangeLogin={handlers.handleChangeLogin}
       handleChangePassword={handlers.handleChangePassword}
       handleLogin={handlers.handleLogin}
-      {...props}
     />
   );
 };

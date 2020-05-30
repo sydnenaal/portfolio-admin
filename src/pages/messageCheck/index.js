@@ -5,7 +5,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 import { getMessages } from "ducks";
 
-import { tabsNames, tabFilter } from "constants/messagesConstants";
+import { tabsNames, tabFilter } from "constants";
 
 import MessageCheckComponent from "./component";
 

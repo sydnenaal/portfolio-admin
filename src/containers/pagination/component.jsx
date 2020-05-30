@@ -2,7 +2,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { Dropdown, Menu, Icon } from "semantic-ui-react";
 
-import { paginationOptions } from "../../constants/tableConstants";
+import { paginationOptions } from "constants";
 
 const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
   const {
@@ -72,7 +72,8 @@ const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
             <Menu.Item
               key={index}
               active={page === item}
-              onClick={() => handleChangePage(item)}>
+              onClick={() => handleChangePage(item)}
+            >
               {item}
             </Menu.Item>
           );

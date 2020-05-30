@@ -1,6 +1,7 @@
 import axios from "axios";
-import { NotificationManager } from "react-notifications";
+import { store } from "react-notifications-component";
 
+import { notificationSettings } from "constants";
 import { serverPath } from "./";
 
 export const getMessages = async ({ cancelToken }) => {
@@ -14,7 +15,12 @@ export const getMessages = async ({ cancelToken }) => {
     if (axios.isCancel(error)) {
       console.log("Отмена запроса");
     } else {
-      NotificationManager.error("Не удалось загрузить сообщения");
+      store.addNotification({
+        ...notificationSettings,
+        title: "Ошибка",
+        message: "Не удалось загрузить сообщения",
+        type: "danger",
+      });
     }
   }
 };

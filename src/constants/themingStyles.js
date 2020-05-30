@@ -1,4 +1,4 @@
-const ThemeStyle = {
+export const themeStyle = {
   dark: {
     backgroundColor: "#333",
     color: "white",
@@ -10,5 +10,3 @@ const ThemeStyle = {
     transition: "all 0.5s ease",
   },
 };
-
-export default ThemeStyle;

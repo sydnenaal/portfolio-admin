@@ -1,14 +1,26 @@
 import React from "react";
 import { Button } from "semantic-ui-react";
-import { NotificationManager } from "react-notifications";
+import { store } from "react-notifications-component";
+
+import { notificationSettings } from "constants";
 
 const Reset = ({ locale }) => {
   const handleReset = () => {
     try {
       localStorage.clear();
-      NotificationManager.success("Произошел сброс настроек", "Сброс");
+      store.addNotification({
+        ...notificationSettings,
+        title: "Сброс",
+        message: "Произошел сброс настроек",
+        type: "success",
+      });
     } catch (err) {
-      NotificationManager.error("Сброс не удался", "Сброс");
+      store.addNotification({
+        ...notificationSettings,
+        title: "Сброс",
+        message: "Сброс не удался",
+        type: "error",
+      });
     }
   };
 

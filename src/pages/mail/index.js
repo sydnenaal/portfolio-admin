@@ -1,12 +1,12 @@
 import React, { useEffect, useState, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { store } from "react-notifications-component";
 
-import { NotificationManager } from "react-notifications";
 import MainPageComponent from "./component";
 
 import { getMessages } from "ducks";
-import { tabsNames, tabFilter } from "constants/messagesConstants";
+import { tabsNames, tabFilter, notificationSettings } from "constants";
 import { setAppState, setMessages, setTabSortedMessages } from "redux/actions";
 import { selectActiveTab, selectMessages } from "redux/selectors";
 
@@ -15,11 +15,16 @@ const helpUserNotify = () => {
 
   if (!isShow) {
     localStorage.setItem("mailNotify", "showed");
-    NotificationManager.info(
-      "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
-      "Подсказка",
-      25000
-    );
+    store.addNotification({
+      ...notificationSettings,
+      title: "Подсказка",
+      message:
+        "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
+      type: "info",
+      dismiss: {
+        duration: 25000,
+      },
+    });
   }
 };
 

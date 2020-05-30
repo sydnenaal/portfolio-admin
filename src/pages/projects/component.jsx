@@ -9,8 +9,7 @@ import PageWithHeader from "containers/pageWithHeader";
 import Table from "containers/table";
 import WithLoader from "containers/withLoader";
 
-import { headerNames } from "constants/tableConstants";
-import ThemeStyle from "constants/themingStyles";
+import { headerNames, themeStyle } from "constants";
 import { selectTheme, selectProjects } from "redux/selectors";
 
 const ProjectsPageComponent = ({
@@ -29,7 +28,7 @@ const ProjectsPageComponent = ({
   return (
     <PageWithHeader title={titles.projects}>
       <div className="projectsBody">
-        <Card fluid style={ThemeStyle[theme]}>
+        <Card fluid style={themeStyle[theme]}>
           <Card.Content>
             <div className="projectsContent">
               <div className="projectsTitle">{projects.title}</div>

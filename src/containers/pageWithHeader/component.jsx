@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "./style.sass";
 
 import Drawer from "./components/drawer";
-import ThemeStyle from "../../constants/themingStyles";
+import { themeStyle } from "constants";
 
 const PageWithHeaderComponent = ({
   drawerVisible,

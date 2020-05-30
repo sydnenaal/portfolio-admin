@@ -2,7 +2,7 @@ import React from "react";
 import { IntlProvider } from "react-intl";
 import { useSelector } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
-import { NotificationContainer } from "react-notifications";
+import ReactNotification from "react-notifications-component";
 
 import Routes from "./routes";
 
@@ -20,13 +20,12 @@ const App = () => {
 
   return (
     <>
+      <ReactNotification />
       <IntlProvider locale={language} messages={messages[language]}>
         <Router>
           <Routes />
         </Router>
       </IntlProvider>
-
-      <NotificationContainer />
     </>
   );
 };

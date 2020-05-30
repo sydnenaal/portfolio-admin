@@ -7,7 +7,7 @@ import "./style.sass";
 import { selectTheme } from "redux/selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
-import ThemeStyle from "constants/themingStyles";
+import { themeStyle } from "constants";
 
 const MainPageComponent = () => {
   const {
