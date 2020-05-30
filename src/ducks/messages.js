@@ -1,7 +1,7 @@
 import axios from "axios";
 import { store } from "react-notifications-component";
 
-import { notificationSettings } from "constants";
+import { notificationSettings } from "constants/notificationSettings";
 import { serverPath } from "./";
 
 export const getMessages = async ({ cancelToken }) => {

@@ -2,7 +2,7 @@ import React from "react";
 import { useIntl } from "react-intl";
 import { Dropdown, Menu, Icon } from "semantic-ui-react";
 
-import { paginationOptions } from "constants";
+import { paginationOptions } from "constants/tableConstants";
 
 const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
   const {

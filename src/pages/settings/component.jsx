@@ -7,7 +7,7 @@ import "./style.sass";
 import { selectTheme } from "redux/selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
-import { themeStyle } from "constants";
+import { themeStyle } from "constants/themingStyles";
 import components from "./components";
 
 const SettingsPageComponent = () => {
@@ -20,7 +20,7 @@ const SettingsPageComponent = () => {
       <div className="settingsBody">
         {components.map((SettingsComponent, index) => (
           <div key={index} className="settingsItem">
-            <Card fluid style={ThemeStyle[theme]}>
+            <Card fluid style={themeStyle[theme]}>
               <Card.Content>
                 <SettingsComponent locale={messages} />
               </Card.Content>

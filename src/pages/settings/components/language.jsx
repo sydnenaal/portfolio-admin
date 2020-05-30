@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, Dropdown } from "semantic-ui-react";
 
-import { languageOptions } from "constants";
+import { languageOptions } from "constants/settingsConstants";
 import { selectLanguage } from "redux/selectors";
 
 import "../style.sass";

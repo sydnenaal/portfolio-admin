@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "./style.sass";
 
 import Drawer from "./components/drawer";
-import { themeStyle } from "constants";
+import { themeStyle } from "constants/themingStyles";
 
 const PageWithHeaderComponent = ({
   drawerVisible,
@@ -16,7 +16,7 @@ const PageWithHeaderComponent = ({
 }) => {
   const theme = useSelector((state) => state.theme.theme);
   const style = { marginLeft: drawerVisible ? "220px" : "70px" };
-  const styleByTheme = ThemeStyle[theme];
+  const styleByTheme = themeStyle[theme];
 
   return (
     <Drawer

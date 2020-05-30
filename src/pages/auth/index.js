@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { store } from "react-notifications-component";
 
-import { notificationSettings } from "constants";
+import { notificationSettings } from "constants/notificationSettings";
 
 import AuthComponent from "./component";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "semantic-ui-react";
 import { store } from "react-notifications-component";
 
-import { notificationSettings } from "constants";
+import { notificationSettings } from "constants/notificationSettings";
 
 const Reset = ({ locale }) => {
   const handleReset = () => {

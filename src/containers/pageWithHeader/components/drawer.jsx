@@ -3,7 +3,7 @@ import { useIntl } from "react-intl";
 import { Icon } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 
-import { drawerItems } from "constants";
+import { drawerItems } from "constants/drawerConstants";
 
 const BarsIcon = ({ handleDrawerVisible, drawerVisible }) => {
   return (

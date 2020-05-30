@@ -9,7 +9,8 @@ import PageWithHeader from "containers/pageWithHeader";
 import Table from "containers/table";
 import WithLoader from "containers/withLoader";
 
-import { headerNames, themeStyle } from "constants";
+import { headerNames } from "constants/tableConstants";
+import { themeStyle } from "constants/themingStyles";
 import { selectTheme, selectProjects } from "redux/selectors";
 
 const ProjectsPageComponent = ({

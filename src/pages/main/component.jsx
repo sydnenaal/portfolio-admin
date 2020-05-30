@@ -7,7 +7,7 @@ import "./style.sass";
 import { selectTheme } from "redux/selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
-import { themeStyle } from "constants";
+import { themeStyle } from "constants/themingStyles";
 
 const MainPageComponent = () => {
   const {
@@ -23,7 +23,7 @@ const MainPageComponent = () => {
     <PageWithHeader title={titles.home}>
       <div className="mainBody">
         <div className="helloWorld">
-          <Card style={ThemeStyle[theme]} fluid>
+          <Card style={themeStyle[theme]} fluid>
             <Card.Content>
               <div className="welcomeSlogan">
                 <p>{title}</p>
@@ -34,7 +34,7 @@ const MainPageComponent = () => {
 
         <div className="mainInformation">
           <div className="infoBlock">
-            <Card style={ThemeStyle[theme]} fluid>
+            <Card style={themeStyle[theme]} fluid>
               <Card.Content>
                 <div className="newMessages">
                   <p className="infoTitle">{messages.title}</p>
@@ -46,7 +46,7 @@ const MainPageComponent = () => {
           </div>
 
           <div className="infoBlock">
-            <Card style={ThemeStyle[theme]} fluid>
+            <Card style={themeStyle[theme]} fluid>
               <Card.Content>
                 <div className="visitors">
                   <p className="infoTitle">{visitors.title}</p>

@@ -6,7 +6,8 @@ import { store } from "react-notifications-component";
 import MainPageComponent from "./component";
 
 import { getMessages } from "ducks";
-import { tabsNames, tabFilter, notificationSettings } from "constants";
+import { tabsNames, tabFilter } from "constants/messagesConstants";
+import { notificationSettings } from "constants/notificationSettings";
 import { setAppState, setMessages, setTabSortedMessages } from "redux/actions";
 import { selectActiveTab, selectMessages } from "redux/selectors";
 
