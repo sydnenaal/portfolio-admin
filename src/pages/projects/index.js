@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getProjects } from "ducks";
@@ -11,11 +12,18 @@ import ProjectsPageComponent from "./component";
 
 const ProjectsPageContainer = () => {
   const [compact, changeCompact] = useState(false);
+  const [modalState, setModalState] = useState(false);
   const [filter, setFilter] = useState("");
+  //const [selectedProject, setSelectedProject] = useState();
 
   const projects = useSelector(selectProjects);
   const dispatch = useDispatch();
+  const history = useHistory();
 
+  const handleClickEdit = () => {
+    history.push("/projects/0");
+  };
+  const handleToggleModal = () => setModalState(!modalState);
   const handleChange = () => changeCompact(!compact);
   const handleChangeFilter = ({ target: { value } }) => setFilter(value);
   const handleFilterData = (data) =>
@@ -67,8 +75,11 @@ const ProjectsPageContainer = () => {
   return (
     <ProjectsPageComponent
       compact={compact}
+      modalState={modalState}
       handleChangeFilter={handleChangeFilter}
+      handleToggleModal={handleToggleModal}
       handleChange={handleChange}
+      handleClickEdit={handleClickEdit}
       handleFilterData={handleFilterData}
     />
   );

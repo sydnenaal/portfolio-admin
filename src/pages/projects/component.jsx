@@ -6,8 +6,10 @@ import { Card, Input, Button, Radio } from "semantic-ui-react";
 import "./style.sass";
 
 import PageWithHeader from "containers/pageWithHeader";
+import Modal from "containers/modal";
 import Table from "containers/table";
 import WithLoader from "containers/withLoader";
+import AddProjectForm from "./components/projectAddForm";
 
 import { headerNames } from "constants/tableConstants";
 import { themeStyle } from "constants/themingStyles";
@@ -18,6 +20,9 @@ const ProjectsPageComponent = ({
   handleChange,
   handleChangeFilter,
   handleFilterData,
+  handleToggleModal,
+  modalState,
+  handleClickEdit,
 }) => {
   const {
     messages: { titles, projects },
@@ -37,7 +42,7 @@ const ProjectsPageComponent = ({
               <div className="projectsActions">
                 <div className="projectsButtons">
                   <div className="crudButton">
-                    <Button>{projects.add}</Button>
+                    <Button onClick={handleToggleModal}>{projects.add}</Button>
                   </div>
 
                   <div className="crudButton">
@@ -45,7 +50,7 @@ const ProjectsPageComponent = ({
                   </div>
 
                   <div className="crudButton">
-                    <Button>{projects.update}</Button>
+                    <Button onClick={handleClickEdit}>{projects.update}</Button>
                   </div>
 
                   <div className="crudButton">
@@ -77,6 +82,14 @@ const ProjectsPageComponent = ({
             </div>
           </Card.Content>
         </Card>
+        <Modal
+          isOpen={modalState}
+          handleClose={handleToggleModal}
+          title="Добавление проекта"
+          size="tiny"
+        >
+          <AddProjectForm />
+        </Modal>
       </div>
     </PageWithHeader>
   );

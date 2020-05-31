@@ -9,26 +9,32 @@ import { selectTheme, selectActiveTab } from "redux/selectors";
 import Card from "containers/card";
 import WithLoader from "containers/withLoader";
 import Message from "./message";
+import Pagination from "containers/pagination/component";
 
 export const Content = ({ content, handleCheck }) => {
   return (
     <Card>
-      <div className="messagesInnerArea">
-        <WithLoader>
-          {content && content.length > 0 ? (
-            content.map((item, index) => (
-              <Message
-                {...item}
-                handleCheck={handleCheck}
-                index={index}
-                key={index}
-              />
-            ))
-          ) : (
-            <div className="emptyMessage">Empty</div>
-          )}
-        </WithLoader>
-      </div>
+      <>
+        <div className="messagesInnerArea">
+          <WithLoader>
+            {content && content.length > 0 ? (
+              content.map((item, index) => (
+                <Message
+                  {...item}
+                  handleCheck={handleCheck}
+                  index={index}
+                  key={index}
+                />
+              ))
+            ) : (
+              <div className="emptyMessage">Empty</div>
+            )}
+          </WithLoader>
+        </div>
+        <div className="messagesPagination">
+          <Pagination handlers={{}} />
+        </div>
+      </>
     </Card>
   );
 };
