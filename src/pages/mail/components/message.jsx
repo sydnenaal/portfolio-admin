@@ -47,7 +47,7 @@ const Message = ({
     history.push(`mail/${id}`);
   };
 
-  const messageContainerPadding = { paddingLeft: isOpen ? "100px" : "5px" };
+  const messageContainerPadding = { paddingLeft: isOpen ? "100px" : "0px" };
 
   useEffect(() => {
     const calcDelay = () => {
@@ -67,65 +67,66 @@ const Message = ({
   }, [id]);
 
   return (
-    <div
-      className="messageComponent"
-      onMouseLeave={handleMouseLeave}
-      style={style}
-    >
-      <div className="deleteMessage">
-        <div className="actionIcon">
-          <Icon size="big" name="trash alternate" />
-        </div>
-
-        <div className="actionIcon">
-          <Icon size="big" name="warning" />
-        </div>
-      </div>
-
-      <div className="messageContainer" style={messageContainerPadding}>
-        <Card>
-          <div
-            className="messageContent"
-            onContextMenu={handleContextMenu}
-            onMouseDown={handleMouseDown}
-          >
-            <div className="indicator">
-              {!isRead && <div className="readPoint"></div>}
-
-              {isImportant && <div className="importantPoint"></div>}
-            </div>
-
-            <div className="checkboxContainer">
-              <div className="checkbox">
-                <Checkbox checked={isChecked} onChange={handleChange} />
-              </div>
-            </div>
-
-            <div className="redirect" onClick={handleClick}>
-              <div className="image">
-                <Icon size="big" name={iconName}></Icon>
-              </div>
-
-              <div className="messageInfo">
-                <div className="messageMeta">
-                  <div className="title">
-                    <strong>{client}</strong>
-                  </div>
-
-                  <div className="date">{dateParse(date)}</div>
-                </div>
-
-                <div className="messageText">
-                  <div className="title">
-                    <strong>{title}</strong>
-                  </div>
-
-                  <div className="text">{text}</div>
-                </div>
-              </div>
-            </div>
+    <div className="messageComponent-hover" onMouseLeave={handleMouseLeave}>
+      <div
+        className="messageComponent"
+        style={{ ...style, ...messageContainerPadding }}
+      >
+        <div className="deleteMessage">
+          <div className="actionIcon">
+            <Icon size="big" name="trash alternate" />
           </div>
-        </Card>
+
+          <div className="actionIcon">
+            <Icon size="big" name="warning" />
+          </div>
+        </div>
+
+        <div className="messageContainer">
+          <Card>
+            <div
+              className="messageContent"
+              onContextMenu={handleContextMenu}
+              onMouseDown={handleMouseDown}
+            >
+              <div className="indicator">
+                {!isRead && <div className="readPoint"></div>}
+
+                {isImportant && <div className="importantPoint"></div>}
+              </div>
+
+              <div className="checkboxContainer">
+                <div className="checkbox">
+                  <Checkbox checked={isChecked} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div className="redirect" onClick={handleClick}>
+                <div className="image">
+                  <Icon size="huge" name={iconName}></Icon>
+                </div>
+
+                <div className="messageInfo">
+                  <div className="messageMeta">
+                    <div className="title">
+                      <strong>{client}</strong>
+                    </div>
+
+                    <div className="date">{dateParse(date)}</div>
+                  </div>
+
+                  <div className="messageText">
+                    <div className="title">
+                      <strong>{title}</strong>
+                    </div>
+
+                    <div className="text">{text}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   );

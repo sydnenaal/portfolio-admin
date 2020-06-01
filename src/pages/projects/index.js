@@ -20,15 +20,12 @@ const ProjectsPageContainer = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handleClickEdit = () => {
-    history.push("/projects/0");
-  };
+  const handleClickEdit = () => history.push("/projects/0");
   const handleToggleModal = () => setModalState(!modalState);
   const handleChange = () => changeCompact(!compact);
   const handleChangeFilter = ({ target: { value } }) => setFilter(value);
   const handleFilterData = (data) =>
     data.filter((item) => {
-      console.log(data);
       const filtered = Object.values(item).filter((value) => {
         const index = value
           .toString()
@@ -52,7 +49,6 @@ const ProjectsPageContainer = () => {
       });
 
       if (response) {
-        console.log(response);
         const responseWithChecked = response.map((item) => ({
           ...item,
           isChecked: false,

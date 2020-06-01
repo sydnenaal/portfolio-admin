@@ -9,6 +9,7 @@ import { selectActiveTab, selectSortedMessages } from "redux/selectors";
 import PageWithHeader from "containers/pageWithHeader";
 import { Tab, Content } from "./components/tab";
 import Tabs from "containers/tabs";
+import WithLoader from "containers/withLoader";
 
 const MailPageComponent = ({
   handleCheck,
@@ -59,7 +60,9 @@ const MailPageComponent = ({
         </div>
 
         <Tabs tabs={renderTabs}>
-          <Content content={tabs[activeTab]} handleCheck={handleCheck} />
+          <WithLoader>
+            <Content handleCheck={handleCheck} />
+          </WithLoader>
         </Tabs>
       </div>
     </PageWithHeader>

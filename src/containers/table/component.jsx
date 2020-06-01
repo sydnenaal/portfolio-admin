@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { useSelector } from "react-redux";
 import { Table } from "semantic-ui-react";
 
-import TablePagination from "../pagination/component";
+import TablePagination from "containers/pagination";
 
 const inlineStyle = { overflow: "visible" };
 
@@ -62,11 +62,7 @@ const TableComponent = ({
           <Table.Footer fullWidth>
             <Table.Row>
               <Table.HeaderCell style={inlineStyle} colSpan={colSpan}>
-                <TablePagination
-                  headerCells={headerCells}
-                  handlers={handlers}
-                  {...props}
-                />
+                <TablePagination handlers={handlers} {...props} />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>

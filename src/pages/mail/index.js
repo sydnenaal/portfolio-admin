@@ -52,17 +52,28 @@ const MailPageContainer = () => {
       isChecked: item.id === id ? !item.isChecked : item.isChecked,
     }));
 
+    const tabs = {};
+    tabsNames.forEach((item) => {
+      tabs[item] = checkedMessages.filter(tabFilter[item]);
+    });
+
     dispatch(setMessages(checkedMessages));
+    dispatch(setTabSortedMessages(tabs));
     countChecked(checkedMessages);
   };
-
   const handleCheckAll = ({ setCheck }) => {
     const checkedMessages = messages.map((item) => ({
       ...item,
       isChecked: tabFilter[activeTab](item) ? setCheck : item.isChecked,
     }));
 
+    const tabs = {};
+    tabsNames.forEach((item) => {
+      tabs[item] = checkedMessages.filter(tabFilter[item]);
+    });
+
     dispatch(setMessages(checkedMessages));
+    dispatch(setTabSortedMessages(tabs));
     countChecked(checkedMessages);
   };
 

@@ -33,9 +33,7 @@ const TableContainer = ({ headerNames, tableData, ...props }) => {
       setPageSize(value);
       setPage(1);
     },
-    handleChangePage: (value) => setPage(value),
-    handleChevronLeft: () => page > 1 && setPage(page - 1),
-    handleChevronRight: () => page < pageCount && setPage(page + 1),
+    handleChangePage: setPage,
     isSorted: function () {
       return column === this.accessor ? direction : null;
     },
