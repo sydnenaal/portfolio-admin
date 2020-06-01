@@ -8,13 +8,20 @@ import {
   SET_ACTIVE_MESSAGE,
   SET_ACTIVE_PROJECT,
   SET_PROJECTS,
+  SET_NEW_MESSAGES_COUNTER,
+  SET_VISITS,
 } from "./types";
 
 const messagesInitialState = {
   messages: null,
+  counter: 0,
   tabSortedMessages: [],
   activeMessage: null,
   activeTab: "all",
+};
+
+const visitsInitialState = {
+  visits: { day: 0, week: 0, month: 0 },
 };
 
 const projectsInitialState = {
@@ -36,6 +43,8 @@ const appInitialState = {
 
 export const messagesReducer = (state = messagesInitialState, action) => {
   switch (action.type) {
+    case SET_NEW_MESSAGES_COUNTER:
+      return { ...state, counter: action.payload };
     case SET_MESSAGES:
       return { ...state, messages: action.payload };
     case SET_TAB_SORTED_MESSAGES:
@@ -44,6 +53,15 @@ export const messagesReducer = (state = messagesInitialState, action) => {
       return { ...state, activeTab: action.payload };
     case SET_ACTIVE_MESSAGE:
       return { ...state, activeMessage: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const visitsReducer = (state = visitsInitialState, action) => {
+  switch (action.type) {
+    case SET_VISITS:
+      return { ...state, visits: action.payload };
     default:
       return state;
   }

@@ -23,6 +23,7 @@ const Message = ({
 }) => {
   const dispatch = useDispatch();
   const history = useHistory();
+
   const [isOpen, setIsOpen] = useState(false);
   const [style, setStyle] = useState({});
 

@@ -7,13 +7,15 @@ import "animate.css";
 import "semantic-ui-css/semantic.min.css";
 import "react-notifications-component/dist/theme.css";
 import * as serviceWorker from "./serviceWorker";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunk from "redux-thunk";
 import { rootReducer } from "./redux";
 import { Provider } from "react-redux";
 
 const store = createStore(
   rootReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  composeWithDevTools(applyMiddleware(thunk))
 );
 
 ReactDOM.render(

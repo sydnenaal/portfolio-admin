@@ -8,8 +8,9 @@ import { selectTheme } from "redux/selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
 import { themeStyle } from "constants/themingStyles";
+import WithLoader from "containers/withLoader";
 
-const MainPageComponent = () => {
+const MainPageComponent = ({ counter, visits }) => {
   const {
     messages: {
       titles,
@@ -32,35 +33,42 @@ const MainPageComponent = () => {
           </Card>
         </div>
 
-        <div className="mainInformation">
-          <div className="infoBlock">
-            <Card style={themeStyle[theme]} fluid>
-              <Card.Content>
-                <div className="newMessages">
-                  <p className="infoTitle">{messages.title}</p>
+        <WithLoader>
+          <div className="mainInformation">
+            <div className="infoBlock">
+              <Card style={themeStyle[theme]} fluid>
+                <Card.Content>
+                  <div className="newMessages">
+                    <p className="infoTitle">{messages.title}</p>
 
-                  <p>0</p>
-                </div>
-              </Card.Content>
-            </Card>
+                    <p>{counter}</p>
+                  </div>
+                </Card.Content>
+              </Card>
+            </div>
+            <div className="infoBlock">
+              <Card style={themeStyle[theme]} fluid>
+                <Card.Content>
+                  <div className="visitors">
+                    <p className="infoTitle">{visitors.title}</p>
+
+                    <p>
+                      {visitors.day}: {visits.day}
+                    </p>
+
+                    <p>
+                      {visitors.week}: {visits.week}
+                    </p>
+
+                    <p>
+                      {visitors.month}: {visits.month}
+                    </p>
+                  </div>
+                </Card.Content>
+              </Card>
+            </div>
           </div>
-
-          <div className="infoBlock">
-            <Card style={themeStyle[theme]} fluid>
-              <Card.Content>
-                <div className="visitors">
-                  <p className="infoTitle">{visitors.title}</p>
-
-                  <p>{visitors.day}: 0</p>
-
-                  <p>{visitors.week}: 0</p>
-
-                  <p>{visitors.month}: 0</p>
-                </div>
-              </Card.Content>
-            </Card>
-          </div>
-        </div>
+        </WithLoader>
       </div>
     </PageWithHeader>
   );

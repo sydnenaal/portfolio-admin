@@ -6,3 +6,5 @@ export const selectActiveMessage = (state) => state.messages.activeMessage;
 export const selectActiveTab = (state) => state.messages.activeTab;
 export const selectSortedMessages = (state) => state.messages.tabSortedMessages;
 export const selectMessages = (state) => state.messages.messages;
+export const selectNewMessagesCounter = (state) => state.messages.counter;
+export const selectVisits = (state) => state.visits.visits;

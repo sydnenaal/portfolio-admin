@@ -8,7 +8,7 @@ import MainPageComponent from "./component";
 import { getMessages } from "ducks";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
 import { notificationSettings } from "constants/notificationSettings";
-import { setAppState, setMessages, setTabSortedMessages } from "redux/actions";
+import { setMessages, setTabSortedMessages } from "redux/actions";
 import { selectActiveTab, selectMessages } from "redux/selectors";
 
 const helpUserNotify = () => {
@@ -80,32 +80,13 @@ const MailPageContainer = () => {
   useEffect(() => {
     let source = axios.CancelToken.source();
 
-    const fetchMessages = async (source) => {
-      dispatch(setAppState(true));
-      const response = await getMessages({
-        cancelToken: source.token,
-      });
-
-      if (response) {
-        const responseWithChecked = response.map((item) => ({
-          ...item,
-          isChecked: false,
-        }));
-
-        const tabs = {};
-        tabsNames.forEach((item) => {
-          tabs[item] = responseWithChecked.filter(tabFilter[item]);
-        });
-
-        dispatch(setMessages(responseWithChecked));
-        helpUserNotify();
-
-        dispatch(setTabSortedMessages(tabs));
-      }
-      dispatch(setAppState(false));
-    };
-
-    !messages && fetchMessages(source);
+    !messages &&
+      dispatch(
+        getMessages({
+          cancelToken: source.token,
+          successCallback: (_) => helpUserNotify(),
+        })
+      );
 
     return () => {
       source.cancel();

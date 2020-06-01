@@ -8,7 +8,6 @@ const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
   const {
     messages: { table },
   } = useIntl();
-  console.log(handlers);
 
   const {
     handleChangePageSize,

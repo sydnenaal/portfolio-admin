@@ -2,7 +2,7 @@
   "name": "portfolio_front",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://sydnenaal.github.io/portfolio/",
+  "homepage": "https://localhost:9000",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -20,6 +20,9 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "redux": "^4.0.5",
+    "redux-devtools": "^3.5.0",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.88.2"
   },
@@ -48,7 +51,7 @@
   },
   "devDependencies": {
     "eslint": "^6.8.0",
-    "prettier": "^2.0.1",
-    "gh-pages": "^3.0.0"
+    "gh-pages": "^3.0.0",
+    "prettier": "^2.0.1"
   }
 }

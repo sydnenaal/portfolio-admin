@@ -8,7 +8,14 @@ import {
   SET_ACTIVE_MESSAGE,
   SET_ACTIVE_PROJECT,
   SET_PROJECTS,
+  SET_NEW_MESSAGES_COUNTER,
+  SET_VISITS,
 } from "./types";
+
+export const setVisits = (visits) => ({
+  type: SET_VISITS,
+  payload: visits,
+});
 
 export const setProjects = (projects) => ({
   type: SET_PROJECTS,
@@ -23,6 +30,11 @@ export const setActiveProject = (activeProject) => ({
 export const setMessages = (messages) => ({
   type: SET_MESSAGES,
   payload: messages,
+});
+
+export const setNewMessagesCounter = (counter) => ({
+  type: SET_NEW_MESSAGES_COUNTER,
+  payload: counter,
 });
 
 export const setTabSortedMessages = (tabSortedMessages) => ({
