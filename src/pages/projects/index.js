@@ -4,8 +4,6 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getProjects } from "ducks";
-import { dateParse } from "utils";
-import { setAppState, setProjects } from "redux/actions";
 import { selectProjects } from "redux/selectors";
 
 import ProjectsPageComponent from "./component";
@@ -41,27 +39,12 @@ const ProjectsPageContainer = () => {
   useEffect(() => {
     let source = axios.CancelToken.source();
 
-    const fetchProjects = async (source) => {
-      dispatch(setAppState(true));
-
-      const response = await getProjects({
-        cancelToken: source.token,
-      });
-
-      if (response) {
-        const responseWithChecked = response.map((item) => ({
-          ...item,
-          isChecked: false,
-          createDate: dateParse(item.createDate),
-        }));
-
-        dispatch(setProjects(responseWithChecked));
-      }
-
-      dispatch(setAppState(false));
-    };
-
-    !projects && fetchProjects(source);
+    !projects &&
+      dispatch(
+        getProjects({
+          cancelToken: source.token,
+        })
+      );
 
     return () => {
       source.cancel();

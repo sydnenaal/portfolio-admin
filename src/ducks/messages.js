@@ -16,8 +16,7 @@ export const getMessages = ({ cancelToken, successCallback }) => {
       });
 
       if (response) {
-        successCallback(response);
-        const responseWithChecked = response.map((item) => ({
+        const responseWithChecked = response.data.map((item) => ({
           ...item,
           isChecked: false,
         }));

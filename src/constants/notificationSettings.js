@@ -1,8 +1,8 @@
 export const notificationSettings = {
   insert: "top",
   container: "top-right",
-  animationIn: ["animate__animated", "animate__fadeIn"],
-  animationOut: ["animate__animated", "animate__fadeOut"],
+  animationIn: ["animate__animated", "animate__fadeInRightBig"],
+  animationOut: ["animate__animated", "animate__fadeOutRightBig"],
   dismiss: {
     duration: 5000,
   },

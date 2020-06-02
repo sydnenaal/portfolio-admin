@@ -13,6 +13,7 @@ import { selectActiveTab, selectMessages } from "redux/selectors";
 
 const helpUserNotify = () => {
   const isShow = localStorage.getItem("mailNotify");
+  console.log(isShow);
 
   if (!isShow) {
     localStorage.setItem("mailNotify", "showed");
@@ -84,7 +85,9 @@ const MailPageContainer = () => {
       dispatch(
         getMessages({
           cancelToken: source.token,
-          successCallback: (_) => helpUserNotify(),
+          successCallback: (_) => {
+            helpUserNotify();
+          },
         })
       );
 
