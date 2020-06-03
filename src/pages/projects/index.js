@@ -22,6 +22,7 @@ const ProjectsPageContainer = () => {
   const handleToggleModal = () => setModalState(!modalState);
   const handleChange = () => changeCompact(!compact);
   const handleChangeFilter = ({ target: { value } }) => setFilter(value);
+  //const handleDeleteProjects = (projects) => {};
   const handleFilterData = (data) =>
     data.filter((item) => {
       const filtered = Object.values(item).filter((value) => {

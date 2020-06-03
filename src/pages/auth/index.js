@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-import { store } from "react-notifications-component";
 
-import { notificationSettings } from "constants/notificationSettings";
+import { checkAuth } from "ducks/auth";
 
 import AuthComponent from "./component";
 
 const AuthPageContainer = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const { from } = useLocation().state || { from: { pathname: "/" } };
 
   const [login, setLogin] = useState("");
@@ -17,17 +18,17 @@ const AuthPageContainer = () => {
     handleChangeLogin: (e) => setLogin(e.target.value),
     handleChangePassword: (e) => setPassword(e.target.value),
     handleLogin: () => {
-      if (login === "Admin" && password === "1") {
-        localStorage.setItem("isAuth", true);
-        history.replace(from);
-      } else {
-        store.addNotification({
-          ...notificationSettings,
-          title: "Ошибка",
-          message: "Неверный логин или пароль",
-          type: "danger",
-        });
-      }
+      dispatch(
+        checkAuth({
+          cancelToken: null,
+          from: from,
+          history: history,
+          loginData: {
+            login,
+            password,
+          },
+        })
+      );
     },
   };
 

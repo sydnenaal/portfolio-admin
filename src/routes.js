@@ -24,12 +24,12 @@ const customRoute = ({ path, getToken }) => ({ children, ...props }) => {
 
 const ProtectedRoute = customRoute({
   path: "/auth",
-  getToken: () => localStorage.getItem("isAuth"),
+  getToken: () => localStorage.getItem("token"),
 });
 
 const AuthRoute = customRoute({
   path: "/",
-  getToken: () => !localStorage.getItem("isAuth"),
+  getToken: () => !localStorage.getItem("token"),
 });
 
 const Routes = () => {

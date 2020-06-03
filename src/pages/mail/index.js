@@ -85,7 +85,7 @@ const MailPageContainer = () => {
       dispatch(
         getMessages({
           cancelToken: source.token,
-          successCallback: (_) => {
+          successCallbackFromUI: (_) => {
             helpUserNotify();
           },
         })
