@@ -1,5 +1,6 @@
 import { setMessages, setActiveMessage } from "redux/actions";
-import { queryWrapper, serverPath } from "ducks";
+import { serverPath } from "ducks";
+import { queryWrapper } from "utils";
 import { sortMessages } from "utils/getTabSortedMessages";
 
 export const setActualityMessages = ({ cancelToken, data }) =>
@@ -8,7 +9,6 @@ export const setActualityMessages = ({ cancelToken, data }) =>
     url: `${serverPath}/messages/actuality`,
     method: "post",
     body: data,
-    errorMessage: "Не удалось завершить операцию",
     successCallback: (dispatch, response) => {
       const responseWithChecked = response.data.map((item) => ({
         ...item,
@@ -26,7 +26,6 @@ export const setPriorityMessages = ({ cancelToken, data }) =>
     url: `${serverPath}/messages/priority`,
     method: "post",
     body: data,
-    errorMessage: "Не удалось завершить операцию",
     successCallback: (dispatch, response) => {
       const responseWithChecked = response.data.map((item) => ({
         ...item,
@@ -44,7 +43,9 @@ export const getMessage = ({ cancelToken, data }) =>
     url: `${serverPath}/messages/message`,
     method: "post",
     body: data,
-    errorMessage: "Не удалось загрузить сообщение",
+    errorMessages: {
+      500: { message: "Не удалось загрузить сообщение", type: "danger" },
+    },
     successCallback: (dispatch, response) => {
       dispatch(setActiveMessage(response.data));
     },
@@ -55,7 +56,9 @@ export const getMessages = ({ cancelToken, successCallbackFromUI }) =>
     cancelToken: cancelToken,
     url: `${serverPath}/messages`,
     method: "get",
-    errorMessage: "Не удалось загрузить сообщения",
+    errorMessages: {
+      500: { message: "Не удалось загрузить сообщения", type: "danger" },
+    },
     successCallback: (dispatch, response) => {
       const responseWithChecked = response.data.map((item) => ({
         ...item,

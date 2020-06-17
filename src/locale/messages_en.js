@@ -31,6 +31,7 @@ export const messages_en = {
     language: "Language",
     password: "Change password",
     userData: "Change contact information",
+    enterOldPasswordPlaceholder: "Enter old password",
     enterPasswordPlaceholder: "Enter new password",
     repeatPasswordPlaceholder: "Repeat new password",
     savePassword: "Save",

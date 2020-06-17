@@ -29,6 +29,7 @@ export const messages_ru = {
     language: "Язык",
     password: "Изменить пароль",
     userData: "Изменить контактные данные",
+    enterOldPasswordPlaceholder: "Enter old password",
     enterPasswordPlaceholder: "Введите новый пароль",
     repeatPasswordPlaceholder: "Повторите новый пароль",
     savePassword: "Сохранить",

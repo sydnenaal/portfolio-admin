@@ -9,11 +9,13 @@ const ChangePassword = ({ locale }) => {
   const dispatch = useDispatch();
 
   const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState(false);
 
   const handleChangePassword = (e) => setPassword(e.target.value);
+  const handleChangeOldPassword = (e) => setOldPassword(e.target.value);
   const handleChangeRepeatPassword = (e) => {
     error && setError(false);
     setRepeatPassword(e.target.value);
@@ -22,7 +24,9 @@ const ChangePassword = ({ locale }) => {
     if (password !== repeatPassword) {
       setError(true);
     } else {
-      dispatch(changePassword({ password: password }));
+      dispatch(
+        changePassword({ password: password, oldPassword: oldPassword })
+      );
       setPassword("");
       setRepeatPassword("");
       setIsPasswordChangeShow(false);
@@ -55,8 +59,8 @@ const ChangePassword = ({ locale }) => {
             size="small"
             fluid
             type="password"
-            onChange={handleChangePassword}
-            value={password}
+            onChange={handleChangeOldPassword}
+            value={oldPassword}
             placeholder={locale.settings.enterOldPasswordPlaceholder}
           />
         </div>

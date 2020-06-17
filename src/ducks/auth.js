@@ -1,4 +1,5 @@
-import { serverPath, queryWrapper } from "ducks";
+import { serverPath } from "ducks";
+import { queryWrapper } from "utils";
 import { encryptData } from "utils";
 
 export const checkAuth = ({ cancelToken, loginData, from, history }) =>
@@ -7,7 +8,9 @@ export const checkAuth = ({ cancelToken, loginData, from, history }) =>
     method: "post",
     body: { data: encryptData(JSON.stringify(loginData)) },
     cancelToken: cancelToken,
-    errorMessage: "Неверный логин или пароль",
+    errorMessages: {
+      500: { message: "Неверный логин или пароль", type: "danger" },
+    },
     successCallback: (_, response) => {
       localStorage.setItem("token", response.data.token);
       history.replace(from);

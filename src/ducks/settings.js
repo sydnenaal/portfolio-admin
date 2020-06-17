@@ -1,21 +1,20 @@
-import { store } from "react-notifications-component";
-
-import { serverPath, queryWrapper } from "ducks";
-import { notificationSettings } from "constants/notificationSettings";
+import { serverPath } from "ducks";
+import { queryWrapper } from "utils";
 import { encryptData } from "utils";
 
-export const changePassword = ({ password }) =>
+export const changePassword = ({ password, oldPassword }) =>
   queryWrapper({
     method: "post",
     url: `${serverPath}/users/setPassword`,
-    body: { data: encryptData(password) },
-    errorMessage: "Не удалось сменить пароль",
-    successCallback: () => {
-      store.addNotification({
-        ...notificationSettings,
-        title: "Сброс",
-        message: "Пароль успешно изменен",
-        type: "success",
-      });
+    body: {
+      data: {
+        password: encryptData(password),
+        oldPassword: encryptData(oldPassword),
+      },
+    },
+    errorMessages: {
+      500: { message: "Не удалось сменить пароль", type: "danger" },
+      505: { message: "Введен неверный старый пароль", type: "danger" },
+      200: { message: "Пароль успешно изменен", type: "success" },
     },
   });
