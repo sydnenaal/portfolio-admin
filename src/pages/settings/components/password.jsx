@@ -1,11 +1,33 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
+import { changePassword } from "ducks/settings";
 
 const ChangePassword = ({ locale }) => {
-  const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
+  const dispatch = useDispatch();
 
+  const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [error, setError] = useState(false);
+
+  const handleChangePassword = (e) => setPassword(e.target.value);
+  const handleChangeRepeatPassword = (e) => {
+    error && setError(false);
+    setRepeatPassword(e.target.value);
+  };
+  const handleSubmit = () => {
+    if (password !== repeatPassword) {
+      setError(true);
+    } else {
+      dispatch(changePassword({ password: password }));
+      setPassword("");
+      setRepeatPassword("");
+      setIsPasswordChangeShow(false);
+    }
+  };
   const handleOpenPasswordChange = () =>
     setIsPasswordChangeShow(!isPasswordChangeShow);
 
@@ -32,6 +54,22 @@ const ChangePassword = ({ locale }) => {
           <Input
             size="small"
             fluid
+            type="password"
+            onChange={handleChangePassword}
+            value={password}
+            placeholder={locale.settings.enterOldPasswordPlaceholder}
+          />
+        </div>
+      </div>
+
+      <div className="passwordChange" style={contentStyle}>
+        <div className="passwordChange-input">
+          <Input
+            size="small"
+            fluid
+            type="password"
+            onChange={handleChangePassword}
+            value={password}
             placeholder={locale.settings.enterPasswordPlaceholder}
           />
         </div>
@@ -40,12 +78,16 @@ const ChangePassword = ({ locale }) => {
           <Input
             size="small"
             fluid
+            type="password"
+            error={error}
+            onChange={handleChangeRepeatPassword}
+            value={repeatPassword}
             placeholder={locale.settings.repeatPasswordPlaceholder}
           />
         </div>
 
         <div className="passwordChange-button">
-          <Button>{locale.settings.savePassword}</Button>
+          <Button onClick={handleSubmit}>{locale.settings.savePassword}</Button>
         </div>
       </div>
     </div>

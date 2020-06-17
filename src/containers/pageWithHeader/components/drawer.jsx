@@ -35,7 +35,7 @@ const DrawerComponent = ({ handleDrawerVisible, drawerVisible, children }) => {
 
   function handleClick() {
     if (this.path === "/auth") {
-      localStorage.removeItem("isAuth");
+      localStorage.removeItem("token");
       history.push("/auth");
     } else {
       history.push(this.path);

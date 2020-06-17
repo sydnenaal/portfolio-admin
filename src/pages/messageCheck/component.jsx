@@ -12,7 +12,11 @@ import { selectActiveMessage } from "redux/selectors";
 
 import "./style.sass";
 
-const MessageCheckPageComponent = ({ handleClickBack }) => {
+const MessageCheckPageComponent = ({
+  handleClickBack,
+  handleDelete,
+  handleSetPriority,
+}) => {
   const {
     messages: { titles },
   } = useIntl();
@@ -24,8 +28,8 @@ const MessageCheckPageComponent = ({ handleClickBack }) => {
       <div className="messagePage">
         <div className="messagePage-buttons">
           <Button onClick={handleClickBack}>Назад</Button>
-          <Button>В корзину</Button>
-          <Button>Отметить как важное</Button>
+          <Button onClick={handleDelete}>В корзину</Button>
+          <Button onClick={handleSetPriority}>Отметить как важное</Button>
         </div>
 
         <Card>

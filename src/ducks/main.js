@@ -3,7 +3,7 @@ import { queryWrapper, serverPath } from "ducks";
 
 export const getMainInfo = ({ cancelToken }) => {
   return queryWrapper({
-    url: `${serverPath}/mainPageInfo`,
+    url: `${serverPath}/mainPage/info`,
     method: "get",
     cancelToken: cancelToken,
     errorMessage: "Не удалось загрузить данные.",

@@ -7,6 +7,7 @@ import Card from "containers/card";
 
 import { setActiveMessage } from "redux/actions";
 import { dateParse } from "utils";
+import { setActualityMessages, setPriorityMessages } from "ducks";
 
 import "../style.sass";
 
@@ -17,6 +18,7 @@ const Message = ({
   isImportant,
   handleCheck,
   id,
+  _id,
   isChecked,
   client,
   date,
@@ -32,6 +34,20 @@ const Message = ({
   const handleChange = () => handleCheck(id);
   const handleContextMenu = (e) => e.preventDefault();
   const handleMouseLeave = () => isOpen && setIsOpen(false);
+  const handleSetPriority = () => {
+    dispatch(
+      setPriorityMessages({
+        data: { messages: [_id], action: !isImportant },
+      })
+    );
+  };
+  const handleDeleteMessage = () => {
+    dispatch(
+      setActualityMessages({
+        data: { messages: [_id], action: true },
+      })
+    );
+  };
   const handleMouseDown = (e) => {
     e.preventDefault();
     e.button === 2 && setIsOpen(!isOpen);
@@ -45,7 +61,7 @@ const Message = ({
         date: date,
       })
     );
-    history.push(`mail/${id}`);
+    history.push(`mail/${_id}`);
   };
 
   const messageContainerPadding = { paddingLeft: isOpen ? "100px" : "0px" };
@@ -75,11 +91,15 @@ const Message = ({
       >
         <div className="deleteMessage">
           <div className="actionIcon">
-            <Icon size="big" name="trash alternate" />
+            <Icon
+              onClick={handleDeleteMessage}
+              size="big"
+              name="trash alternate"
+            />
           </div>
 
           <div className="actionIcon">
-            <Icon size="big" name="warning" />
+            <Icon onClick={handleSetPriority} size="big" name="warning" />
           </div>
         </div>
 

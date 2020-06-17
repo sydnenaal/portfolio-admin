@@ -1,18 +1,11 @@
 import { serverPath, queryWrapper } from "ducks";
-import CryptoJS from "crypto-js";
-
-const secretKey = Math.random() * 100;
+import { encryptData } from "utils";
 
 export const checkAuth = ({ cancelToken, loginData, from, history }) =>
   queryWrapper({
     url: `${serverPath}/auth`,
     method: "post",
-    body: {
-      [secretKey]: CryptoJS.AES.encrypt(
-        JSON.stringify(loginData),
-        secretKey.toString()
-      ).toString(),
-    },
+    body: { data: encryptData(JSON.stringify(loginData)) },
     cancelToken: cancelToken,
     errorMessage: "Неверный логин или пароль",
     successCallback: (_, response) => {

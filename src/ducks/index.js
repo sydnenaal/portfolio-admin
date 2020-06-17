@@ -10,6 +10,8 @@ export const serverPath = "http://localhost:9000";
 export * from "./messages";
 export * from "./projects";
 export * from "./main";
+export * from "./settings";
+export * from "./auth";
 
 export const queryWrapper = ({
   successCallback,
@@ -23,16 +25,18 @@ export const queryWrapper = ({
   if (!isLoading) {
     dispatch(setAppState(true));
     try {
+      const token = localStorage.getItem("token");
       const response = await axios({
         method: method,
         url: url,
         data: body,
-        params: { cancelToken },
+        headers: { authToken: token || "" },
+        cancelToken: cancelToken,
       });
 
-      response && successCallback(dispatch, response);
+      successCallback && successCallback(dispatch, response);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       axios.isCancel(error)
         ? console.log("Отмена запроса")
         : store.addNotification({

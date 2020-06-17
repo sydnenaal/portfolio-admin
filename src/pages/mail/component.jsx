@@ -14,6 +14,10 @@ import WithLoader from "containers/withLoader";
 const MailPageComponent = ({
   handleCheck,
   handleCheckAll,
+  handleDeleteMessages,
+  handleSetImportantMessages,
+  handleSetUsualMessages,
+  handleReturnMessages,
   checked,
   tabsNames,
 }) => {
@@ -35,6 +39,28 @@ const MailPageComponent = ({
       title={item}
     />
   ));
+  const switchButtons = () => {
+    switch (activeTab) {
+      case "trash":
+        return (
+          <Button onClick={handleReturnMessages} disabled={checked === 0}>
+            {mail.buttons.undoDelete}
+          </Button>
+        );
+      case "important":
+        return (
+          <Button onClick={handleSetUsualMessages} disabled={checked === 0}>
+            {mail.buttons.checkAsNotImportant}
+          </Button>
+        );
+      default:
+        return (
+          <Button onClick={handleSetImportantMessages} disabled={checked === 0}>
+            {mail.buttons.checkAsImportant}
+          </Button>
+        );
+    }
+  };
 
   return (
     <PageWithHeader title={titles.mail}>
@@ -45,11 +71,9 @@ const MailPageComponent = ({
 
             <Button onClick={unCheckAll}>{mail.buttons.uncheckAll}</Button>
 
-            <Button disabled={checked === 0}>
-              {mail.buttons.checkAsImportant}
-            </Button>
+            {switchButtons()}
 
-            <Button disabled={checked === 0}>
+            <Button onClick={handleDeleteMessages} disabled={checked === 0}>
               {mail.buttons[activeTab === "trash" ? "remove" : "removeToTrash"]}
             </Button>
           </div>

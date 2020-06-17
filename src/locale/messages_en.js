@@ -12,6 +12,8 @@ export const messages_en = {
     buttons: {
       checkAll: "Select all",
       uncheckAll: "Remove selection",
+      undoDelete: "Return to ",
+      checkAsUsual: "Check as usual",
       checkAsImportant: "Check as important",
       removeToTrash: "Remove to trash",
       remove: "Remove",

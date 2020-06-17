@@ -3,17 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { store } from "react-notifications-component";
 
-import MainPageComponent from "./component";
+import MailPageComponent from "./component";
 
-import { getMessages } from "ducks";
+import { getMessages, setPriorityMessages, setActualityMessages } from "ducks";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
 import { notificationSettings } from "constants/notificationSettings";
-import { setMessages, setTabSortedMessages } from "redux/actions";
+import { setMessages } from "redux/actions";
 import { selectActiveTab, selectMessages } from "redux/selectors";
+import { sortMessages } from "utils/getTabSortedMessages";
 
 const helpUserNotify = () => {
   const isShow = localStorage.getItem("mailNotify");
-  console.log(isShow);
 
   if (!isShow) {
     localStorage.setItem("mailNotify", "showed");
@@ -38,28 +38,46 @@ const MailPageContainer = () => {
   const [checked, setChecked] = useState(0);
 
   const countChecked = (array) => {
-    setChecked(
-      array.reduce((accum, item) =>
-        typeof accum === "object"
-          ? accum.isChecked + item.isChecked
-          : accum + item.isChecked
-      )
+    const checkedCount = array.reduce(
+      (acc, item) => acc + Number(item.isChecked),
+      0
     );
+
+    setChecked(checkedCount);
+  };
+  const getCheckedMessages = () =>
+    messages.filter((item) => item.isChecked).map((item) => item._id);
+  const priorityAction = ({ action }) => () => {
+    const checkedMessages = getCheckedMessages();
+    dispatch(
+      setPriorityMessages({
+        data: { messages: checkedMessages, action: action },
+      })
+    );
+    setChecked(0);
+  };
+  const actualityAction = ({ action }) => () => {
+    const checkedMessages = getCheckedMessages();
+    dispatch(
+      setActualityMessages({
+        data: { messages: checkedMessages, action: action },
+      })
+    );
+    setChecked(0);
   };
 
+  const handleSetUsualMessages = priorityAction({ action: false });
+  const handleSetImportantMessages = priorityAction({ action: true });
+  const handleDeleteMessages = actualityAction({ action: true });
+  const handleReturnMessages = actualityAction({ action: false });
   const handleCheck = (id) => {
     const checkedMessages = messages.map((item) => ({
       ...item,
       isChecked: item.id === id ? !item.isChecked : item.isChecked,
     }));
 
-    const tabs = {};
-    tabsNames.forEach((item) => {
-      tabs[item] = checkedMessages.filter(tabFilter[item]);
-    });
-
+    sortMessages({ messages: checkedMessages, dispatch: dispatch });
     dispatch(setMessages(checkedMessages));
-    dispatch(setTabSortedMessages(tabs));
     countChecked(checkedMessages);
   };
   const handleCheckAll = ({ setCheck }) => {
@@ -68,40 +86,42 @@ const MailPageContainer = () => {
       isChecked: tabFilter[activeTab](item) ? setCheck : item.isChecked,
     }));
 
-    const tabs = {};
-    tabsNames.forEach((item) => {
-      tabs[item] = checkedMessages.filter(tabFilter[item]);
-    });
-
+    sortMessages({ messages: checkedMessages, dispatch: dispatch });
     dispatch(setMessages(checkedMessages));
-    dispatch(setTabSortedMessages(tabs));
     countChecked(checkedMessages);
   };
 
   useEffect(() => {
+    setChecked(0);
+  }, [setChecked, activeTab]);
+
+  useEffect(() => {
     let source = axios.CancelToken.source();
 
-    !messages &&
-      dispatch(
-        getMessages({
-          cancelToken: source.token,
-          successCallbackFromUI: (_) => {
-            helpUserNotify();
-          },
-        })
-      );
+    dispatch(
+      getMessages({
+        cancelToken: source.token,
+        successCallbackFromUI: (_) => {
+          helpUserNotify();
+        },
+      })
+    );
 
     return () => {
       source.cancel();
     };
-  }, [dispatch, messages]);
+  }, [dispatch]);
 
   return (
-    <MainPageComponent
+    <MailPageComponent
       tabsNames={tabsNames}
       messages={messages}
       handleCheckAll={handleCheckAll}
       handleCheck={handleCheck}
+      handleReturnMessages={handleReturnMessages}
+      handleDeleteMessages={handleDeleteMessages}
+      handleSetImportantMessages={handleSetImportantMessages}
+      handleSetUsualMessages={handleSetUsualMessages}
       checked={checked}
     />
   );

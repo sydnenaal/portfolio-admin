@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Label } from "semantic-ui-react";
 
 import { themeStyle } from "constants/themingStyles";
-import { setTab } from "redux/actions";
+import { setTab, setMessages } from "redux/actions";
+import { sortMessages } from "utils";
 import {
   selectTheme,
   selectActiveTab,
   selectSortedMessages,
+  selectMessages,
 } from "redux/selectors";
 
 import Card from "containers/card";
@@ -74,6 +76,7 @@ export const Content = ({ handleCheck }) => {
 export const Tab = ({ title, messagesCounter, locale }) => {
   const activeTab = useSelector(selectActiveTab);
   const theme = useSelector(selectTheme);
+  const messages = useSelector(selectMessages);
   const dispatch = useDispatch();
 
   const isActive = activeTab === title;
@@ -81,7 +84,12 @@ export const Tab = ({ title, messagesCounter, locale }) => {
   const borderColor = isActive ? activeColor : "transparent";
   const tabStyle = { borderBottom: `2px solid ${borderColor}` };
 
-  const handleClick = () => dispatch(setTab(title));
+  const handleClick = () => {
+    const newMessages = messages.map((item) => ({ ...item, isChecked: false }));
+    dispatch(setMessages(newMessages));
+    sortMessages({ messages: newMessages, dispatch: dispatch });
+    dispatch(setTab(title));
+  };
 
   return (
     <div style={tabStyle} className="tab" key={title} onClick={handleClick}>
