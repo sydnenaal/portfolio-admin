@@ -9,3 +9,4 @@ export const SET_THEME = "THEME/SET_THEME";
 export const SET_LANGUAGE = "LANGUAGE/SET_LANGUAGE";
 export const SET_APP_STATE = "APP_STATE/SET_APP_STATE";
 export const SET_VISITS = "VISITS/SET_VISITS";
+export const SET_USER_DATA = "USER/SET_USER_DATA";

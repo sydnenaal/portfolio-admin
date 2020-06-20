@@ -39,28 +39,28 @@ const MailPageComponent = ({
       title={item}
     />
   ));
-  const switchButtons = () => {
-    switch (activeTab) {
-      case "trash":
-        return (
-          <Button onClick={handleReturnMessages} disabled={checked === 0}>
-            {mail.buttons.undoDelete}
-          </Button>
-        );
-      case "important":
-        return (
-          <Button onClick={handleSetUsualMessages} disabled={checked === 0}>
-            {mail.buttons.checkAsNotImportant}
-          </Button>
-        );
-      default:
-        return (
-          <Button onClick={handleSetImportantMessages} disabled={checked === 0}>
-            {mail.buttons.checkAsImportant}
-          </Button>
-        );
-    }
-  };
+
+  let buttonInfo;
+
+  switch (activeTab) {
+    case "trash":
+      buttonInfo = {
+        handler: handleReturnMessages,
+        message: mail.buttons.undoDelete,
+      };
+      break;
+    case "important":
+      buttonInfo = {
+        handler: handleSetUsualMessages,
+        message: mail.buttons.checkAsUsual,
+      };
+      break;
+    default:
+      buttonInfo = {
+        handler: handleSetImportantMessages,
+        message: mail.buttons.checkAsImportant,
+      };
+  }
 
   return (
     <PageWithHeader title={titles.mail}>
@@ -71,7 +71,9 @@ const MailPageComponent = ({
 
             <Button onClick={unCheckAll}>{mail.buttons.uncheckAll}</Button>
 
-            {switchButtons()}
+            <Button onClick={buttonInfo.handler} disabled={checked === 0}>
+              {buttonInfo.message}
+            </Button>
 
             <Button onClick={handleDeleteMessages} disabled={checked === 0}>
               {mail.buttons[activeTab === "trash" ? "remove" : "removeToTrash"]}

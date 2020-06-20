@@ -10,6 +10,7 @@ export const messages_en = {
     empty: "Empty",
     searchPlaceholder: "Search...",
     buttons: {
+      goBack: "Go back",
       checkAll: "Select all",
       uncheckAll: "Remove selection",
       undoDelete: "Return to ",

@@ -26,14 +26,21 @@ export const queryWrapper = ({
       });
 
       successCallback && successCallback(dispatch, response);
-      showNotifyByResponseStatusCode(errorMessages, response.status);
+      showNotifyByResponseStatusCode(response.status, errorMessages);
     } catch (error) {
       console.log({ ...error });
       if (error.isAxiosError) {
         const errorStatus = error.response && error.response.status;
+        const errorMessage = errorMessages || {
+          500: {
+            message: "Не удалось завершить операцию",
+            type: "danger",
+          },
+        };
+
         axios.isCancel(error)
           ? console.log("Отмена запроса")
-          : showNotifyByResponseStatusCode(errorMessages, errorStatus);
+          : showNotifyByResponseStatusCode(errorStatus, errorMessage);
       }
     }
     dispatch(setAppState(false));

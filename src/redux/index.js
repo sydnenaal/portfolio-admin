@@ -7,6 +7,7 @@ import {
   appStateReducer,
   projectsReducer,
   visitsReducer,
+  userReducer,
 } from "./reducers";
 
 export const rootReducer = combineReducers({
@@ -16,4 +17,5 @@ export const rootReducer = combineReducers({
   language: languageReducer,
   appState: appStateReducer,
   visits: visitsReducer,
+  user: userReducer,
 });

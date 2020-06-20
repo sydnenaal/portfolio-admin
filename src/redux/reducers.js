@@ -10,7 +10,12 @@ import {
   SET_PROJECTS,
   SET_NEW_MESSAGES_COUNTER,
   SET_VISITS,
+  SET_USER_DATA,
 } from "./types";
+
+const userInitialState = {
+  userData: { name: "", photo: "" },
+};
 
 const messagesInitialState = {
   messages: null,
@@ -39,6 +44,15 @@ const languageInitialState = {
 
 const appInitialState = {
   isLoading: false,
+};
+
+export const userReducer = (state = userInitialState, action) => {
+  switch (action.type) {
+    case SET_USER_DATA:
+      return { ...state, userData: action.payload };
+    default:
+      return state;
+  }
 };
 
 export const messagesReducer = (state = messagesInitialState, action) => {

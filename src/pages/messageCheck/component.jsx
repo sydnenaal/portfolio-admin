@@ -18,7 +18,10 @@ const MessageCheckPageComponent = ({
   handleSetPriority,
 }) => {
   const {
-    messages: { titles },
+    messages: {
+      titles,
+      mail: { buttons },
+    },
   } = useIntl();
 
   const activeMessage = useSelector(selectActiveMessage);
@@ -27,9 +30,11 @@ const MessageCheckPageComponent = ({
     <PageWithHeader title={titles.mail} subtitle={"read"}>
       <div className="messagePage">
         <div className="messagePage-buttons">
-          <Button onClick={handleClickBack}>Назад</Button>
-          <Button onClick={handleDelete}>В корзину</Button>
-          <Button onClick={handleSetPriority}>Отметить как важное</Button>
+          <Button onClick={handleClickBack}>{buttons.goBack}</Button>
+          <Button onClick={handleDelete}>{buttons.removeToTrash}</Button>
+          <Button onClick={handleSetPriority}>
+            {buttons.checkAsImportant}
+          </Button>
         </div>
 
         <Card>

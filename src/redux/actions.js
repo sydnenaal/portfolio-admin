@@ -10,7 +10,13 @@ import {
   SET_PROJECTS,
   SET_NEW_MESSAGES_COUNTER,
   SET_VISITS,
+  SET_USER_DATA,
 } from "./types";
+
+export const setUserData = (userData) => ({
+  type: SET_USER_DATA,
+  payload: userData,
+});
 
 export const setVisits = (visits) => ({
   type: SET_VISITS,

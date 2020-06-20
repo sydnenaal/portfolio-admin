@@ -8,3 +8,4 @@ export const selectSortedMessages = (state) => state.messages.tabSortedMessages;
 export const selectMessages = (state) => state.messages.messages;
 export const selectNewMessagesCounter = (state) => state.messages.counter;
 export const selectVisits = (state) => state.visits.visits;
+export const selectUserData = (state) => state.user.userData;

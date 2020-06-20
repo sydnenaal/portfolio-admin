@@ -50,66 +50,50 @@
         left: 3px
 
 .drawer
-    display: flex
+    width: 100%
+    height: 100vh
 
-    .sidebar
-        height: 100vh
-        position: fixed
-        overflow: hidden
-        background-color: #222
-        color: white
-        will-change: max-width
-        transition: max-width 0.3s ease
-
-        .sidebar-item
-            display: flex
-            cursor: pointer
-
-            &:hover
-                background-color: rgba(51, 51, 51, 0.3)
-
-            &__title
-                height: 50px
-                min-width: 150px
-                padding-right: 15px
-                font-size: 18px
-                display: flex
-                flex-direction: column
-                align-items: flex-start
-                justify-content: center
-
-            &__icon
-                cursor: pointer
-                width: 70px
-                min-width: 70px
-                height: 50px
-                display: flex
-                flex-direction: column
-                align-items: center
-                justify-content: center
-
-            .icon_head
-                height: 70px
-
-    .pageWithHeader
-        will-change: margin-left
-        transition: margin-left 0.3s ease
+    .staticElements
+        height: 7vh
         width: 100%
-        height: 100vh
+        display: flex
+        position: fixed
+        z-index: 10000 !important
 
         .header
-            width: 100%
+            flex-grow: 1
             height: 7vh
-            z-index: 100
-            position: fixed
             box-shadow: 0 0 7px rgba(0,0,0,0.4)
-
+            
             .headerContent
                 display: flex
                 align-items: center
+                justify-content: space-between
                 padding-left: 20px
+                padding-right: 20px
                 width: 100%
                 height: 100%
+
+                .headerTitleContainer
+                    display: flex
+
+                .headerUserInfo
+                    display: flex
+                    max-width: 300px
+
+                    .headerUserName
+                        margin-right: 15px
+                        display: flex
+                        align-items: center
+                        font-size: 16px
+
+                    .headerUserPhoto
+                        width: 30px
+                        height: 30px
+                        overflow: hidden
+                        border-radius: 50%
+                        margin-right: 15px
+                        background-color: black
 
                 .drawerButton
                     width: 50px
@@ -139,7 +123,50 @@
                     align-items: flex-end
                     justify-content: flex-end
 
+        .sidebar
+            background-color: #222
+            color: white
+            will-change: max-width
+            transition: max-width 0.3s ease
+            overflow: hidden
+            height: 100vh
+
+            .sidebar-item
+                display: flex
+                cursor: pointer
+
+                &:hover
+                    background-color: rgba(51, 51, 51, 0.3)
+
+                &__title
+                    height: 50px
+                    min-width: 150px
+                    padding-right: 15px
+                    font-size: 18px
+                    display: flex
+                    flex-direction: column
+                    align-items: flex-start
+                    justify-content: center
+
+                &__icon
+                    cursor: pointer
+                    width: 70px
+                    min-width: 70px
+                    height: 50px
+                    display: flex
+                    flex-direction: column
+                    align-items: center
+                    justify-content: center
+
+                .icon_head
+                    height: 70px
+
+    .pageWithHeader
+        height: 100vh
+        width: 100% 
+        padding-left: 70px
+        padding-top: 7vh
+
         .body
             width: 100%
-            padding-top: 7vh
-            min-height: 100vh
+            min-height: 93vh
