@@ -5,9 +5,10 @@ import { queryWrapper } from "utils";
 
 export const deleteProjects = () => {};
 
-export const getProjects = ({ cancelToken }) => {
+export const getProjects = ({ cancelToken, title }) => {
   return queryWrapper({
     cancelToken: cancelToken,
+    title: title,
     url: `${serverPath}/projects`,
     method: "get",
     errorMessages: {

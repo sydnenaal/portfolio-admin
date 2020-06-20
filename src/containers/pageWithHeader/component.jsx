@@ -34,7 +34,7 @@ const PageWithHeaderComponent = ({
   useEffect(() => {
     let source = axios.CancelToken.source();
 
-    dispatch(getUserData({ cancelToken: source.token }));
+    dispatch(getUserData({ cancelToken: source.token, title: "getUserData" }));
 
     return () => {
       source.cancel();
@@ -116,7 +116,7 @@ const PageWithHeaderComponent = ({
                 <img
                   width="30px"
                   src={userData.photo || userPlaceholder}
-                  alt="user-photo"
+                  alt="user"
                 />
               </div>
               <div className="headerUserName">

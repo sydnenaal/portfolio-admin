@@ -4,10 +4,10 @@ import {
   messagesReducer,
   themeReducer,
   languageReducer,
-  appStateReducer,
   projectsReducer,
   visitsReducer,
   userReducer,
+  requestsStackReducer,
 } from "./reducers";
 
 export const rootReducer = combineReducers({
@@ -15,7 +15,7 @@ export const rootReducer = combineReducers({
   projects: projectsReducer,
   theme: themeReducer,
   language: languageReducer,
-  appState: appStateReducer,
   visits: visitsReducer,
   user: userReducer,
+  requestStack: requestsStackReducer,
 });

@@ -18,6 +18,7 @@ const MainPageContainer = () => {
     dispatch(
       getMainInfo({
         cancelToken: source.token,
+        title: "getMainPageInfo",
       })
     );
 

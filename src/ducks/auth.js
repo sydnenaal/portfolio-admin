@@ -2,12 +2,13 @@ import { serverPath } from "ducks";
 import { queryWrapper, encryptData } from "utils";
 import { setUserData } from "redux/actions";
 
-export const checkAuth = ({ cancelToken, loginData, from, history }) =>
+export const checkAuth = ({ cancelToken, loginData, from, history, title }) =>
   queryWrapper({
     url: `${serverPath}/auth`,
     method: "post",
     body: { data: encryptData(JSON.stringify(loginData)) },
     cancelToken: cancelToken,
+    title: title,
     errorMessages: {
       500: { message: "Неверный логин или пароль", type: "danger" },
     },
@@ -20,11 +21,12 @@ export const checkAuth = ({ cancelToken, loginData, from, history }) =>
     },
   });
 
-export const getUserData = ({ cancelToken }) =>
+export const getUserData = ({ cancelToken, title }) =>
   queryWrapper({
     url: `${serverPath}/users/getUserData`,
     method: "get",
     cancelToken: cancelToken,
+    title: title,
     errorMessages: {
       500: {
         message: "Не удалось загрузить данные текущего пользователя",

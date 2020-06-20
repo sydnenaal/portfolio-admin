@@ -1,17 +1,18 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Card, Input, Button } from "semantic-ui-react";
 
 import "./style.sass";
-import { selectLoading } from "redux/selectors";
-
-import { Card, Input, Button } from "semantic-ui-react";
+import { selectRequestStack } from "redux/selectors";
 
 const AuthPageComponent = ({
   handleChangeLogin,
   handleChangePassword,
   handleLogin,
 }) => {
-  const loading = useSelector(selectLoading);
+  const requestStack = useSelector(selectRequestStack);
+  const isLoading = requestStack.indexOf("auth") !== -1;
+
   return (
     <div className="auth">
       <div className="cardBody">
@@ -45,7 +46,7 @@ const AuthPageComponent = ({
               </div>
 
               <div className="cardContent_button">
-                <Button loading={loading} onClick={handleLogin} primary>
+                <Button loading={isLoading} onClick={handleLogin} primary>
                   Вход
                 </Button>
               </div>

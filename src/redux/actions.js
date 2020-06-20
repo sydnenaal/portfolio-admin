@@ -2,7 +2,6 @@ import {
   SET_MESSAGES,
   SET_LANGUAGE,
   SET_THEME,
-  SET_APP_STATE,
   SET_TAB,
   SET_TAB_SORTED_MESSAGES,
   SET_ACTIVE_MESSAGE,
@@ -11,7 +10,13 @@ import {
   SET_NEW_MESSAGES_COUNTER,
   SET_VISITS,
   SET_USER_DATA,
+  SET_REQUESTS_STACK,
 } from "./types";
+
+export const setRequestStack = (stack) => ({
+  type: SET_REQUESTS_STACK,
+  payload: stack,
+});
 
 export const setUserData = (userData) => ({
   type: SET_USER_DATA,
@@ -66,9 +71,4 @@ export const setTheme = (theme) => ({
 export const setLanguage = (language) => ({
   type: SET_LANGUAGE,
   payload: language,
-});
-
-export const setAppState = (state) => ({
-  type: SET_APP_STATE,
-  payload: state,
 });

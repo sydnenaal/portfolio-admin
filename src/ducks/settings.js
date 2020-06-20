@@ -2,8 +2,10 @@ import { serverPath } from "ducks";
 import { queryWrapper } from "utils";
 import { encryptData } from "utils";
 
-export const changePassword = ({ password, oldPassword }) =>
+export const changePassword = ({ cancelToken, password, oldPassword, title }) =>
   queryWrapper({
+    cancelToken: cancelToken,
+    title: title,
     method: "post",
     url: `${serverPath}/users/setPassword`,
     body: {

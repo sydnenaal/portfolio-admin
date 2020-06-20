@@ -86,7 +86,7 @@ const MailPageComponent = ({
         </div>
 
         <Tabs tabs={renderTabs}>
-          <WithLoader>
+          <WithLoader title="getMessages">
             <Content handleCheck={handleCheck} />
           </WithLoader>
         </Tabs>

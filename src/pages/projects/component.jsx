@@ -68,7 +68,7 @@ const ProjectsPageComponent = ({
               </div>
 
               <div className="projectsTable">
-                <WithLoader>
+                <WithLoader title="getProjects">
                   {projectsData && (
                     <Table
                       showPagination={true}

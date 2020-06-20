@@ -1,6 +1,5 @@
 export const selectLanguage = (state) => state.language.language;
 export const selectTheme = (state) => state.theme.theme;
-export const selectLoading = (state) => state.appState.isLoading;
 export const selectProjects = (state) => state.projects.projects;
 export const selectActiveMessage = (state) => state.messages.activeMessage;
 export const selectActiveTab = (state) => state.messages.activeTab;
@@ -9,3 +8,4 @@ export const selectMessages = (state) => state.messages.messages;
 export const selectNewMessagesCounter = (state) => state.messages.counter;
 export const selectVisits = (state) => state.visits.visits;
 export const selectUserData = (state) => state.user.userData;
+export const selectRequestStack = (state) => state.requestStack.requestsStack;

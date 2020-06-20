@@ -38,6 +38,7 @@ const MessageCheckPageContainer = () => {
       getMessage({
         data: { _id: message },
         cancelToken: source.token,
+        title: "getMessage",
       })
     );
 

@@ -2,11 +2,12 @@ import { setVisits, setNewMessagesCounter } from "redux/actions";
 import { queryWrapper } from "utils";
 import { serverPath } from "ducks";
 
-export const getMainInfo = ({ cancelToken }) => {
+export const getMainInfo = ({ cancelToken, title }) => {
   return queryWrapper({
     url: `${serverPath}/mainPage/info`,
     method: "get",
     cancelToken: cancelToken,
+    title: title,
     errorMessages: {
       500: { message: "Не удалось загрузить данные", type: "danger" },
     },

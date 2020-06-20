@@ -2,7 +2,6 @@ import {
   SET_MESSAGES,
   SET_THEME,
   SET_LANGUAGE,
-  SET_APP_STATE,
   SET_TAB,
   SET_TAB_SORTED_MESSAGES,
   SET_ACTIVE_MESSAGE,
@@ -11,7 +10,12 @@ import {
   SET_NEW_MESSAGES_COUNTER,
   SET_VISITS,
   SET_USER_DATA,
+  SET_REQUESTS_STACK,
 } from "./types";
+
+const requestsStackInitialState = {
+  requestsStack: [],
+};
 
 const userInitialState = {
   userData: { name: "", photo: "" },
@@ -42,8 +46,16 @@ const languageInitialState = {
   language: localStorage.getItem("lang") || "en",
 };
 
-const appInitialState = {
-  isLoading: false,
+export const requestsStackReducer = (
+  state = requestsStackInitialState,
+  action
+) => {
+  switch (action.type) {
+    case SET_REQUESTS_STACK:
+      return { ...state, requestsStack: action.payload };
+    default:
+      return state;
+  }
 };
 
 export const userReducer = (state = userInitialState, action) => {
@@ -105,15 +117,6 @@ export const languageReducer = (state = languageInitialState, action) => {
   switch (action.type) {
     case SET_LANGUAGE:
       return { ...state, language: action.payload };
-    default:
-      return state;
-  }
-};
-
-export const appStateReducer = (state = appInitialState, action) => {
-  switch (action.type) {
-    case SET_APP_STATE:
-      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

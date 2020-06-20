@@ -39,7 +39,7 @@ const MessageCheckPageComponent = ({
 
         <Card>
           <div className="messagePage-body">
-            <WithLoader>
+            <WithLoader title="getMessage">
               <div>
                 <div className="messagePage-Body__date">
                   <span>Дата: </span>

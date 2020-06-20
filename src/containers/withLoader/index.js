@@ -1,11 +1,13 @@
 import React from "react";
-import { Loader } from "semantic-ui-react";
 import { useSelector } from "react-redux";
+import { Loader } from "semantic-ui-react";
 
-import { selectLoading } from "redux/selectors";
+import { selectRequestStack } from "redux/selectors";
 
-const WithLoader = ({ children }) => {
-  const loading = useSelector(selectLoading);
+const WithLoader = ({ children, title }) => {
+  const requestStack = useSelector(selectRequestStack);
+  const loading = requestStack.indexOf(title) !== -1;
+
   return <>{loading ? <Loader active inline="centered" /> : children}</>;
 };
 

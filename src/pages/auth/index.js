@@ -21,6 +21,7 @@ const AuthPageContainer = () => {
       dispatch(
         checkAuth({
           cancelToken: null,
+          title: "auth",
           from: from,
           history: history,
           loginData: {

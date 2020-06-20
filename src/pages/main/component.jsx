@@ -33,7 +33,7 @@ const MainPageComponent = ({ counter, visits }) => {
           </Card>
         </div>
 
-        <WithLoader>
+        <WithLoader title="getMainPageInfo">
           <div className="mainInformation">
             <div className="infoBlock">
               <Card style={themeStyle[theme]} fluid>

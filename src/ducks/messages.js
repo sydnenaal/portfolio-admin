@@ -3,9 +3,10 @@ import { serverPath } from "ducks";
 import { queryWrapper } from "utils";
 import { sortMessages } from "utils/getTabSortedMessages";
 
-export const setActualityMessages = ({ cancelToken, data }) =>
+export const setActualityMessages = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
+    title: title,
     url: `${serverPath}/messages/actuality`,
     method: "post",
     body: data,
@@ -20,9 +21,10 @@ export const setActualityMessages = ({ cancelToken, data }) =>
     },
   });
 
-export const setPriorityMessages = ({ cancelToken, data }) =>
+export const setPriorityMessages = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
+    title: title,
     url: `${serverPath}/messages/priority`,
     method: "post",
     body: data,
@@ -37,9 +39,10 @@ export const setPriorityMessages = ({ cancelToken, data }) =>
     },
   });
 
-export const getMessage = ({ cancelToken, data }) =>
+export const getMessage = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
+    title: title,
     url: `${serverPath}/messages/message`,
     method: "post",
     body: data,
@@ -51,9 +54,10 @@ export const getMessage = ({ cancelToken, data }) =>
     },
   });
 
-export const getMessages = ({ cancelToken, successCallbackFromUI }) =>
+export const getMessages = ({ cancelToken, successCallbackFromUI, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
+    title: title,
     url: `${serverPath}/messages`,
     method: "get",
     errorMessages: {

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
@@ -6,6 +7,7 @@ import "../style.sass";
 import { changePassword } from "ducks/settings";
 
 const ChangePassword = ({ locale }) => {
+  let source = axios.CancelToken.source();
   const dispatch = useDispatch();
 
   const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
@@ -13,6 +15,12 @@ const ChangePassword = ({ locale }) => {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      source.cancel();
+    };
+  }, [source]);
 
   const handleChangePassword = (e) => setPassword(e.target.value);
   const handleChangeOldPassword = (e) => setOldPassword(e.target.value);
@@ -25,7 +33,12 @@ const ChangePassword = ({ locale }) => {
       setError(true);
     } else {
       dispatch(
-        changePassword({ password: password, oldPassword: oldPassword })
+        changePassword({
+          title: "changePassword",
+          cancelToken: source.token,
+          password: password,
+          oldPassword: oldPassword,
+        })
       );
       setPassword("");
       setRepeatPassword("");

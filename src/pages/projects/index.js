@@ -43,6 +43,7 @@ const ProjectsPageContainer = () => {
     !projects &&
       dispatch(
         getProjects({
+          title: "getProjects",
           cancelToken: source.token,
         })
       );
