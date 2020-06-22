@@ -35,6 +35,7 @@ const Message = ({
   const handleContextMenu = (e) => e.preventDefault();
   const handleMouseLeave = () => isOpen && setIsOpen(false);
   const handleSetPriority = () => {
+    setIsOpen(false);
     dispatch(
       setPriorityMessages({
         data: { messages: [_id], action: !isImportant },
@@ -42,6 +43,7 @@ const Message = ({
     );
   };
   const handleDeleteMessage = () => {
+    setIsOpen(false);
     dispatch(
       setActualityMessages({
         data: { messages: [_id], action: true },

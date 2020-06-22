@@ -34,6 +34,7 @@ const MailPageContainer = () => {
   const dispatch = useDispatch();
   const activeTab = useSelector(selectActiveTab);
   const messages = useSelector(selectMessages);
+  const source = axios.CancelToken.source();
 
   const [checked, setChecked] = useState(0);
 
@@ -51,6 +52,8 @@ const MailPageContainer = () => {
     const checkedMessages = getCheckedMessages();
     dispatch(
       setPriorityMessages({
+        title: "setPriority",
+        cancelToken: source.token,
         data: { messages: checkedMessages, action: action },
       })
     );
@@ -60,6 +63,8 @@ const MailPageContainer = () => {
     const checkedMessages = getCheckedMessages();
     dispatch(
       setActualityMessages({
+        title: "setActuality",
+        cancelToken: source.token,
         data: { messages: checkedMessages, action: action },
       })
     );
@@ -96,7 +101,7 @@ const MailPageContainer = () => {
   }, [setChecked, activeTab]);
 
   useEffect(() => {
-    let source = axios.CancelToken.source();
+    const source = axios.CancelToken.source();
 
     dispatch(
       getMessages({

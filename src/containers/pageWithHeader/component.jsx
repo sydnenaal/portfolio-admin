@@ -62,12 +62,14 @@ const PageWithHeaderComponent = ({
     {
       key: "0",
       text: "Profile",
+      icon: "user",
       value: "profile",
       onClick: () => console.log("click profile"),
     },
     {
       key: "1",
       text: "Logout",
+      icon: "sign-out",
       value: "logout",
       onClick: () => {
         localStorage.removeItem("token");

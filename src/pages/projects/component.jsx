@@ -6,10 +6,9 @@ import { Card, Input, Button, Radio } from "semantic-ui-react";
 import "./style.sass";
 
 import PageWithHeader from "containers/pageWithHeader";
-import Modal from "containers/modal";
 import Table from "containers/table";
 import WithLoader from "containers/withLoader";
-import AddProjectForm from "./components/projectAddForm";
+import AddProjectModal from "./components/projectAddModal";
 
 import { headerNames } from "constants/tableConstants";
 import { themeStyle } from "constants/themingStyles";
@@ -23,6 +22,10 @@ const ProjectsPageComponent = ({
   handleToggleModal,
   modalState,
   handleClickEdit,
+  handleCheck,
+  handleCheckAll,
+  checked,
+  handleDeleteProjects,
 }) => {
   const {
     messages: { titles, projects },
@@ -46,17 +49,26 @@ const ProjectsPageComponent = ({
                   </div>
 
                   <div className="crudButton">
-                    <Button>{projects.delete}</Button>
+                    <Button
+                      disabled={checked === 0}
+                      onClick={handleDeleteProjects}
+                    >
+                      {projects.delete}
+                    </Button>
                   </div>
 
                   <div className="crudButton">
-                    <Button onClick={handleClickEdit}>{projects.update}</Button>
+                    <Button disabled={checked !== 1} onClick={handleClickEdit}>
+                      {projects.update}
+                    </Button>
                   </div>
 
                   <div className="crudButton">
-                    <p>{projects.dense}</p>
-
-                    <Radio toggle onChange={handleChange} />
+                    <Radio
+                      toggle
+                      onChange={handleChange}
+                      label={projects.dense}
+                    />
                   </div>
                 </div>
 
@@ -71,6 +83,8 @@ const ProjectsPageComponent = ({
                 <WithLoader title="getProjects">
                   {projectsData && (
                     <Table
+                      handleCheckAll={handleCheckAll}
+                      handleCheck={handleCheck}
                       showPagination={true}
                       compact={compact}
                       headerNames={headerNames}
@@ -82,14 +96,10 @@ const ProjectsPageComponent = ({
             </div>
           </Card.Content>
         </Card>
-        <Modal
-          isOpen={modalState}
-          handleClose={handleToggleModal}
-          title="Добавление проекта"
-          size="tiny"
-        >
-          <AddProjectForm />
-        </Modal>
+        <AddProjectModal
+          modalState={modalState}
+          handleToggleModal={handleToggleModal}
+        />
       </div>
     </PageWithHeader>
   );

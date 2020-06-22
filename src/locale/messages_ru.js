@@ -13,6 +13,7 @@ export const messages_ru = {
       goBack: "Назад",
       checkAll: "Выделить все",
       uncheckAll: "Снять выделение",
+      undoDelete: "Вернуть",
       checkAsUsual: "Отметить как обычное",
       checkAsImportant: "Отметить как важное",
       removeToTrash: "Поместить в корзину",

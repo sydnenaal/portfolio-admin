@@ -3,10 +3,44 @@ import { setProjects } from "redux/actions";
 import { serverPath } from "ducks";
 import { queryWrapper } from "utils";
 
-export const deleteProjects = () => {};
+export const insertProjects = ({ cancelToken, title, body }) =>
+  queryWrapper({
+    cancelToken: cancelToken,
+    title: title,
+    method: "put",
+    url: `${serverPath}/projects/insert`,
+    body: body,
+    successCallback: (dispatch, response) => {
+      const responseWithChecked = response.data.map((item) => ({
+        ...item,
+        isChecked: false,
+        createDate: dateParse(item.createDate),
+      }));
 
-export const getProjects = ({ cancelToken, title }) => {
-  return queryWrapper({
+      dispatch(setProjects(responseWithChecked));
+    },
+  });
+
+export const deleteProjects = ({ cancelToken, title, data }) =>
+  queryWrapper({
+    cancelToken: cancelToken,
+    title: title,
+    method: "delete",
+    url: `${serverPath}/projects/delete`,
+    body: data,
+    successCallback: (dispatch, response) => {
+      const responseWithChecked = response.data.map((item) => ({
+        ...item,
+        isChecked: false,
+        createDate: dateParse(item.createDate),
+      }));
+
+      dispatch(setProjects(responseWithChecked));
+    },
+  });
+
+export const getProjects = ({ cancelToken, title }) =>
+  queryWrapper({
     cancelToken: cancelToken,
     title: title,
     url: `${serverPath}/projects`,
@@ -24,4 +58,3 @@ export const getProjects = ({ cancelToken, title }) => {
       dispatch(setProjects(responseWithChecked));
     },
   });
-};

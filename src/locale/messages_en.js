@@ -13,7 +13,7 @@ export const messages_en = {
       goBack: "Go back",
       checkAll: "Select all",
       uncheckAll: "Remove selection",
-      undoDelete: "Return to ",
+      undoDelete: "Return",
       checkAsUsual: "Check as usual",
       checkAsImportant: "Check as important",
       removeToTrash: "Remove to trash",
