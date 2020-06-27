@@ -19,3 +19,5 @@ export const rootReducer = combineReducers({
   user: userReducer,
   requestStack: requestsStackReducer,
 });
+
+export * from "./reducers";

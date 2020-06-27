@@ -1,4 +1,4 @@
-import { setMessages, setActiveMessage } from "redux/actions";
+import { setMessages, setActiveMessage } from "ducks";
 import { serverPath } from "api";
 import { queryWrapper } from "utils";
 import { sortMessages } from "utils/getTabSortedMessages";

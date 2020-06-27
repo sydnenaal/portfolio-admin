@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Card, Input, Button } from "semantic-ui-react";
 
 import "./style.sass";
-import { selectRequestStack } from "redux/selectors";
+import { selectRequestStack } from "selectors";
 
 const AuthPageComponent = ({
   handleChangeLogin,

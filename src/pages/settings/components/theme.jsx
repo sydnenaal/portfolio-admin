@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Radio } from "semantic-ui-react";
 
 import "../style.sass";
-import { setTheme } from "redux/actions";
+import { setTheme } from "ducks";
 
 const ChangeTheme = ({ locale }) => {
   const theme = useSelector((state) => state.theme.theme);

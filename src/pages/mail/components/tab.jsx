@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Label } from "semantic-ui-react";
 
 import { themeStyle } from "constants/themingStyles";
-import { setTab, setMessages } from "redux/actions";
+import { setTab, setMessages } from "ducks";
 import { sortMessages } from "utils";
 import {
   selectTheme,
   selectActiveTab,
   selectSortedMessages,
   selectMessages,
-} from "redux/selectors";
+} from "selectors";
 
 import Card from "containers/card";
 import Message from "./message";

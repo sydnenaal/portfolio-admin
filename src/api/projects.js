@@ -1,5 +1,5 @@
 import { dateParse } from "utils";
-import { setProjects } from "redux/actions";
+import { setProjects } from "ducks";
 import { serverPath } from "api";
 import { queryWrapper } from "utils";
 

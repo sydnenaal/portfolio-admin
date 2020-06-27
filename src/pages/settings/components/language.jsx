@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Menu, Dropdown } from "semantic-ui-react";
 
 import { languageOptions } from "constants/settingsConstants";
-import { selectLanguage } from "redux/selectors";
+import { selectLanguage } from "selectors";
 
 import "../style.sass";
-import { setLanguage } from "redux/actions";
+import { setLanguage } from "ducks";
 
 const Language = ({ locale }) => {
   const language = useSelector(selectLanguage);

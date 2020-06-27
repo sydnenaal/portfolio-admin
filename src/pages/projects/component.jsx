@@ -12,7 +12,7 @@ import AddProjectModal from "./components/projectAddModal";
 
 import { headerNames } from "constants/tableConstants";
 import { themeStyle } from "constants/themingStyles";
-import { selectTheme, selectProjects } from "redux/selectors";
+import { selectTheme, selectProjects } from "selectors";
 
 const ProjectsPageComponent = ({
   compact,

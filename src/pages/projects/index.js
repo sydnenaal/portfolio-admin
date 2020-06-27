@@ -4,8 +4,8 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getProjects, deleteProjects } from "api";
-import { selectProjects } from "redux/selectors";
-import { setProjects } from "redux/actions";
+import { selectProjects } from "selectors";
+import { setProjects } from "ducks";
 
 import ProjectsPageComponent from "./component";
 

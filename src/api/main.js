@@ -1,4 +1,4 @@
-import { setVisits, setNewMessagesCounter } from "redux/actions";
+import { setVisits, setNewMessagesCounter } from "ducks";
 import { queryWrapper } from "utils";
 import { serverPath } from "api";
 

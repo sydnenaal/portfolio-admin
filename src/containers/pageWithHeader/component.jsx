@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 
 import { drawerItems } from "constants/drawerConstants";
 import { themeStyle } from "constants/themingStyles";
-import { selectUserData } from "redux/selectors";
+import { selectUserData } from "selectors";
 import { getUserData } from "api";
 import "./style.sass";
 import userPlaceholder from "assets/userPlaceholder.png";

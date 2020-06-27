@@ -1,8 +1,8 @@
 import axios from "axios";
 
 import { showNotifyByResponseStatusCode } from "./notifications";
-import { selectRequestStack } from "redux/selectors";
-import { setRequestStack } from "redux/actions";
+import { selectRequestStack } from "selectors";
+import { setRequestStack } from "ducks";
 
 export const queryWrapper = ({
   title,

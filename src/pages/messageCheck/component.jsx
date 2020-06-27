@@ -8,7 +8,7 @@ import WithLoader from "containers/withLoader";
 import { dateParse } from "utils";
 import Card from "containers/card";
 
-import { selectActiveMessage } from "redux/selectors";
+import { selectActiveMessage } from "selectors";
 
 import "./style.sass";
 

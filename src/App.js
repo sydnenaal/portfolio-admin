@@ -8,7 +8,7 @@ import Routes from "./routes";
 
 import { messages_ru } from "locale/messages_ru";
 import { messages_en } from "locale/messages_en";
-import { selectLanguage } from "redux/selectors";
+import { selectLanguage } from "selectors";
 
 const messages = {
   en: messages_en,

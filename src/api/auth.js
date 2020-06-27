@@ -1,6 +1,6 @@
 import { serverPath } from "api";
 import { queryWrapper, encryptData } from "utils";
-import { setUserData } from "redux/actions";
+import { setUserData } from "ducks";
 
 export const checkAuth = ({ cancelToken, loginData, from, history, title }) =>
   queryWrapper({

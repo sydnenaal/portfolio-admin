@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getMainInfo } from "api/main";
-import { selectNewMessagesCounter, selectVisits } from "redux/selectors";
+import { selectNewMessagesCounter, selectVisits } from "selectors";
 
 import MainPageComponent from "./component";
 

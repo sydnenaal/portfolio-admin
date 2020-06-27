@@ -4,7 +4,7 @@ import { useIntl } from "react-intl";
 import { Card } from "semantic-ui-react";
 
 import "./style.sass";
-import { selectTheme } from "redux/selectors";
+import { selectTheme } from "selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
 import { themeStyle } from "constants/themingStyles";

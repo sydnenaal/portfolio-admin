@@ -1,5 +1,5 @@
 import { tabsNames, tabFilter } from "constants/messagesConstants";
-import { setTabSortedMessages } from "redux/actions";
+import { setTabSortedMessages } from "ducks";
 
 export const sortMessages = ({ messages, dispatch }) => {
   const tabs = {};

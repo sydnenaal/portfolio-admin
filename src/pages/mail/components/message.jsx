@@ -5,7 +5,7 @@ import { Icon, Checkbox } from "semantic-ui-react";
 
 import Card from "containers/card";
 
-import { setActiveMessage } from "redux/actions";
+import { setActiveMessage } from "ducks";
 import { dateParse } from "utils";
 import { setActualityMessages, setPriorityMessages } from "api";
 

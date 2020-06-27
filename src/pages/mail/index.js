@@ -8,8 +8,8 @@ import MailPageComponent from "./component";
 import { getMessages, setPriorityMessages, setActualityMessages } from "api";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
 import { notificationSettings } from "constants/notificationSettings";
-import { setMessages } from "redux/actions";
-import { selectActiveTab, selectMessages } from "redux/selectors";
+import { setMessages } from "ducks";
+import { selectActiveTab, selectMessages } from "selectors";
 import { sortMessages } from "utils/getTabSortedMessages";
 
 const helpUserNotify = () => {

@@ -4,7 +4,7 @@ import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
 
 import "./style.sass";
-import { selectActiveTab, selectSortedMessages } from "redux/selectors";
+import { selectActiveTab, selectSortedMessages } from "selectors";
 
 import PageWithHeader from "containers/pageWithHeader";
 import { Tab, Content } from "./components/tab";

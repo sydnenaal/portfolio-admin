@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Loader } from "semantic-ui-react";
 
-import { selectRequestStack } from "redux/selectors";
+import { selectRequestStack } from "selectors";
 
 const WithLoader = ({ children, title }) => {
   const requestStack = useSelector(selectRequestStack);
