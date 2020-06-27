@@ -1,4 +1,4 @@
-import { serverPath } from "ducks";
+import { serverPath } from "api";
 import { queryWrapper, encryptData } from "utils";
 import { setUserData } from "redux/actions";
 

@@ -1,4 +1,4 @@
-import { serverPath } from "ducks";
+import { serverPath } from "api";
 import { queryWrapper } from "utils";
 import { encryptData } from "utils";
 

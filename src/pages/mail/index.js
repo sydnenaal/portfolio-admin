@@ -5,7 +5,7 @@ import { store } from "react-notifications-component";
 
 import MailPageComponent from "./component";
 
-import { getMessages, setPriorityMessages, setActualityMessages } from "ducks";
+import { getMessages, setPriorityMessages, setActualityMessages } from "api";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
 import { notificationSettings } from "constants/notificationSettings";
 import { setMessages } from "redux/actions";

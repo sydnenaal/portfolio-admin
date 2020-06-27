@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
 
-import { insertProjects } from "ducks";
+import { insertProjects } from "api";
 
 import Modal from "containers/modal";
 

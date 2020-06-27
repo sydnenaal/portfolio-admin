@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getMainInfo } from "ducks/main";
+import { getMainInfo } from "api/main";
 import { selectNewMessagesCounter, selectVisits } from "redux/selectors";
 
 import MainPageComponent from "./component";
@@ -10,6 +10,7 @@ import MainPageComponent from "./component";
 const MainPageContainer = () => {
   const counter = useSelector(selectNewMessagesCounter);
   const visits = useSelector(selectVisits);
+  console.log(visits);
   const dispatch = useDispatch();
 
   useEffect(() => {

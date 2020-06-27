@@ -7,7 +7,7 @@ import Card from "containers/card";
 
 import { setActiveMessage } from "redux/actions";
 import { dateParse } from "utils";
-import { setActualityMessages, setPriorityMessages } from "ducks";
+import { setActualityMessages, setPriorityMessages } from "api";
 
 import "../style.sass";
 

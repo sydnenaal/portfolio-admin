@@ -1,6 +1,6 @@
 import { setVisits, setNewMessagesCounter } from "redux/actions";
 import { queryWrapper } from "utils";
-import { serverPath } from "ducks";
+import { serverPath } from "api";
 
 export const getMainInfo = ({ cancelToken, title }) => {
   return queryWrapper({

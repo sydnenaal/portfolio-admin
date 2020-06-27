@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
-import { checkAuth } from "ducks/auth";
+import { checkAuth } from "api/auth";
 
 import AuthComponent from "./component";
 

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getProjects, deleteProjects } from "ducks";
+import { getProjects, deleteProjects } from "api";
 import { selectProjects } from "redux/selectors";
 import { setProjects } from "redux/actions";
 

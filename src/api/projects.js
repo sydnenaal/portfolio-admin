@@ -1,6 +1,6 @@
 import { dateParse } from "utils";
 import { setProjects } from "redux/actions";
-import { serverPath } from "ducks";
+import { serverPath } from "api";
 import { queryWrapper } from "utils";
 
 export const insertProjects = ({ cancelToken, title, body }) =>

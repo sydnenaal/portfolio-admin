@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
-import { changePassword } from "ducks/settings";
+import { changePassword } from "api";
 
 const ChangePassword = ({ locale }) => {
   let source = axios.CancelToken.source();

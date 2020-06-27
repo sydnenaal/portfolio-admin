@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 
-import { getMessage, setPriorityMessages, setActualityMessages } from "ducks";
+import { getMessage, setPriorityMessages, setActualityMessages } from "api";
 
 import MessageCheckComponent from "./component";
 
