@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
@@ -28,39 +28,57 @@ const MailPageComponent = ({
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
 
-  const checkAll = () => handleCheckAll({ setCheck: true });
-  const unCheckAll = () => handleCheckAll({ setCheck: false });
+  const checkAll = useCallback(() => handleCheckAll({ setCheck: true }), [
+    handleCheckAll,
+  ]);
+  const unCheckAll = useCallback(() => handleCheckAll({ setCheck: false }), [
+    handleCheckAll,
+  ]);
 
-  const renderTabs = tabsNames.map((item, index) => (
-    <Tab
-      key={index}
-      locale={mail}
-      messagesCounter={tabs[item] ? tabs[item].length.toString() : "0"}
-      title={item}
-    />
-  ));
+  const removeMessage = useMemo(
+    () => (activeTab === "trash" ? "remove" : "removeToTrash"),
+    [activeTab]
+  );
 
-  let buttonInfo;
+  const renderTabs = tabsNames.map((item, index) => {
+    const tab = tabs[item];
+    const messagesCounter = tab ? tab.length.toString() : "0";
 
-  switch (activeTab) {
-    case "trash":
-      buttonInfo = {
-        handler: handleReturnMessages,
-        message: mail.buttons.undoDelete,
-      };
-      break;
-    case "important":
-      buttonInfo = {
-        handler: handleSetUsualMessages,
-        message: mail.buttons.checkAsUsual,
-      };
-      break;
-    default:
-      buttonInfo = {
-        handler: handleSetImportantMessages,
-        message: mail.buttons.checkAsImportant,
-      };
-  }
+    return (
+      <Tab
+        key={index}
+        locale={mail}
+        messagesCounter={messagesCounter}
+        title={item}
+      />
+    );
+  });
+
+  let buttonInfo = useMemo(() => {
+    switch (activeTab) {
+      case "trash":
+        return {
+          handler: handleReturnMessages,
+          message: mail.buttons.undoDelete,
+        };
+      case "important":
+        return {
+          handler: handleSetUsualMessages,
+          message: mail.buttons.checkAsUsual,
+        };
+      default:
+        return {
+          handler: handleSetImportantMessages,
+          message: mail.buttons.checkAsImportant,
+        };
+    }
+  }, [
+    activeTab,
+    mail,
+    handleReturnMessages,
+    handleSetUsualMessages,
+    handleSetImportantMessages,
+  ]);
 
   return (
     <PageWithHeader title={titles.mail}>
@@ -76,7 +94,7 @@ const MailPageComponent = ({
             </Button>
 
             <Button onClick={handleDeleteMessages} disabled={checked === 0}>
-              {mail.buttons[activeTab === "trash" ? "remove" : "removeToTrash"]}
+              {mail.buttons[removeMessage]}
             </Button>
           </div>
 

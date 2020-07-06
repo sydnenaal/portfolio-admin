@@ -63,9 +63,10 @@
     overflow-x: hidden
     height: 100%
     padding: 3px
+    padding-left: 0px
     will-change: opacity, padding-left
-    transition: all 0.2s ease
-    opacity: 0
+    transition: padding-left .2s ease
+    animation: fade_in .5s
 
     .deleteMessage
         display: flex
@@ -165,3 +166,11 @@
                         overflow-x: hidden
                         text-overflow: ellipsis
                         white-space: nowrap
+.openMessageSubmenu
+    padding-left: 100px
+
+@keyframes fade_in
+    0%
+        opacity: 0
+    100%
+        opacity: 1

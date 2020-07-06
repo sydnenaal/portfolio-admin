@@ -1,19 +1,20 @@
 import React from "react";
 
-const BarsIcon = ({ handleDrawerVisible, drawerVisible }) => {
+import "./style.sass";
+
+const BarsIcon = ({ handleDrawerVisible, drawerVisible, color }) => {
+  const style = { backgroundColor: color };
   return (
-    <div className="sidebar-item">
-      <div
-        className="sidebar-item__icon icon_header"
-        onClick={handleDrawerVisible}
-      >
-        <div id="nav-icon4" className={drawerVisible ? " open" : ""}>
-          <span></span>
+    <div
+      className="sidebar-item__icon icon_header"
+      onClick={handleDrawerVisible}
+    >
+      <div id="nav-icon4" className={drawerVisible ? " open" : ""}>
+        <span style={style}></span>
 
-          <span></span>
+        <span style={style}></span>
 
-          <span></span>
-        </div>
+        <span style={style}></span>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Label } from "semantic-ui-react";
 
@@ -79,17 +79,25 @@ export const Tab = ({ title, messagesCounter, locale }) => {
   const messages = useSelector(selectMessages);
   const dispatch = useDispatch();
 
-  const isActive = activeTab === title;
-  const activeColor = theme === "dark" ? "white" : "grey";
-  const borderColor = isActive ? activeColor : "transparent";
-  const tabStyle = { borderBottom: `2px solid ${borderColor}` };
+  const isActive = useMemo(() => activeTab === title, [activeTab, title]);
+  const activeColor = useMemo(() => (theme === "dark" ? "white" : "grey"), [
+    theme,
+  ]);
+  const borderColor = useMemo(() => (isActive ? activeColor : "transparent"), [
+    isActive,
+    activeColor,
+  ]);
+  const tabStyle = useMemo(
+    () => ({ borderBottom: `2px solid ${borderColor}` }),
+    [borderColor]
+  );
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     const newMessages = messages.map((item) => ({ ...item, isChecked: false }));
     dispatch(setMessages(newMessages));
     sortMessages({ messages: newMessages, dispatch: dispatch });
     dispatch(setTab(title));
-  };
+  }, [messages, title, dispatch]);
 
   return (
     <div style={tabStyle} className="tab" key={title} onClick={handleClick}>

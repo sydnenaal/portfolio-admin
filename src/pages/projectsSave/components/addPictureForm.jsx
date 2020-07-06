@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Button } from "semantic-ui-react";
 
 const inputStyle = { display: "none" };
@@ -7,8 +7,11 @@ const AddPictureForm = () => {
   const [uploadedImage, setUploadedImage] = useState();
   const inputRef = useRef();
 
-  const handleClick = () => inputRef.current.click();
-  const handleChangeInput = (e) => setUploadedImage(e.target.value);
+  const handleClick = useCallback(() => inputRef.current.click(), [inputRef]);
+  const handleChangeInput = useCallback(
+    (e) => setUploadedImage(e.target.value),
+    []
+  );
 
   return (
     <div className="form-text">

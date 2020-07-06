@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Radio } from "semantic-ui-react";
 
@@ -9,13 +9,13 @@ const ChangeTheme = ({ locale }) => {
   const theme = useSelector((state) => state.theme.theme);
   const dispatch = useDispatch();
 
-  const handleChangeTheme = () => {
+  const handleChangeTheme = useCallback(() => {
     const newTheme = theme === "light" ? "dark" : "light";
     dispatch(setTheme(newTheme));
     localStorage.setItem("theme", newTheme);
-  };
+  }, [dispatch, theme]);
 
-  const isDark = theme === "dark";
+  const isDark = useMemo(() => theme === "dark", [theme]);
 
   return (
     <div id="theme">

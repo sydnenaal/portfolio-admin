@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import PageWithHeaderComponent from "./component";
 
 const PageWithHeaderContainer = (props) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleChangeIsVisible = () => {
+  const handleChangeIsVisible = useCallback(() => {
     setIsVisible(!isVisible);
-  };
+  }, [isVisible]);
 
   return (
     <PageWithHeaderComponent

@@ -1,6 +1,5 @@
 .settingsBody
     width: 100%
-    padding: 30px
     display: flex
     align-items: flex-start
     justify-content: flex-start
@@ -8,10 +7,7 @@
 
     .settingsItem
         width: 100%
-        max-width: 50%
-        min-width: 300px
-        font-size: 23px
-        padding: 20px
+        min-width: 250px
         display: flex
         align-items: flex-start
         justify-content: center
@@ -35,9 +31,33 @@
             transition: max-height 0.4s ease
 
             &-input
-                font-size: 17px
                 margin-bottom: 10px
 
 .chevronIcon
     will-change: transform
     transition: transform .2s ease
+
+@media (max-width: 1920px)
+    .settingsBody
+        padding: 30px
+    .settingsItem
+        padding: 20px
+        font-size: 23px
+        max-width: 50%
+    .passwordChange-input
+        font-size: 17px
+
+@media (max-width: 500px) 
+    .settingsBody
+        padding: 10px
+    .settingsItem
+        padding: 10px
+        font-size: 18px
+        max-width: 100%
+    .passwordChange-input
+        font-size: 14px
+    
+
+
+
+        

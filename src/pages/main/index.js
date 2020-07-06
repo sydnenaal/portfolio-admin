@@ -10,7 +10,6 @@ import MainPageComponent from "./component";
 const MainPageContainer = () => {
   const counter = useSelector(selectNewMessagesCounter);
   const visits = useSelector(selectVisits);
-  console.log(visits);
   const dispatch = useDispatch();
 
   useEffect(() => {

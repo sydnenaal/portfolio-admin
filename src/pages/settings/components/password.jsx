@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
@@ -22,13 +22,22 @@ const ChangePassword = ({ locale }) => {
     };
   }, [source]);
 
-  const handleChangePassword = (e) => setPassword(e.target.value);
-  const handleChangeOldPassword = (e) => setOldPassword(e.target.value);
-  const handleChangeRepeatPassword = (e) => {
-    error && setError(false);
-    setRepeatPassword(e.target.value);
-  };
-  const handleSubmit = () => {
+  const handleChangePassword = useCallback(
+    (e) => setPassword(e.target.value),
+    []
+  );
+  const handleChangeOldPassword = useCallback(
+    (e) => setOldPassword(e.target.value),
+    []
+  );
+  const handleChangeRepeatPassword = useCallback(
+    (e) => {
+      error && setError(false);
+      setRepeatPassword(e.target.value);
+    },
+    [error]
+  );
+  const handleSubmit = useCallback(() => {
     if (password !== repeatPassword) {
       setError(true);
     } else {
@@ -44,17 +53,25 @@ const ChangePassword = ({ locale }) => {
       setRepeatPassword("");
       setIsPasswordChangeShow(false);
     }
-  };
-  const handleOpenPasswordChange = () =>
-    setIsPasswordChangeShow(!isPasswordChangeShow);
+  }, [password, repeatPassword, oldPassword, dispatch, source.token]);
+  const handleOpenPasswordChange = useCallback(
+    () => setIsPasswordChangeShow(!isPasswordChangeShow),
+    [isPasswordChangeShow]
+  );
 
-  const contentStyle = {
-    maxHeight: `${isPasswordChangeShow ? 300 : 0}px`,
-  };
+  const contentStyle = useMemo(
+    () => ({
+      maxHeight: `${isPasswordChangeShow ? 300 : 0}px`,
+    }),
+    [isPasswordChangeShow]
+  );
 
-  const chevronStyle = {
-    transform: `rotate(${isPasswordChangeShow ? 180 : 0}deg)`,
-  };
+  const chevronStyle = useMemo(
+    () => ({
+      transform: `rotate(${isPasswordChangeShow ? 180 : 0}deg)`,
+    }),
+    [isPasswordChangeShow]
+  );
 
   return (
     <div>

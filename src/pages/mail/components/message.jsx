@@ -1,4 +1,5 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
+import clsx from "clsx";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Icon, Checkbox } from "semantic-ui-react";
@@ -10,6 +11,9 @@ import { dateParse } from "utils";
 import { setActualityMessages, setPriorityMessages } from "api";
 
 import "../style.sass";
+import { useEffect } from "react";
+
+const calcDelay = (id) => ((id + 1) / 2) * 100;
 
 const Message = ({
   title,
@@ -27,131 +31,117 @@ const Message = ({
   const history = useHistory();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [style, setStyle] = useState({});
+  const [render, setRender] = useState(false);
 
-  const iconName = isRead ? "envelope open outline" : "envelope outline";
-
-  const handleChange = () => handleCheck(id);
-  const handleContextMenu = (e) => e.preventDefault();
-  const handleMouseLeave = () => isOpen && setIsOpen(false);
-  const handleSetPriority = () => {
+  const handleChange = useCallback(() => handleCheck(id), [id, handleCheck]);
+  const handleContextMenu = useCallback((e) => e.preventDefault(), []);
+  const handleMouseLeave = useCallback(() => isOpen && setIsOpen(false), [
+    isOpen,
+  ]);
+  const handleSetPriority = useCallback(() => {
+    const data = { messages: [_id], action: !isImportant };
     setIsOpen(false);
-    dispatch(
-      setPriorityMessages({
-        data: { messages: [_id], action: !isImportant },
-      })
-    );
-  };
-  const handleDeleteMessage = () => {
+    dispatch(setPriorityMessages({ data }));
+  }, [_id, isImportant, dispatch]);
+  const handleDeleteMessage = useCallback(() => {
+    const data = { messages: [_id], action: true };
     setIsOpen(false);
-    dispatch(
-      setActualityMessages({
-        data: { messages: [_id], action: true },
-      })
-    );
-  };
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    e.button === 2 && setIsOpen(!isOpen);
-  };
-  const handleClick = () => {
-    dispatch(
-      setActiveMessage({
-        title: title,
-        text: text,
-        client: client,
-        date: date,
-      })
-    );
+    dispatch(setActualityMessages({ data }));
+  }, [_id, dispatch]);
+  const handleMouseDown = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.button === 2 && setIsOpen(!isOpen);
+    },
+    [isOpen]
+  );
+  const handleClick = useCallback(() => {
+    const activeMessage = { title, text, client, date };
+    dispatch(setActiveMessage(activeMessage));
     history.push(`mail/${_id}`);
-  };
+  }, [_id, title, text, client, date, dispatch, history]);
 
-  const messageContainerPadding = { paddingLeft: isOpen ? "100px" : "0px" };
+  const iconName = useMemo(
+    () => (isRead ? "envelope open outline" : "envelope outline"),
+    [isRead]
+  );
+  const messageComponentStyles = useMemo(
+    () => clsx({ messageComponent: true, openMessageSubmenu: isOpen }),
+    [isOpen]
+  );
 
   useEffect(() => {
-    const calcDelay = () => {
-      const delay = id * 2;
-      if (delay < 10) {
-        return "0" + delay;
-      }
-      return delay;
-    };
-
-    const style = {
-      transitionDelay: `0.${calcDelay()}s`,
-      opacity: 1,
-    };
-
-    setTimeout(() => setStyle(style), 0);
+    setTimeout(() => setRender(true), calcDelay(id));
   }, [id]);
 
   return (
-    <div className="messageComponent-hover" onMouseLeave={handleMouseLeave}>
-      <div
-        className="messageComponent"
-        style={{ ...style, ...messageContainerPadding }}
-      >
-        <div className="deleteMessage">
-          <div className="actionIcon">
-            <Icon
-              onClick={handleDeleteMessage}
-              size="big"
-              name="trash alternate"
-            />
-          </div>
-
-          <div className="actionIcon">
-            <Icon onClick={handleSetPriority} size="big" name="warning" />
-          </div>
-        </div>
-
-        <div className="messageContainer">
-          <Card>
-            <div
-              className="messageContent"
-              onContextMenu={handleContextMenu}
-              onMouseDown={handleMouseDown}
-            >
-              <div className="indicator">
-                {!isRead && <div className="readPoint"></div>}
-
-                {isImportant && <div className="importantPoint"></div>}
+    <>
+      {render && (
+        <div className="messageComponent-hover" onMouseLeave={handleMouseLeave}>
+          <div className={messageComponentStyles}>
+            <div className="deleteMessage">
+              <div className="actionIcon">
+                <Icon
+                  onClick={handleDeleteMessage}
+                  size="big"
+                  name="trash alternate"
+                />
               </div>
 
-              <div className="checkboxContainer">
-                <div className="checkbox">
-                  <Checkbox checked={isChecked} onChange={handleChange} />
-                </div>
-              </div>
-
-              <div className="redirect" onClick={handleClick}>
-                <div className="image">
-                  <Icon size="huge" name={iconName}></Icon>
-                </div>
-
-                <div className="messageInfo">
-                  <div className="messageMeta">
-                    <div className="title">
-                      <strong>{client}</strong>
-                    </div>
-
-                    <div className="date">{dateParse(date)}</div>
-                  </div>
-
-                  <div className="messageText">
-                    <div className="title">
-                      <strong>{title}</strong>
-                    </div>
-
-                    <div className="text">{text}</div>
-                  </div>
-                </div>
+              <div className="actionIcon">
+                <Icon onClick={handleSetPriority} size="big" name="warning" />
               </div>
             </div>
-          </Card>
+
+            <div className="messageContainer">
+              <Card>
+                <div
+                  className="messageContent"
+                  onContextMenu={handleContextMenu}
+                  onMouseDown={handleMouseDown}
+                >
+                  <div className="indicator">
+                    {!isRead && <div className="readPoint"></div>}
+
+                    {isImportant && <div className="importantPoint"></div>}
+                  </div>
+
+                  <div className="checkboxContainer">
+                    <div className="checkbox">
+                      <Checkbox checked={isChecked} onChange={handleChange} />
+                    </div>
+                  </div>
+
+                  <div className="redirect" onClick={handleClick}>
+                    <div className="image">
+                      <Icon size="huge" name={iconName}></Icon>
+                    </div>
+
+                    <div className="messageInfo">
+                      <div className="messageMeta">
+                        <div className="title">
+                          <strong>{client}</strong>
+                        </div>
+
+                        <div className="date">{dateParse(date)}</div>
+                      </div>
+
+                      <div className="messageText">
+                        <div className="title">
+                          <strong>{title}</strong>
+                        </div>
+
+                        <div className="text">{text}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

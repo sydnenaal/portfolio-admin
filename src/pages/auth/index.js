@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -14,30 +14,31 @@ const AuthPageContainer = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const handlers = {
-    handleChangeLogin: (e) => setLogin(e.target.value),
-    handleChangePassword: (e) => setPassword(e.target.value),
-    handleLogin: () => {
-      dispatch(
-        checkAuth({
-          cancelToken: null,
-          title: "auth",
-          from: from,
-          history: history,
-          loginData: {
-            login,
-            password,
-          },
-        })
-      );
-    },
-  };
+  const handleChangeLogin = useCallback((e) => setLogin(e.target.value), []);
+  const handleChangePassword = useCallback(
+    (e) => setPassword(e.target.value),
+    []
+  );
+  const handleLogin = useCallback(() => {
+    dispatch(
+      checkAuth({
+        cancelToken: null,
+        title: "auth",
+        from: from,
+        history: history,
+        loginData: {
+          login,
+          password,
+        },
+      })
+    );
+  }, [history, dispatch, from, login, password]);
 
   return (
     <AuthComponent
-      handleChangeLogin={handlers.handleChangeLogin}
-      handleChangePassword={handlers.handleChangePassword}
-      handleLogin={handlers.handleLogin}
+      handleChangeLogin={handleChangeLogin}
+      handleChangePassword={handleChangePassword}
+      handleLogin={handleLogin}
     />
   );
 };

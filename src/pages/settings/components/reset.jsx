@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Button } from "semantic-ui-react";
 import { store } from "react-notifications-component";
 
 import { notificationSettings } from "constants/notificationSettings";
 
 const Reset = ({ locale }) => {
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     try {
       localStorage.clear();
       store.addNotification({
@@ -22,7 +22,7 @@ const Reset = ({ locale }) => {
         type: "error",
       });
     }
-  };
+  }, []);
 
   return (
     <div id="reset">

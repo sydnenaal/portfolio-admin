@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
@@ -15,31 +15,31 @@ const AddProjectForm = ({ modalState, handleToggleModal }) => {
   const [type, setType] = useState("");
   const [client, setClient] = useState("");
 
-  const handleChangeName = (e) => setName(e.target.value);
-  const handleChangeType = (e) => setType(e.target.value);
-  const handleChangeClient = (e) => setClient(e.target.value);
+  const handleChangeName = useCallback((e) => setName(e.target.value), []);
+  const handleChangeType = useCallback((e) => setType(e.target.value), []);
+  const handleChangeClient = useCallback((e) => setClient(e.target.value), []);
 
-  const handleSuccess = () => {
-    const data = {
-      name,
-      type,
-      client,
-      createDate: Date.now(),
+  const handleSuccess = useCallback(() => {
+    const requestData = {
+      cancelToken: source.token,
+      title: "insertProject",
+      body: {
+        data: {
+          name,
+          type,
+          client,
+          createDate: Date.now(),
+        },
+      },
     };
 
-    dispatch(
-      insertProjects({
-        cancelToken: source.token,
-        title: "insertProject",
-        body: { data: data },
-      })
-    );
+    dispatch(insertProjects(requestData));
 
     setName("");
     setType("");
     setClient("");
     handleToggleModal();
-  };
+  }, [dispatch, name, type, client, handleToggleModal, source.token]);
 
   return (
     <Modal

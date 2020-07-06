@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useIntl } from "react-intl";
-import { Card } from "semantic-ui-react";
 
 import "./style.sass";
 import { selectTheme } from "selectors";
@@ -9,6 +8,7 @@ import { selectTheme } from "selectors";
 import PageWithHeader from "containers/pageWithHeader";
 import { themeStyle } from "constants/themingStyles";
 import WithLoader from "containers/withLoader";
+import Card from "containers/card";
 
 const MainPageComponent = ({ counter, visits }) => {
   const {
@@ -24,47 +24,41 @@ const MainPageComponent = ({ counter, visits }) => {
     <PageWithHeader title={titles.home}>
       <div className="mainBody">
         <div className="helloWorld">
-          <Card style={themeStyle[theme]} fluid>
-            <Card.Content>
-              <div className="welcomeSlogan">
-                <p>{title}</p>
-              </div>
-            </Card.Content>
+          <Card padding="10px" style={themeStyle[theme]}>
+            <div className="welcomeSlogan">
+              <p>{title}</p>
+            </div>
           </Card>
         </div>
 
         <WithLoader title="getMainPageInfo">
           <div className="mainInformation">
             <div className="infoBlock">
-              <Card style={themeStyle[theme]} fluid>
-                <Card.Content>
-                  <div className="newMessages">
-                    <p className="infoTitle">{messages.title}</p>
+              <Card padding="10px" style={themeStyle[theme]}>
+                <div className="newMessages">
+                  <p className="infoTitle">{messages.title}</p>
 
-                    <p>{counter}</p>
-                  </div>
-                </Card.Content>
+                  <p>{counter}</p>
+                </div>
               </Card>
             </div>
             <div className="infoBlock">
-              <Card style={themeStyle[theme]} fluid>
-                <Card.Content>
-                  <div className="visitors">
-                    <p className="infoTitle">{visitors.title}</p>
+              <Card padding="10px" style={themeStyle[theme]}>
+                <div className="visitors">
+                  <p className="infoTitle">{visitors.title}</p>
 
-                    <p>
-                      {visitors.day}: {visits.day}
-                    </p>
+                  <p>
+                    {visitors.day}: {visits.day}
+                  </p>
 
-                    <p>
-                      {visitors.week}: {visits.week}
-                    </p>
+                  <p>
+                    {visitors.week}: {visits.week}
+                  </p>
 
-                    <p>
-                      {visitors.month}: {visits.month}
-                    </p>
-                  </div>
-                </Card.Content>
+                  <p>
+                    {visitors.month}: {visits.month}
+                  </p>
+                </div>
               </Card>
             </div>
           </div>

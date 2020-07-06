@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom";
 
 import { drawerItems } from "constants/drawerConstants";
 import { themeStyle } from "constants/themingStyles";
-import { selectUserData } from "selectors";
+import { selectUserData, selectTheme } from "selectors";
 import { getUserData } from "api";
 import "./style.sass";
 import userPlaceholder from "assets/userPlaceholder.png";
@@ -28,6 +28,7 @@ const PageWithHeaderComponent = ({
   const history = useHistory();
   const { pathname } = history.location;
 
+  const theme = useSelector(selectTheme);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
 
@@ -50,47 +51,78 @@ const PageWithHeaderComponent = ({
       handleDrawerVisible();
     }
   }
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     drawerVisible && handleDrawerVisible();
-  };
+  }, [drawerVisible, handleDrawerVisible]);
 
-  const itemStyle = { backgroundColor: "#333" };
-  const drawerStyle = { maxWidth: drawerVisible ? "220px" : "70px" };
-  const theme = useSelector((state) => state.theme.theme);
-  const styleByTheme = themeStyle[theme];
-  const userOptions = [
-    {
-      key: "0",
-      text: "Profile",
-      icon: "user",
-      value: "profile",
-      onClick: () => console.log("click profile"),
-    },
-    {
-      key: "1",
-      text: "Logout",
-      icon: "sign-out",
-      value: "logout",
-      onClick: () => {
-        localStorage.removeItem("token");
-        history.push("/auth");
+  const screenWidth = document.documentElement.clientWidth;
+  const itemStyle = useMemo(() => ({ backgroundColor: "#333" }), []);
+  const drawerStyle = useMemo(() => {
+    const startWidth = screenWidth < 500 ? "0px" : "70px";
+    return { maxWidth: drawerVisible ? "220px" : startWidth };
+  }, [drawerVisible, screenWidth]);
+  const styleByTheme = useMemo(() => themeStyle[theme], [theme]);
+  const userOptions = useMemo(
+    () => [
+      {
+        key: "0",
+        text: "Profile",
+        icon: "user",
+        value: "profile",
+        onClick: () => console.log("click profile"),
       },
-    },
-  ];
+      {
+        key: "1",
+        text: "Logout",
+        icon: "sign-out",
+        value: "logout",
+        onClick: () => {
+          localStorage.removeItem("token");
+          history.push("/auth");
+        },
+      },
+    ],
+    [history]
+  );
 
   return (
     <div className="drawer">
       <div className="staticElements">
+        <div className="header" style={styleByTheme}>
+          <BarsIcon
+            handleDrawerVisible={handleDrawerVisible}
+            drawerVisible={drawerVisible}
+            color={styleByTheme.color}
+          />
+          <div className="headerContent">
+            <div className="headerTitleContainer">
+              <div className="headerTitle">{title}</div>
+              {subtitle && <div className="headerSubtitle">/{subtitle}</div>}
+            </div>
+            {screenWidth > 500 && (
+              <div className="headerUserInfo">
+                <div className="headerUserPhoto">
+                  <img
+                    width="30px"
+                    src={userData.photo || userPlaceholder}
+                    alt="user"
+                  />
+                </div>
+                <div className="headerUserName">
+                  <Dropdown inline options={userOptions} text={userData.name} />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="pageWithHeader">
         <div
           className="sidebar"
           style={drawerStyle}
           onMouseLeave={handleMouseLeave}
         >
-          <BarsIcon
-            handleDrawerVisible={handleDrawerVisible}
-            drawerVisible={drawerVisible}
-          />
-
           {drawerItems(titles).map((item, index) => (
             <div
               className="sidebar-item"
@@ -106,30 +138,6 @@ const PageWithHeaderComponent = ({
             </div>
           ))}
         </div>
-
-        <div className="header" style={styleByTheme}>
-          <div className="headerContent">
-            <div className="headerTitleContainer">
-              <div className="headerTitle">{title}</div>
-              {subtitle && <div className="headerSubtitle">/{subtitle}</div>}
-            </div>
-            <div className="headerUserInfo">
-              <div className="headerUserPhoto">
-                <img
-                  width="30px"
-                  src={userData.photo || userPlaceholder}
-                  alt="user"
-                />
-              </div>
-              <div className="headerUserName">
-                <Dropdown inline options={userOptions} text={userData.name} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="pageWithHeader">
         <div className="body" style={styleByTheme}>
           {children}
         </div>

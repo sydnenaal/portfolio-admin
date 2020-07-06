@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, Dropdown } from "semantic-ui-react";
 
@@ -12,11 +12,14 @@ const Language = ({ locale }) => {
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
 
-  const handleChangeLanguage = (e, data) => {
-    const { value } = data;
-    dispatch(setLanguage(value));
-    localStorage.setItem("lang", value);
-  };
+  const handleChangeLanguage = useCallback(
+    (e, data) => {
+      const { value } = data;
+      dispatch(setLanguage(value));
+      localStorage.setItem("lang", value);
+    },
+    [dispatch]
+  );
 
   return (
     <div id="language">
