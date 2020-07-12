@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Label } from "semantic-ui-react";
 
 import { themeStyle } from "constants/themingStyles";
 import { setTab, setMessages } from "ducks";
@@ -102,7 +101,9 @@ export const Tab = ({ title, messagesCounter, locale }) => {
   return (
     <div style={tabStyle} className="tab" key={title} onClick={handleClick}>
       <span style={themeStyle[theme]}>{locale.tabs[title]}</span>
-      {messagesCounter && <Label>{messagesCounter}</Label>}
+      {messagesCounter && (
+        <div className="tabMessagesCounter">{messagesCounter}</div>
+      )}
     </div>
   );
 };

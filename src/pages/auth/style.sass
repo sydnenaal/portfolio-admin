@@ -7,7 +7,6 @@
     justify-content: center
 
     .cardBody
-        width: 450px
         height: 400px
 
         .cardContent
@@ -18,12 +17,26 @@
 
             &_title
                 font-size: 30px
-                margin-bottom: 50px
                 margin-top: 10px
 
             &_input
-                width: 80%
                 margin-bottom: 15px
 
             &_button
                 margin-bottom: 10px
+
+@media (max-width: 1920px)
+    .cardBody
+        width: 450px
+    .cardContent_input
+        width: 80%
+    .cardContent_title
+        margin-bottom: 50px
+
+@media (max-width: 500px)
+    .cardBody
+        width: 90%
+    .cardContent_input
+        width: 97%
+    .cardContent_title
+        margin-bottom: 30px

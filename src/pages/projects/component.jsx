@@ -33,6 +33,7 @@ const ProjectsPageComponent = ({
 
   const theme = useSelector(selectTheme);
   const projectsData = useSelector(selectProjects);
+  const isMobileMode = document.documentElement.clientWidth < 500;
 
   return (
     <PageWithHeader title={titles.projects}>
@@ -43,6 +44,14 @@ const ProjectsPageComponent = ({
               <div className="projectsTitle">{projects.title}</div>
 
               <div className="projectsActions">
+                <div className="searchProjects">
+                  <Input
+                    fluid={isMobileMode}
+                    icon="search"
+                    placeholder={projects.search}
+                    onChange={handleChangeFilter}
+                  />
+                </div>
                 <div className="projectsButtons">
                   <div className="crudButton">
                     <Button onClick={handleToggleModal}>{projects.add}</Button>
@@ -71,12 +80,6 @@ const ProjectsPageComponent = ({
                     />
                   </div>
                 </div>
-
-                <Input
-                  icon="search"
-                  placeholder={projects.search}
-                  onChange={handleChangeFilter}
-                />
               </div>
 
               <div className="projectsTable">

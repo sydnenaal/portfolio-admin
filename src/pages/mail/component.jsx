@@ -35,6 +35,10 @@ const MailPageComponent = ({
     handleCheckAll,
   ]);
 
+  const screenWidth = document.documentElement.clientWidth;
+  const buttonsSize = useMemo(() => (screenWidth > 500 ? "small" : "tiny"), [
+    screenWidth,
+  ]);
   const removeMessage = useMemo(
     () => (activeTab === "trash" ? "remove" : "removeToTrash"),
     [activeTab]
@@ -84,22 +88,48 @@ const MailPageComponent = ({
     <PageWithHeader title={titles.mail}>
       <div className="mailBody">
         <div className="mailActions">
+          <div className="search">
+            <Input
+              fluid={screenWidth < 500}
+              placeholder={mail.searchPlaceholder}
+              icon="search"
+            />
+          </div>
+
           <div className="buttons">
-            <Button onClick={checkAll}>{mail.buttons.checkAll}</Button>
+            <Button
+              size={buttonsSize}
+              className="actionButton"
+              onClick={checkAll}
+            >
+              {mail.buttons.checkAll}
+            </Button>
 
-            <Button onClick={unCheckAll}>{mail.buttons.uncheckAll}</Button>
+            <Button
+              size={buttonsSize}
+              className="actionButton"
+              onClick={unCheckAll}
+            >
+              {mail.buttons.uncheckAll}
+            </Button>
 
-            <Button onClick={buttonInfo.handler} disabled={checked === 0}>
+            <Button
+              size={buttonsSize}
+              className="actionButton"
+              onClick={buttonInfo.handler}
+              disabled={checked === 0}
+            >
               {buttonInfo.message}
             </Button>
 
-            <Button onClick={handleDeleteMessages} disabled={checked === 0}>
+            <Button
+              size={buttonsSize}
+              className="actionButton"
+              onClick={handleDeleteMessages}
+              disabled={checked === 0}
+            >
               {mail.buttons[removeMessage]}
             </Button>
-          </div>
-
-          <div className="search">
-            <Input placeholder={mail.searchPlaceholder} icon="search" />
           </div>
         </div>
 

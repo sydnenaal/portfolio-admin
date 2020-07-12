@@ -1,4 +1,4 @@
-import { serverPath } from "api";
+import { serverPath, apiServices } from "api";
 import { queryWrapper, encryptData } from "utils";
 import { setUserData } from "ducks";
 
@@ -23,7 +23,7 @@ export const checkAuth = ({ cancelToken, loginData, from, history, title }) =>
 
 export const getUserData = ({ cancelToken, title }) =>
   queryWrapper({
-    url: `${serverPath}/users/getUserData`,
+    url: `${apiServices}/users/getUserData`,
     method: "get",
     cancelToken: cancelToken,
     title: title,

@@ -1,5 +1,5 @@
 import { setMessages, setActiveMessage } from "ducks";
-import { serverPath } from "api";
+import { apiServices } from "api";
 import { queryWrapper } from "utils";
 import { sortMessages } from "utils/getTabSortedMessages";
 
@@ -7,7 +7,7 @@ export const setActualityMessages = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
     title: title,
-    url: `${serverPath}/messages/actuality`,
+    url: `${apiServices}/messages/actuality`,
     method: "post",
     body: data,
     successCallback: (dispatch, response) => {
@@ -25,7 +25,7 @@ export const setPriorityMessages = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
     title: title,
-    url: `${serverPath}/messages/priority`,
+    url: `${apiServices}/messages/priority`,
     method: "post",
     body: data,
     successCallback: (dispatch, response) => {
@@ -43,7 +43,7 @@ export const getMessage = ({ cancelToken, data, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
     title: title,
-    url: `${serverPath}/messages/message`,
+    url: `${apiServices}/messages/message`,
     method: "post",
     body: data,
     errorMessages: {
@@ -58,7 +58,7 @@ export const getMessages = ({ cancelToken, successCallbackFromUI, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
     title: title,
-    url: `${serverPath}/messages`,
+    url: `${apiServices}/messages`,
     method: "get",
     errorMessages: {
       500: { message: "Не удалось загрузить сообщения", type: "danger" },

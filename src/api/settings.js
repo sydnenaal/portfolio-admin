@@ -1,4 +1,4 @@
-import { serverPath } from "api";
+import { apiServices } from "api";
 import { queryWrapper } from "utils";
 import { encryptData } from "utils";
 
@@ -7,7 +7,7 @@ export const changePassword = ({ cancelToken, password, oldPassword, title }) =>
     cancelToken: cancelToken,
     title: title,
     method: "post",
-    url: `${serverPath}/users/setPassword`,
+    url: `${apiServices}/users/setPassword`,
     body: {
       data: {
         password: encryptData(password),

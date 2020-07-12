@@ -1,6 +1,6 @@
 import { dateParse } from "utils";
 import { setProjects } from "ducks";
-import { serverPath } from "api";
+import { apiServices } from "api";
 import { queryWrapper } from "utils";
 
 export const insertProjects = ({ cancelToken, title, body }) =>
@@ -8,7 +8,7 @@ export const insertProjects = ({ cancelToken, title, body }) =>
     cancelToken: cancelToken,
     title: title,
     method: "put",
-    url: `${serverPath}/projects/insert`,
+    url: `${apiServices}/projects/insert`,
     body: body,
     successCallback: (dispatch, response) => {
       const responseWithChecked = response.data.map((item) => ({
@@ -26,7 +26,7 @@ export const deleteProjects = ({ cancelToken, title, data }) =>
     cancelToken: cancelToken,
     title: title,
     method: "delete",
-    url: `${serverPath}/projects/delete`,
+    url: `${apiServices}/projects/delete`,
     body: data,
     successCallback: (dispatch, response) => {
       const responseWithChecked = response.data.map((item) => ({
@@ -43,7 +43,7 @@ export const getProjects = ({ cancelToken, title }) =>
   queryWrapper({
     cancelToken: cancelToken,
     title: title,
-    url: `${serverPath}/projects`,
+    url: `${apiServices}/projects`,
     method: "get",
     errorMessages: {
       500: { message: "Не удалось загрузить проекты", type: "danger" },

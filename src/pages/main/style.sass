@@ -1,7 +1,6 @@
 .mainBody
     width: 100%
     height: 100%
-    padding: 30px
     display: flex
     flex-direction: column
     align-items: flex-start
@@ -26,9 +25,11 @@
             width: 49%
 
             .infoTitle
-                margin-bottom: 15px
+                margin-bottom: 10px
 
 @media (max-width: 1920px)
+    .mainBody
+        padding: 30px
     .welcomeSlogan
         font-size: 40px
     .newMessages, .visitors
@@ -39,6 +40,8 @@
         margin-bottom: 30px
 
 @media (max-width: 500px)
+    .mainBody
+        padding: 15px
     .welcomeSlogan
         font-size: 25px
     .newMessages, .visitors
