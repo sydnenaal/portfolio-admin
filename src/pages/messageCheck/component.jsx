@@ -49,10 +49,6 @@ const MessageCheckPageComponent = ({
                   <span>От кого: </span>
                   {activeMessage && activeMessage.client}
                 </div>
-                <div className="messagePage-Body__theme">
-                  <span>Тема: </span>
-                  {activeMessage && activeMessage.title}
-                </div>
                 <div className="messagePage-Body__text">
                   <span>Сообщение: </span>
                   {activeMessage && activeMessage.text}

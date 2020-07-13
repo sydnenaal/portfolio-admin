@@ -81,10 +81,6 @@ const Message = ({ ...props }) => {
                       </div>
 
                       <div className="messageText">
-                        <div className="title">
-                          <strong>{props.title}</strong>
-                        </div>
-
                         <div className="text">{props.text}</div>
                       </div>
                     </div>

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import axios from "axios";
+import React, { useState, useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
@@ -7,7 +6,6 @@ import "../style.sass";
 import { changePassword } from "api";
 
 const ChangePassword = ({ locale }) => {
-  let source = axios.CancelToken.source();
   const dispatch = useDispatch();
 
   const [isPasswordChangeShow, setIsPasswordChangeShow] = useState(false);
@@ -15,12 +13,6 @@ const ChangePassword = ({ locale }) => {
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      source.cancel();
-    };
-  }, [source]);
 
   const handleChangePassword = useCallback(
     (e) => setPassword(e.target.value),
@@ -44,7 +36,6 @@ const ChangePassword = ({ locale }) => {
       dispatch(
         changePassword({
           title: "changePassword",
-          cancelToken: source.token,
           password: password,
           oldPassword: oldPassword,
         })
@@ -53,7 +44,7 @@ const ChangePassword = ({ locale }) => {
       setRepeatPassword("");
       setIsPasswordChangeShow(false);
     }
-  }, [password, repeatPassword, oldPassword, dispatch, source.token]);
+  }, [password, repeatPassword, oldPassword, dispatch]);
   const handleOpenPasswordChange = useCallback(
     () => setIsPasswordChangeShow(!isPasswordChangeShow),
     [isPasswordChangeShow]
