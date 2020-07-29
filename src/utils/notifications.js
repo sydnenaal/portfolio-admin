@@ -12,3 +12,19 @@ export const showNotifyByResponseStatusCode = (status, messages) => {
       type: messageData.type,
     });
 };
+
+export const helpUserNotify = () => {
+  if (!localStorage.getItem("mailNotify")) {
+    localStorage.setItem("mailNotify", "showed");
+    store.addNotification({
+      ...notificationSettings,
+      title: "Подсказка",
+      message:
+        "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
+      type: "info",
+      dismiss: {
+        duration: 25000,
+      },
+    });
+  }
+};

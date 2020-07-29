@@ -1,106 +1,86 @@
 import React, { useState, useEffect } from "react";
-import clsx from "clsx";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import Component from "./component";
 import { setActiveMessage } from "ducks";
-import { setActualityMessages, setPriorityMessages } from "api";
+import { setPriorityMessages, setActualityMessages } from "api";
 
 const MessageContainer = ({
-  handleCheck,
-  id,
   _id,
   isImportant,
-  title,
-  text,
-  client,
-  date,
-  isRead,
   isChecked,
+  dispatch,
+  index,
+  ...props
 }) => {
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
   const history = useHistory();
 
-  const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
-  const [startPosition, setStartPosition] = useState(0);
-  const [position, setPosition] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteAnimationTrigger, setDeleteAnimationTrigger] = useState(false);
 
   const universalMessageAction = ({ action, handler }) => () => {
     const data = { messages: [_id], action: action };
     setIsOpen(false);
-    dispatch(handler({ data }));
+    reduxDispatch(handler({ data }));
   };
 
-  const handleCheckMessage = () => handleCheck(id);
-  const handlePreventContextMenu = (e) => e.preventDefault();
-  const handleTouchStart = (e) => setStartPosition(e.touches[0].clientX);
-  const handleMouseLeave = () => isOpen && setIsOpen(false);
-  const handleTouchEnd = (e) => {
-    const target = e.changedTouches[0].clientX - startPosition;
-    setPosition(target > 50 ? "100px" : "0px");
-  };
+  const handleCheckMessage = (_, data) =>
+    dispatch({
+      type: data.checked ? "CHECK_SINGLE" : "DROP_SINGLE_CHECK",
+      payload: _id,
+    });
+
   const handleSetPriority = universalMessageAction({
     action: !isImportant,
     handler: setPriorityMessages,
   });
-  const handleDeleteMessage = universalMessageAction({
-    action: true,
-    handler: setActualityMessages,
-  });
-  const handleRightClickOnMessage = (e) => {
-    e.preventDefault();
-    e.button === 2 && setIsOpen(!isOpen);
-  };
+
+  const handleDeleteMessage = () => setDeleteAnimationTrigger(true);
+
   const handleClickOnMessage = () => {
-    const activeMessage = { title, text, client, date };
-    dispatch(setActiveMessage(activeMessage));
+    const activeMessage = {
+      title: props.title,
+      text: props.text,
+      client: props.client,
+      date: props.date,
+    };
+    reduxDispatch(setActiveMessage(activeMessage));
     history.push(`mail/${_id}`);
   };
-  const handleTouchMove = (e) => {
-    e.stopPropagation();
-    const targetPosition = e.touches[0].clientX - startPosition;
-    const isPositionInScope = targetPosition < 100 && targetPosition > 0;
-    isPositionInScope && setPosition(targetPosition);
+
+  const handleDeleteOnAnimationEnd = (e) => {
+    if (e.animationName === "fadeOut") {
+      setRender(false);
+      universalMessageAction({
+        action: true,
+        handler: setActualityMessages,
+      })();
+    }
   };
 
-  const isMobileMode = document.documentElement.clientWidth < 500;
-  const iconName = isRead ? "envelope open outline" : "envelope outline";
-  const translateStyle = isMobileMode ? { paddingLeft: position } : null;
-  const messageComponentStyles = clsx({
-    messageComponent: true,
-    openMessageSubmenu: isOpen && !isMobileMode,
-  });
-
   useEffect(() => {
-    const delay = ((id + 1) / 2) * 100;
+    const delay = ((index + 1) / 3) * 100;
     setTimeout(() => setRender(true), delay);
-  }, [id]);
+  }, [index]);
 
   return (
     <Component
+      handleDeleteOnAnimationEnd={handleDeleteOnAnimationEnd}
       handleDeleteMessage={handleDeleteMessage}
       handleSetPriority={handleSetPriority}
-      translateStyle={translateStyle}
-      handleTouchMove={handleTouchMove}
       handleCheckMessage={handleCheckMessage}
-      handleTouchEnd={handleTouchEnd}
-      handleRightClickOnMessage={handleRightClickOnMessage}
       handleClickOnMessage={handleClickOnMessage}
-      iconName={iconName}
-      render={render}
-      handleMouseLeave={handleMouseLeave}
-      handleTouchStart={handleTouchStart}
-      handlePreventContextMenu={handlePreventContextMenu}
-      messageComponentStyles={messageComponentStyles}
-      title={title}
-      text={text}
-      client={client}
-      date={date}
-      isRead={isRead}
+      universalMessageAction={universalMessageAction}
+      deleteAnimationTrigger={deleteAnimationTrigger}
       isImportant={isImportant}
+      isOpen={isOpen}
+      render={render}
+      setIsOpen={setIsOpen}
       isChecked={isChecked}
+      {...props}
     />
   );
 };

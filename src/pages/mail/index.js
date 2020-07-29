@@ -1,134 +1,134 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useReducer, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { store } from "react-notifications-component";
 
 import MailPageComponent from "./component";
-
 import { getMessages, setPriorityMessages, setActualityMessages } from "api";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
-import { notificationSettings } from "constants/notificationSettings";
-import { setMessages } from "ducks";
 import { selectActiveTab, selectMessages } from "selectors";
-import { sortMessages } from "utils/getTabSortedMessages";
+import { helpUserNotify } from "utils";
 
-const helpUserNotify = () => {
-  const isShow = localStorage.getItem("mailNotify");
+const checkedMessagesReducer = (state, action) => {
+  const { messages, count, checked, activeTab } = state;
+  const checkAll = () => {
+    const checkedItems = messages
+      .filter(tabFilter[activeTab])
+      .map((item) => item._id);
+    return { checked: checkedItems, count: checkedItems.length };
+  };
 
-  if (!isShow) {
-    localStorage.setItem("mailNotify", "showed");
-    store.addNotification({
-      ...notificationSettings,
-      title: "Подсказка",
-      message:
-        "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
-      type: "info",
-      dismiss: {
-        duration: 25000,
-      },
-    });
+  switch (action.type) {
+    case "CHECK_ALL":
+      return { ...state, ...checkAll() };
+    case "DROP_CHECKS":
+      return { ...state, checked: [], count: 0 };
+    case "CHECK_SINGLE":
+      return {
+        ...state,
+        checked: [...checked, action.payload],
+        count: count + 1,
+      };
+    case "DROP_SINGLE_CHECK":
+      return {
+        ...state,
+        checked: checked.filter((item) => item !== action.payload),
+        count: count - 1,
+      };
+    case "UPDATE_MESSAGES":
+      return { ...state, messages: action.payload };
+    case "SET_ACTIVE_TAB":
+      return { ...state, activeTab: action.payload };
+    default:
+      return state;
   }
 };
 
 const MailPageContainer = () => {
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
   const activeTab = useSelector(selectActiveTab);
   const messages = useSelector(selectMessages);
   const source = axios.CancelToken.source();
 
-  const [checked, setChecked] = useState(0);
+  const [state, localDispatch] = useReducer(checkedMessagesReducer, {
+    messages: messages,
+    checked: [],
+    count: 0,
+    activeTab: activeTab,
+  });
 
-  const countChecked = (array) => {
-    const checkedCount = array.reduce(
-      (acc, item) => acc + Number(item.isChecked),
-      0
-    );
-
-    setChecked(checkedCount);
-  };
-  const getCheckedMessages = () =>
-    messages.filter((item) => item.isChecked).map((item) => item._id);
-  const priorityAction = ({ action }) => () => {
-    const checkedMessages = getCheckedMessages();
-    dispatch(
-      setPriorityMessages({
-        title: "setPriority",
-        cancelToken: source.token,
-        data: { messages: checkedMessages, action: action },
-      })
-    );
-    setChecked(0);
-  };
-  const actualityAction = ({ action }) => () => {
-    const checkedMessages = getCheckedMessages();
-    dispatch(
-      setActualityMessages({
-        title: "setActuality",
-        cancelToken: source.token,
-        data: { messages: checkedMessages, action: action },
-      })
-    );
-    setChecked(0);
+  const messagesAction = ({ action, title, reduxAction }) => () => {
+    const queryData = {
+      title: title,
+      cancelToken: source.token,
+      data: { messages: state.checked, action: action },
+    };
+    reduxDispatch(reduxAction(queryData));
+    localDispatch({ type: "UPDATE_MESSAGES", payload: messages });
   };
 
-  const handleSetUsualMessages = priorityAction({ action: false });
-  const handleSetImportantMessages = priorityAction({ action: true });
-  const handleDeleteMessages = actualityAction({ action: true });
-  const handleReturnMessages = actualityAction({ action: false });
-  const handleCheck = (id) => {
-    const checkedMessages = messages.map((item) => ({
-      ...item,
-      isChecked: item.id === id ? !item.isChecked : item.isChecked,
-    }));
+  const handleSetUsualMessages = messagesAction({
+    action: false,
+    title: "setPriority",
+    reduxAction: setPriorityMessages,
+  });
 
-    sortMessages({ messages: checkedMessages, dispatch: dispatch });
-    dispatch(setMessages(checkedMessages));
-    countChecked(checkedMessages);
-  };
-  const handleCheckAll = ({ setCheck }) => {
-    const checkedMessages = messages.map((item) => ({
-      ...item,
-      isChecked: tabFilter[activeTab](item) ? setCheck : item.isChecked,
-    }));
+  const handleSetImportantMessages = messagesAction({
+    action: true,
+    title: "setPriority",
+    reduxAction: setPriorityMessages,
+  });
 
-    sortMessages({ messages: checkedMessages, dispatch: dispatch });
-    dispatch(setMessages(checkedMessages));
-    countChecked(checkedMessages);
-  };
+  const handleDeleteMessages = messagesAction({
+    action: true,
+    title: "setActuality",
+    reduxAction: setActualityMessages,
+  });
+
+  const handleReturnMessages = messagesAction({
+    action: false,
+    title: "setActuality",
+    reduxAction: setActualityMessages,
+  });
+
+  const handleCheckAllMessages = () => localDispatch({ type: "CHECK_ALL" });
+  const handleDropChecksMessages = () => localDispatch({ type: "DROP_CHECKS" });
 
   useEffect(() => {
-    setChecked(0);
-  }, [setChecked, activeTab]);
+    localDispatch({ type: "DROP_CHECKS" });
+    localDispatch({ type: "SET_ACTIVE_TAB", payload: activeTab });
+  }, [activeTab]);
 
   useEffect(() => {
     const source = axios.CancelToken.source();
+    const queryParams = {
+      cancelToken: source.token,
+      title: "getMessages",
+      successCallbackFromUI: (response) => {
+        localDispatch({ type: "UPDATE_MESSAGES", payload: response });
+        helpUserNotify();
+      },
+    };
 
-    dispatch(
-      getMessages({
-        cancelToken: source.token,
-        title: "getMessages",
-        successCallbackFromUI: (_) => {
-          helpUserNotify();
-        },
-      })
-    );
+    reduxDispatch(getMessages(queryParams));
 
     return () => {
       source.cancel();
     };
-  }, [dispatch]);
+  }, [reduxDispatch]);
 
   return (
     <MailPageComponent
       tabsNames={tabsNames}
       messages={messages}
-      handleCheckAll={handleCheckAll}
-      handleCheck={handleCheck}
+      handleDropChecksMessages={handleDropChecksMessages}
+      handleCheckAll={handleCheckAllMessages}
       handleReturnMessages={handleReturnMessages}
       handleDeleteMessages={handleDeleteMessages}
       handleSetImportantMessages={handleSetImportantMessages}
       handleSetUsualMessages={handleSetUsualMessages}
-      checked={checked}
+      checked={state.checked}
+      checkedCount={state.count}
+      dispatch={localDispatch}
     />
   );
 };

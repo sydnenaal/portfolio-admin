@@ -5,92 +5,97 @@ import Card from "containers/card";
 import { dateParse } from "utils";
 
 import "./style.sass";
+import AdaptiveContainer from "./adaptiveContainer";
 
-const Message = ({ ...props }) => {
+const Message = ({
+  handleSetPriority,
+  isOpen,
+  setIsOpen,
+  isRead,
+  isImportant,
+  isChecked,
+  handleCheckMessage,
+  handleClickOnMessage,
+  client,
+  handleDeleteOnAnimationEnd,
+  date,
+  handleDeleteMessage,
+  render,
+  deleteAnimationTrigger,
+  text,
+}) => {
   return (
     <>
-      {props.render && (
-        <div
-          className="messageComponent-hover"
-          onMouseLeave={props.handleMouseLeave}
-        >
-          <div
-            className={props.messageComponentStyles}
-            style={props.translateStyle}
+      <div className="messageComponent-hover">
+        {render && (
+          <AdaptiveContainer
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            isDeleted={deleteAnimationTrigger}
+            handleDeleteOnAnimationEnd={handleDeleteOnAnimationEnd}
           >
             <div className="deleteMessage">
               <div className="actionIcon">
                 <Icon
-                  onClick={props.handleDeleteMessage}
+                  onClick={handleDeleteMessage}
                   size="big"
                   name="trash alternate"
                 />
               </div>
 
               <div className="actionIcon">
-                <Icon
-                  onClick={props.handleSetPriority}
-                  size="big"
-                  name="warning"
-                />
+                <Icon onClick={handleSetPriority} size="big" name="warning" />
               </div>
             </div>
 
             <div className="messageContainer">
               <Card>
-                <div
-                  className="messageContent"
-                  onContextMenu={props.handlePreventContextMenu}
-                  onTouchStart={props.handleTouchStart}
-                  onTouchMove={props.handleTouchMove}
-                  onTouchEnd={props.handleTouchEnd}
-                  onMouseDown={props.handleRightClickOnMessage}
-                >
+                <div className="messageContent">
                   <div className="indicator">
-                    {!props.isRead && <div className="readPoint"></div>}
+                    {!isRead && <div className="readPoint"></div>}
 
-                    {props.isImportant && (
-                      <div className="importantPoint"></div>
-                    )}
+                    {isImportant && <div className="importantPoint"></div>}
                   </div>
 
                   <div className="checkboxContainer">
                     <div className="checkbox">
                       <Checkbox
-                        checked={props.isChecked}
-                        onChange={props.handleCheckMessage}
+                        checked={isChecked}
+                        onChange={handleCheckMessage}
                       />
                     </div>
                   </div>
 
-                  <div
-                    className="redirect"
-                    onClick={props.handleClickOnMessage}
-                  >
+                  <div className="redirect" onClick={handleClickOnMessage}>
                     <div className="image">
-                      <Icon size="huge" name={props.iconName}></Icon>
+                      <Icon
+                        size="huge"
+                        name={
+                          isRead ? "envelope open outline" : "envelope outline"
+                        }
+                      ></Icon>
                     </div>
 
                     <div className="messageInfo">
                       <div className="messageMeta">
                         <div className="title">
-                          <strong>{props.client}</strong>
+                          <strong>{client}</strong>
                         </div>
 
-                        <div className="date">{dateParse(props.date)}</div>
+                        <div className="date">{dateParse(date)}</div>
                       </div>
 
                       <div className="messageText">
-                        <div className="text">{props.text}</div>
+                        <div className="text">{text}</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </Card>
             </div>
-          </div>
-        </div>
-      )}
+          </AdaptiveContainer>
+        )}
+      </div>
     </>
   );
 };

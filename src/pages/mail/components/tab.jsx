@@ -15,7 +15,7 @@ import Card from "containers/card";
 import Message from "./message";
 import Pagination from "containers/pagination";
 
-export const Content = ({ handleCheck }) => {
+export const Content = ({ dispatch, checked }) => {
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
   const content = tabs[activeTab];
@@ -50,9 +50,11 @@ export const Content = ({ handleCheck }) => {
             displayedMessages.map((item, index) => (
               <Message
                 {...item}
-                handleCheck={handleCheck}
+                dispatch={dispatch}
+                isChecked={checked.includes(item._id)}
+                checked={checked}
                 index={index}
-                key={index}
+                key={item._id}
               />
             ))
           ) : (

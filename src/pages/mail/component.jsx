@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
@@ -12,13 +12,15 @@ import Tabs from "containers/tabs";
 import WithLoader from "containers/withLoader";
 
 const MailPageComponent = ({
-  handleCheck,
   handleCheckAll,
   handleDeleteMessages,
   handleSetImportantMessages,
+  handleDropChecksMessages,
   handleSetUsualMessages,
   handleReturnMessages,
+  checkedCount,
   checked,
+  dispatch,
   tabsNames,
 }) => {
   const {
@@ -28,21 +30,8 @@ const MailPageComponent = ({
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
 
-  const checkAll = useCallback(() => handleCheckAll({ setCheck: true }), [
-    handleCheckAll,
-  ]);
-  const unCheckAll = useCallback(() => handleCheckAll({ setCheck: false }), [
-    handleCheckAll,
-  ]);
-
   const screenWidth = document.documentElement.clientWidth;
-  const buttonsSize = useMemo(() => (screenWidth > 500 ? "small" : "tiny"), [
-    screenWidth,
-  ]);
-  const removeMessage = useMemo(
-    () => (activeTab === "trash" ? "remove" : "removeToTrash"),
-    [activeTab]
-  );
+  const buttonsSize = screenWidth > 500 ? "small" : "tiny";
 
   const renderTabs = tabsNames.map((item, index) => {
     const tab = tabs[item];
@@ -100,7 +89,7 @@ const MailPageComponent = ({
             <Button
               size={buttonsSize}
               className="actionButton"
-              onClick={checkAll}
+              onClick={handleCheckAll}
             >
               {mail.buttons.checkAll}
             </Button>
@@ -108,7 +97,7 @@ const MailPageComponent = ({
             <Button
               size={buttonsSize}
               className="actionButton"
-              onClick={unCheckAll}
+              onClick={handleDropChecksMessages}
             >
               {mail.buttons.uncheckAll}
             </Button>
@@ -117,7 +106,7 @@ const MailPageComponent = ({
               size={buttonsSize}
               className="actionButton"
               onClick={buttonInfo.handler}
-              disabled={checked === 0}
+              disabled={checkedCount === 0}
             >
               {buttonInfo.message}
             </Button>
@@ -126,16 +115,16 @@ const MailPageComponent = ({
               size={buttonsSize}
               className="actionButton"
               onClick={handleDeleteMessages}
-              disabled={checked === 0}
+              disabled={checkedCount === 0}
             >
-              {mail.buttons[removeMessage]}
+              {mail.buttons[activeTab === "trash" ? "remove" : "removeToTrash"]}
             </Button>
           </div>
         </div>
 
         <Tabs tabs={renderTabs}>
           <WithLoader title="getMessages">
-            <Content handleCheck={handleCheck} />
+            <Content dispatch={dispatch} checked={checked} />
           </WithLoader>
         </Tabs>
       </div>

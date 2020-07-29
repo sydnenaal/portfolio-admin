@@ -64,14 +64,9 @@ export const getMessages = ({ cancelToken, successCallbackFromUI, title }) =>
       500: { message: "Не удалось загрузить сообщения", type: "danger" },
     },
     successCallback: (dispatch, response) => {
-      const responseWithChecked = response.data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
+      dispatch(setMessages(response.data));
+      sortMessages({ messages: response.data, dispatch: dispatch });
 
-      dispatch(setMessages(responseWithChecked));
-      sortMessages({ messages: responseWithChecked, dispatch: dispatch });
-
-      successCallbackFromUI(responseWithChecked);
+      successCallbackFromUI(response.data);
     },
   });
