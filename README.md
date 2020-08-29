@@ -2,10 +2,11 @@
 
 Деплой проекта на Heroku: https://sydnenaal-portfolio.herokuapp.com/
 
-Стек технологий:
+### Стек технологий:
 - Create-react-app
 - React.js
 - Redux
   - Thunk
+- Axios
 - Semantic UI
 - SASS
