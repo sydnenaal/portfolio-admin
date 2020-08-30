@@ -9,3 +9,7 @@ export const selectNewMessagesCounter = (state) => state.messages.counter;
 export const selectVisits = (state) => state.visits.visits;
 export const selectUserData = (state) => state.user.userData;
 export const selectRequestStack = (state) => state.requestStack.requestsStack;
+export const selectContacts = (state) => state.contacts.contacts;
+export const selectIsDenseProjects = (state) => state.projects.isDense;
+export const selectProjectSearch = (state) => state.projects.searchFor;
+export const selectMessagesSearch = (state) => state.messages.searchFor;

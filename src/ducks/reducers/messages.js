@@ -4,6 +4,7 @@ import {
   SET_TAB_SORTED_MESSAGES,
   SET_ACTIVE_MESSAGE,
   SET_NEW_MESSAGES_COUNTER,
+  SET_MESSAGES_SEARCH_FOR,
 } from "ducks/types";
 
 export const setMessages = (messages) => ({
@@ -31,12 +32,18 @@ export const setNewMessagesCounter = (counter) => ({
   payload: counter,
 });
 
+export const setMessagesSearchTrigger = (action) => ({
+  type: SET_MESSAGES_SEARCH_FOR,
+  payload: action,
+});
+
 const messagesInitialState = {
   messages: null,
   counter: 0,
   tabSortedMessages: [],
   activeMessage: null,
   activeTab: "all",
+  searchFor: "client",
 };
 
 export const messagesReducer = (state = messagesInitialState, action) => {
@@ -51,6 +58,8 @@ export const messagesReducer = (state = messagesInitialState, action) => {
       return { ...state, activeTab: action.payload };
     case SET_ACTIVE_MESSAGE:
       return { ...state, activeMessage: action.payload };
+    case SET_MESSAGES_SEARCH_FOR:
+      return { ...state, searchFor: action.payload };
     default:
       return state;
   }

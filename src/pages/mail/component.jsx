@@ -22,6 +22,8 @@ const MailPageComponent = ({
   checked,
   dispatch,
   tabsNames,
+  handleChangeSearch,
+  search,
 }) => {
   const {
     messages: { titles, mail },
@@ -79,6 +81,8 @@ const MailPageComponent = ({
         <div className="mailActions">
           <div className="search">
             <Input
+              value={search}
+              onChange={handleChangeSearch}
               fluid={screenWidth < 500}
               placeholder={mail.searchPlaceholder}
               icon="search"
@@ -124,7 +128,7 @@ const MailPageComponent = ({
 
         <Tabs tabs={renderTabs}>
           <WithLoader title="getMessages">
-            <Content dispatch={dispatch} checked={checked} />
+            <Content filter={search} dispatch={dispatch} checked={checked} />
           </WithLoader>
         </Tabs>
       </div>

@@ -40,7 +40,7 @@ export const messages_en = {
     resetButton: "agree",
   },
   home: {
-    title: "Welcome, Administrator",
+    title: "Welcome,",
     visitors: {
       title: "New visitors for last time",
       day: "Today",

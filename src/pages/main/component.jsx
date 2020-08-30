@@ -10,7 +10,7 @@ import { themeStyle } from "constants/themingStyles";
 import WithLoader from "containers/withLoader";
 import Card from "containers/card";
 
-const MainPageComponent = ({ counter, visits }) => {
+const MainPageComponent = ({ counter, visits, user }) => {
   const {
     messages: {
       titles,
@@ -18,6 +18,7 @@ const MainPageComponent = ({ counter, visits }) => {
     },
   } = useIntl();
 
+  const name = user.name.split(" ")[0];
   const theme = useSelector(selectTheme);
 
   return (
@@ -26,7 +27,7 @@ const MainPageComponent = ({ counter, visits }) => {
         <div className="helloWorld">
           <Card padding="10px" style={themeStyle[theme]}>
             <div className="welcomeSlogan">
-              <p>{title}</p>
+              <p>{`${title} ${name}`}</p>
             </div>
           </Card>
         </div>

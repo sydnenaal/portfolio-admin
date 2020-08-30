@@ -8,7 +8,6 @@ const Reset = ({ locale }) => {
   const handleReset = useCallback(() => {
     try {
       localStorage.clear();
-      //TODO: Обновить
       store.addNotification({
         ...notificationSettings,
         title: "Сброс",
@@ -16,21 +15,20 @@ const Reset = ({ locale }) => {
         type: "success",
       });
     } catch (err) {
-      console.log(err);
       store.addNotification({
         ...notificationSettings,
         title: "Сброс",
         message: "Сброс не удался",
-        type: "danger",
+        type: "error",
       });
     }
   }, []);
 
   return (
     <div id="reset">
-      <p>{locale.settings.reset}</p>
+      <p>Изменить фотографию профиля</p>
       <div>
-        <Button onClick={handleReset}>{locale.settings.resetButton}</Button>
+        <Button onClick={handleReset}>Выбрать</Button>
       </div>
     </div>
   );

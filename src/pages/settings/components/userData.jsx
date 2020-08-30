@@ -1,29 +1,34 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
 import { setContactData } from "api";
+import { selectContacts } from "selectors";
 
 const UserData = ({ locale }) => {
   const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
   const [isUserDataChangeShow, setIsUserDataChangeShow] = useState(false);
   const [behance, setBehance] = useState("");
-  const [instagram, setInstagram] = useState("");
   const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
+
+  useEffect(() => {
+    if (contacts) {
+      setBehance(contacts.behance);
+      setInstagram(contacts.instagram);
+      setFacebook(contacts.facebook);
+    }
+  }, [contacts]);
 
   const handleSubmit = () => {
-    dispatch(
-      setContactData({
-        title: "setContacts",
-        data: {
-          behance,
-          instagram,
-          facebook,
-        },
-      })
-    );
+    const fetchData = {
+      title: "setContacts",
+      data: { behance, instagram, facebook },
+    };
+    dispatch(setContactData(fetchData));
   };
   const handleOpenPasswordChange = useCallback(
     () => setIsUserDataChangeShow(!isUserDataChangeShow),
@@ -33,18 +38,10 @@ const UserData = ({ locale }) => {
   const handleChangeInstagram = (e) => setInstagram(e.target.value);
   const handleChangeFacebook = (e) => setFacebook(e.target.value);
 
-  const contentStyle = useMemo(
-    () => ({
-      maxHeight: `${isUserDataChangeShow ? 300 : 0}px`,
-    }),
-    [isUserDataChangeShow]
-  );
-  const chevronStyle = useMemo(
-    () => ({
-      transform: `rotate(${isUserDataChangeShow ? 180 : 0}deg)`,
-    }),
-    [isUserDataChangeShow]
-  );
+  const contentStyle = { maxHeight: `${isUserDataChangeShow ? 300 : 0}px` };
+  const chevronStyle = {
+    transform: `rotate(${isUserDataChangeShow ? 180 : 0}deg)`,
+  };
 
   return (
     <div>

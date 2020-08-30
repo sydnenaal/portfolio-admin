@@ -3,13 +3,18 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
 import { getMainInfo } from "api/main";
-import { selectNewMessagesCounter, selectVisits } from "selectors";
+import {
+  selectNewMessagesCounter,
+  selectVisits,
+  selectUserData,
+} from "selectors";
 
 import MainPageComponent from "./component";
 
 const MainPageContainer = () => {
   const counter = useSelector(selectNewMessagesCounter);
   const visits = useSelector(selectVisits);
+  const user = useSelector(selectUserData);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,7 +32,7 @@ const MainPageContainer = () => {
     };
   }, [dispatch]);
 
-  return <MainPageComponent counter={counter} visits={visits} />;
+  return <MainPageComponent counter={counter} user={user} visits={visits} />;
 };
 
 export default MainPageContainer;

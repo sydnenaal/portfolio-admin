@@ -42,7 +42,7 @@ const MessageContainer = ({
 
   const handleClickOnMessage = () => {
     const activeMessage = {
-      title: props.title,
+      email: props.email,
       text: props.text,
       client: props.client,
       date: props.date,

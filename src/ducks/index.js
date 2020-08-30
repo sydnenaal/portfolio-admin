@@ -8,6 +8,7 @@ import {
   visitsReducer,
   userReducer,
   requestsStackReducer,
+  contactsReducer,
 } from "./reducers";
 
 export const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ export const rootReducer = combineReducers({
   visits: visitsReducer,
   user: userReducer,
   requestStack: requestsStackReducer,
+  contacts: contactsReducer,
 });
 
 export * from "./reducers";

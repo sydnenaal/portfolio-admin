@@ -20,3 +20,27 @@ export const changePassword = ({ cancelToken, password, oldPassword, title }) =>
       200: { message: "Пароль успешно изменен", type: "success" },
     },
   });
+
+export const setUserName = ({ username, title }) =>
+  queryWrapper({
+    title: title,
+    method: "post",
+    url: `${apiServices}/users/setUsername`,
+    body: { data: { username } },
+    errorMessages: {
+      500: { message: "Не удалось сменить имя", type: "danger" },
+      200: { message: "Данные пользователя успешно изменены", type: "success" },
+    },
+  });
+
+export const setUserPhoto = ({ photo, title }) =>
+  queryWrapper({
+    title: title,
+    method: "post",
+    url: `${apiServices}/users/setPhoto`,
+    body: { data: { photo } },
+    errorMessages: {
+      500: { message: "Не удалось сменить фото", type: "danger" },
+      200: { message: "Данные пользователя успешно изменены", type: "success" },
+    },
+  });

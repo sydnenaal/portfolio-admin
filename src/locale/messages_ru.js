@@ -40,7 +40,7 @@ export const messages_ru = {
     resetButton: "Подтвердить",
   },
   home: {
-    title: "Добро пожаловать, Администратор",
+    title: "Добро пожаловать,",
     visitors: {
       title: "Посетители за последнее время",
       day: "сегодня",

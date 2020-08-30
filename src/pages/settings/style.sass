@@ -1,54 +1,69 @@
-.settingsBody
-    width: 100%
-    display: flex
-    align-items: flex-start
-    justify-content: flex-start
-    flex-wrap: wrap
+.settingsPage
 
-    .settingsItem
+    .settingsTitle
+
+        &_main, &_user, &_projects, &_messages
+            display: flex
+            align-items: center
+            height: 50px
+            font-size: 35px
+            margin-bottom: 25px
+            padding-left: 20px
+
+        &_user, &_projects, &_messages
+            margin-top: 40px
+    
+    .settingsBody
         width: 100%
-        min-width: 250px
         display: flex
         align-items: flex-start
-        justify-content: center
+        justify-content: flex-start
+        flex-wrap: wrap
 
-        #theme, #language, #reset,
+        .settingsItem
             width: 100%
+            min-width: 250px
             display: flex
-            align-items: center
-            justify-content: space-between
+            align-items: flex-start
+            justify-content: center
 
-        .passwordChangeHeader
-            width: 100%
-            display: flex
-            align-items: center
-            justify-content: space-between
-            cursor: pointer
+            #theme, #language, #reset,
+                width: 100%
+                display: flex
+                align-items: center
+                justify-content: space-between
 
-        .passwordChange
-            overflow: hidden
-            will-change: max-height
-            transition: max-height 0.4s ease
+            .passwordChangeHeader
+                width: 100%
+                display: flex
+                align-items: center
+                justify-content: space-between
+                cursor: pointer
 
-            &-input
-                margin-bottom: 10px
+            .passwordChange
+                overflow: hidden
+                will-change: max-height
+                transition: max-height 0.4s ease
+
+                &-input
+                    margin-bottom: 10px
 
 .chevronIcon
     will-change: transform
     transition: transform .2s ease
 
 @media (max-width: 1920px)
-    .settingsBody
+    .settingsPage
         padding: 30px
     .settingsItem
-        padding: 20px
+        padding: 10px
         font-size: 23px
-        max-width: 50%
+        max-width: 80%
     .passwordChange-input
         font-size: 17px
 
 @media (max-width: 500px) 
-    .settingsBody
+    .settingsPage
         padding: 10px
     .settingsItem
         padding: 10px

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useIntl } from "react-intl";
-import { Card, Input, Button, Radio } from "semantic-ui-react";
+import { Card, Input, Button } from "semantic-ui-react";
 
 import "./style.sass";
 
@@ -15,8 +15,6 @@ import { themeStyle } from "constants/themingStyles";
 import { selectTheme, selectProjects } from "selectors";
 
 const ProjectsPageComponent = ({
-  compact,
-  handleChange,
   handleChangeFilter,
   handleFilterData,
   handleToggleModal,
@@ -26,6 +24,7 @@ const ProjectsPageComponent = ({
   handleCheckAll,
   checked,
   handleDeleteProjects,
+  isDense,
 }) => {
   const {
     messages: { titles, projects },
@@ -71,14 +70,6 @@ const ProjectsPageComponent = ({
                       {projects.update}
                     </Button>
                   </div>
-
-                  <div className="crudButton">
-                    <Radio
-                      toggle
-                      onChange={handleChange}
-                      label={projects.dense}
-                    />
-                  </div>
                 </div>
               </div>
 
@@ -89,7 +80,7 @@ const ProjectsPageComponent = ({
                       handleCheckAll={handleCheckAll}
                       handleCheck={handleCheck}
                       showPagination={true}
-                      compact={compact}
+                      compact={isDense}
                       headerNames={headerNames}
                       tableData={handleFilterData(projectsData)}
                     />

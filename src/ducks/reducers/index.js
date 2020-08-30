@@ -5,3 +5,4 @@ export * from "./requestStack";
 export * from "./theme";
 export * from "./user";
 export * from "./visits";
+export * from "./contacts";

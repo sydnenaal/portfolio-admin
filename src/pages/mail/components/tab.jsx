@@ -15,7 +15,7 @@ import Card from "containers/card";
 import Message from "./message";
 import Pagination from "containers/pagination";
 
-export const Content = ({ dispatch, checked }) => {
+export const Content = ({ dispatch, checked, filter }) => {
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
   const content = tabs[activeTab];
@@ -28,11 +28,13 @@ export const Content = ({ dispatch, checked }) => {
   useEffect(() => {
     if (content) {
       setDisplayedMessages(
-        content.slice((page - 1) * pageSize, page * pageSize)
+        content
+          .filter((item) => item.client.indexOf(filter) !== -1)
+          .slice((page - 1) * pageSize, page * pageSize)
       );
       setPageCount(Math.ceil(content.length / pageSize));
     }
-  }, [content, page, pageSize]);
+  }, [content, page, pageSize, filter]);
 
   const handlers = {
     handleChangePageSize: (e, { value }) => {

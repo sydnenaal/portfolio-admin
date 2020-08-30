@@ -38,6 +38,8 @@ const checkedMessagesReducer = (state, action) => {
       return { ...state, messages: action.payload };
     case "SET_ACTIVE_TAB":
       return { ...state, activeTab: action.payload };
+    case "SET_SEARCH":
+      return { ...state, search: action.payload };
     default:
       return state;
   }
@@ -54,6 +56,7 @@ const MailPageContainer = () => {
     checked: [],
     count: 0,
     activeTab: activeTab,
+    search: "",
   });
 
   const messagesAction = ({ action, title, reduxAction }) => () => {
@@ -92,6 +95,8 @@ const MailPageContainer = () => {
 
   const handleCheckAllMessages = () => localDispatch({ type: "CHECK_ALL" });
   const handleDropChecksMessages = () => localDispatch({ type: "DROP_CHECKS" });
+  const handleChangeSearch = (e) =>
+    localDispatch({ type: "SET_SEARCH", payload: e.target.value });
 
   useEffect(() => {
     localDispatch({ type: "DROP_CHECKS" });
@@ -100,6 +105,7 @@ const MailPageContainer = () => {
 
   useEffect(() => {
     const source = axios.CancelToken.source();
+
     const queryParams = {
       cancelToken: source.token,
       title: "getMessages",
@@ -108,12 +114,9 @@ const MailPageContainer = () => {
         helpUserNotify();
       },
     };
-
     reduxDispatch(getMessages(queryParams));
 
-    return () => {
-      source.cancel();
-    };
+    return source.cancel;
   }, [reduxDispatch]);
 
   return (
@@ -126,7 +129,9 @@ const MailPageContainer = () => {
       handleDeleteMessages={handleDeleteMessages}
       handleSetImportantMessages={handleSetImportantMessages}
       handleSetUsualMessages={handleSetUsualMessages}
+      handleChangeSearch={handleChangeSearch}
       checked={state.checked}
+      search={state.search}
       checkedCount={state.count}
       dispatch={localDispatch}
     />
