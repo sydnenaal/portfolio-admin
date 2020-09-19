@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
@@ -7,38 +7,40 @@ import { getMessage, setPriorityMessages, setActualityMessages } from "api";
 
 import MessageCheckComponent from "./component";
 
-const MessageCheckPageContainer = () => {
+function MessageCheckPageContainer() {
   const history = useHistory();
   const { message } = useParams();
-
   const dispatch = useDispatch();
 
-  const handleClickBack = () => history.goBack();
-  const handleDelete = useCallback(() => {
+  function handleClickBack() {
+    history.goBack();
+  }
+
+  function handleDelete() {
     const data = { messages: [message], action: true };
+
     dispatch(setActualityMessages({ data }));
     history.goBack();
-  }, [history, dispatch, message]);
-  const handleSetPriority = useCallback(() => {
+  }
+
+  function handleSetPriority() {
     const data = { messages: [message], action: true };
+
     dispatch(setPriorityMessages({ data }));
     history.goBack();
-  }, [history, dispatch, message]);
+  }
 
   useEffect(() => {
     let source = axios.CancelToken.source();
-
-    dispatch(
-      getMessage({
-        data: { _id: message },
-        cancelToken: source.token,
-        title: "getMessage",
-      })
-    );
-
-    return () => {
-      source.cancel();
+    const params = {
+      data: { _id: message },
+      cancelToken: source.token,
+      title: "getMessage",
     };
+
+    dispatch(getMessage(params));
+
+    return source.cancel;
   }, [dispatch, message]);
 
   return (
@@ -48,6 +50,6 @@ const MessageCheckPageContainer = () => {
       handleClickBack={handleClickBack}
     />
   );
-};
+}
 
 export default MessageCheckPageContainer;

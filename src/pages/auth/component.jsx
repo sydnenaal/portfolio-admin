@@ -5,11 +5,11 @@ import { Card, Input, Button } from "semantic-ui-react";
 import "./style.sass";
 import { selectRequestStack } from "selectors";
 
-const AuthPageComponent = ({
+function AuthPageComponent({
   handleChangeLogin,
   handleChangePassword,
   handleLogin,
-}) => {
+}) {
   const requestStack = useSelector(selectRequestStack);
   const isLoading = requestStack.indexOf("auth") !== -1;
 
@@ -56,6 +56,6 @@ const AuthPageComponent = ({
       </div>
     </div>
   );
-};
+}
 
 export default AuthPageComponent;

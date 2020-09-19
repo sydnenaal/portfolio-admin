@@ -11,7 +11,7 @@ import { Tab, Content } from "./components/tab";
 import Tabs from "containers/tabs";
 import WithLoader from "containers/withLoader";
 
-const MailPageComponent = ({
+function MailPageComponent({
   handleCheckAll,
   handleDeleteMessages,
   handleSetImportantMessages,
@@ -24,30 +24,26 @@ const MailPageComponent = ({
   tabsNames,
   handleChangeSearch,
   search,
-}) => {
+}) {
   const {
     messages: { titles, mail },
   } = useIntl();
 
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
-
   const screenWidth = document.documentElement.clientWidth;
   const buttonsSize = screenWidth > 500 ? "small" : "tiny";
 
-  const renderTabs = tabsNames.map((item, index) => {
-    const tab = tabs[item];
-    const messagesCounter = tab ? tab.length.toString() : "0";
+  const renderTabs = useMemo(() => {
+    function getTabFromTabName(title, key) {
+      const messagesCounter = tabs[title] ? tabs[title].length.toString() : "0";
+      const props = { title, key, messagesCounter, locale: mail };
 
-    return (
-      <Tab
-        key={index}
-        locale={mail}
-        messagesCounter={messagesCounter}
-        title={item}
-      />
-    );
-  });
+      return <Tab {...props} />;
+    }
+
+    return tabsNames.map(getTabFromTabName);
+  }, [tabsNames, mail, tabs]);
 
   let buttonInfo = useMemo(() => {
     switch (activeTab) {
@@ -134,6 +130,6 @@ const MailPageComponent = ({
       </div>
     </PageWithHeader>
   );
-};
+}
 
 export default memo(MailPageComponent);

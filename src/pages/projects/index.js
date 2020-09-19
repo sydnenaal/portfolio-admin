@@ -9,13 +9,18 @@ import { setProjects } from "ducks";
 
 import ProjectsPageComponent from "./component";
 
-const countSelected = (array) =>
-  array.reduce((acc, item) => acc + Number(item.isChecked), 0);
+function countSelected(array) {
+  return array.reduce((acc, { isChecked }) => acc + Number(isChecked), 0);
+}
 
-const getCheckedProjects = (projects) =>
-  projects.filter((item) => item.isChecked).map((item) => item._id);
+function getCheckedProjects(projects) {
+  const getChecked = ({ isChecked }) => isChecked;
+  const getId = ({ _id }) => _id;
 
-const ProjectsPageContainer = () => {
+  return projects.filter(getChecked).map(getId);
+}
+
+function ProjectsPageContainer() {
   const projects = useSelector(selectProjects);
   const isDense = useSelector((state) => state.projects.isDense);
   const dispatch = useDispatch();
@@ -26,20 +31,30 @@ const ProjectsPageContainer = () => {
   const [filter, setFilter] = useState("");
   const [checked, setChecked] = useState(0);
 
-  const handleClickEdit = () => history.push("/projects/0");
-  const handleToggleModal = () => setModalState(!modalState);
-  const handleChangeFilter = ({ target: { value } }) => setFilter(value);
-  const handleDeleteProjects = () => {
+  function handleClickEdit() {
+    history.push("/projects/0");
+  }
+
+  function handleToggleModal() {
+    setModalState(!modalState);
+  }
+
+  function handleChangeFilter({ target: { value } }) {
+    setFilter(value);
+  }
+
+  function handleDeleteProjects() {
     const checked = getCheckedProjects(projects);
     const fetchData = {
       title: "deleteProjects",
       cancelToken: source.token,
       data: { data: checked },
     };
-    dispatch(deleteProjects(fetchData));
-  };
 
-  const handleCheck = (id) => {
+    dispatch(deleteProjects(fetchData));
+  }
+
+  function handleCheck(id) {
     const checkedProjects = projects.map((item) => ({
       ...item,
       isChecked: item._id === id ? !item.isChecked : item.isChecked,
@@ -47,39 +62,48 @@ const ProjectsPageContainer = () => {
 
     dispatch(setProjects(checkedProjects));
     setChecked(countSelected(checkedProjects));
-  };
+  }
 
-  const handleCheckAll = (value) => {
-    const checkedProjects = projects.map((item) => ({
-      ...item,
-      isChecked: value,
-    }));
+  function handleCheckAll(isChecked) {
+    function setCheckFlags(item) {
+      return { ...item, isChecked };
+    }
+
+    const checkedProjects = projects.map(setCheckFlags);
 
     dispatch(setProjects(checkedProjects));
     setChecked(countSelected(checkedProjects));
-  };
+  }
 
-  const handleFilterData = (data) => {
-    const callback = (value) =>
-      value.toString().toLowerCase().indexOf(filter.toLowerCase()) !== -1;
+  function handleFilterData(data) {
+    function filterValues(value) {
+      const stringify = value.toString().toLowerCase();
 
-    return data.filter(
-      (item) => Object.values(item).filter(callback).length > 0
-    );
-  };
+      return stringify.indexOf(filter.toLowerCase()) !== -1;
+    }
 
-  useEffect(() => {
-    projects && setChecked(countSelected(projects));
-  }, [projects]);
+    function filterAllData(item) {
+      const validValues = Object.values(item).filter(filterValues);
+
+      return validValues.length > 0;
+    }
+
+    return data.filter(filterAllData);
+  }
 
   useEffect(() => {
     const source = axios.CancelToken.source();
 
-    const fetchData = {
-      title: "getProjects",
-      cancelToken: source.token,
-    };
-    !projects && dispatch(getProjects(fetchData));
+    if (!projects) {
+      const fetchData = {
+        title: "getProjects",
+        cancelToken: source.token,
+      };
+
+      dispatch(getProjects(fetchData));
+    }
+
+    setChecked(countSelected(projects));
 
     return source.cancel;
   }, [dispatch, projects]);
@@ -98,6 +122,6 @@ const ProjectsPageContainer = () => {
       handleFilterData={handleFilterData}
     />
   );
-};
+}
 
 export default ProjectsPageContainer;

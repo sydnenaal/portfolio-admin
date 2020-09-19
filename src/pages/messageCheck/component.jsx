@@ -12,11 +12,11 @@ import { selectActiveMessage } from "selectors";
 
 import "./style.sass";
 
-const MessageCheckPageComponent = ({
+function MessageCheckPageComponent({
   handleClickBack,
   handleDelete,
   handleSetPriority,
-}) => {
+}) {
   const {
     messages: {
       titles,
@@ -64,6 +64,6 @@ const MessageCheckPageComponent = ({
       </div>
     </PageWithHeader>
   );
-};
+}
 
 export default MessageCheckPageComponent;

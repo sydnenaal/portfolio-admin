@@ -52,10 +52,10 @@ const MailPageContainer = () => {
   const source = axios.CancelToken.source();
 
   const [state, localDispatch] = useReducer(checkedMessagesReducer, {
-    messages: messages,
+    messages,
     checked: [],
     count: 0,
-    activeTab: activeTab,
+    activeTab,
     search: "",
   });
 

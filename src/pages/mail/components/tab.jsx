@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { themeStyle } from "constants/themingStyles";
@@ -10,16 +10,14 @@ import {
   selectSortedMessages,
   selectMessages,
 } from "selectors";
-
 import Card from "containers/card";
 import Message from "./message";
 import Pagination from "containers/pagination";
 
-export const Content = ({ dispatch, checked, filter }) => {
+export function Content({ dispatch, checked, filter }) {
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
   const content = tabs[activeTab];
-
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState();
@@ -27,20 +25,22 @@ export const Content = ({ dispatch, checked, filter }) => {
 
   useEffect(() => {
     if (content) {
-      setDisplayedMessages(
-        content
-          .filter((item) => item.client.indexOf(filter) !== -1)
-          .slice((page - 1) * pageSize, page * pageSize)
-      );
+      const slicedContent = content
+        .filter((item) => item.client.indexOf(filter) !== -1)
+        .slice((page - 1) * pageSize, page * pageSize);
+
+      setDisplayedMessages(slicedContent);
       setPageCount(Math.ceil(content.length / pageSize));
     }
   }, [content, page, pageSize, filter]);
 
+  function handleChangePageSize(_, { value }) {
+    setPageSize(value);
+    setPage(1);
+  }
+
   const handlers = {
-    handleChangePageSize: (e, { value }) => {
-      setPageSize(value);
-      setPage(1);
-    },
+    handleChangePageSize,
     handleChangePage: setPage,
   };
 
@@ -74,33 +74,25 @@ export const Content = ({ dispatch, checked, filter }) => {
       </>
     </Card>
   );
-};
+}
 
-export const Tab = ({ title, messagesCounter, locale }) => {
+export function Tab({ title, messagesCounter, locale }) {
   const activeTab = useSelector(selectActiveTab);
   const theme = useSelector(selectTheme);
   const messages = useSelector(selectMessages);
   const dispatch = useDispatch();
+  const isActive = activeTab === title;
+  const activeColor = theme === "dark" ? "white" : "grey";
+  const borderColor = isActive ? activeColor : "transparent";
+  const tabStyle = { borderBottom: `2px solid ${borderColor}` };
 
-  const isActive = useMemo(() => activeTab === title, [activeTab, title]);
-  const activeColor = useMemo(() => (theme === "dark" ? "white" : "grey"), [
-    theme,
-  ]);
-  const borderColor = useMemo(() => (isActive ? activeColor : "transparent"), [
-    isActive,
-    activeColor,
-  ]);
-  const tabStyle = useMemo(
-    () => ({ borderBottom: `2px solid ${borderColor}` }),
-    [borderColor]
-  );
-
-  const handleClick = useCallback(() => {
+  function handleClick() {
     const newMessages = messages.map((item) => ({ ...item, isChecked: false }));
+
     dispatch(setMessages(newMessages));
-    sortMessages({ messages: newMessages, dispatch: dispatch });
+    sortMessages({ messages: newMessages, dispatch });
     dispatch(setTab(title));
-  }, [messages, title, dispatch]);
+  }
 
   return (
     <div style={tabStyle} className="tab" key={title} onClick={handleClick}>
@@ -110,4 +102,4 @@ export const Tab = ({ title, messagesCounter, locale }) => {
       )}
     </div>
   );
-};
+}

@@ -10,7 +10,7 @@ import { themeStyle } from "constants/themingStyles";
 import WithLoader from "containers/withLoader";
 import Card from "containers/card";
 
-const MainPageComponent = ({ counter, visits, user }) => {
+function MainPageComponent({ counter, visits, user }) {
   const {
     messages: {
       titles,
@@ -47,7 +47,6 @@ const MainPageComponent = ({ counter, visits, user }) => {
               <Card padding="10px" style={themeStyle[theme]}>
                 <div className="visitors">
                   <p className="infoTitle">{visitors.title}</p>
-
                   <p>
                     {visitors.day}: {visits.day}
                   </p>
@@ -67,6 +66,6 @@ const MainPageComponent = ({ counter, visits, user }) => {
       </div>
     </PageWithHeader>
   );
-};
+}
 
 export default MainPageComponent;

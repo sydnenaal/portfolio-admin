@@ -4,17 +4,15 @@ import { useIntl } from "react-intl";
 import { Card, Input, Button } from "semantic-ui-react";
 
 import "./style.sass";
-
 import PageWithHeader from "containers/pageWithHeader";
 import Table from "containers/table";
 import WithLoader from "containers/withLoader";
 import AddProjectModal from "./components/projectAddModal";
-
 import { headerNames } from "constants/tableConstants";
 import { themeStyle } from "constants/themingStyles";
 import { selectTheme, selectProjects } from "selectors";
 
-const ProjectsPageComponent = ({
+function ProjectsPageComponent({
   handleChangeFilter,
   handleFilterData,
   handleToggleModal,
@@ -25,7 +23,7 @@ const ProjectsPageComponent = ({
   checked,
   handleDeleteProjects,
   isDense,
-}) => {
+}) {
   const {
     messages: { titles, projects },
   } = useIntl();
@@ -97,6 +95,6 @@ const ProjectsPageComponent = ({
       </div>
     </PageWithHeader>
   );
-};
+}
 
 export default ProjectsPageComponent;

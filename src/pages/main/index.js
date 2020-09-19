@@ -11,7 +11,7 @@ import {
 
 import MainPageComponent from "./component";
 
-const MainPageContainer = () => {
+function MainPageContainer() {
   const counter = useSelector(selectNewMessagesCounter);
   const visits = useSelector(selectVisits);
   const user = useSelector(selectUserData);
@@ -19,13 +19,9 @@ const MainPageContainer = () => {
 
   useEffect(() => {
     let source = axios.CancelToken.source();
+    const params = { cancelToken: source.token, title: "getMainPageInfo" };
 
-    dispatch(
-      getMainInfo({
-        cancelToken: source.token,
-        title: "getMainPageInfo",
-      })
-    );
+    dispatch(getMainInfo(params));
 
     return () => {
       source.cancel();
@@ -33,6 +29,6 @@ const MainPageContainer = () => {
   }, [dispatch]);
 
   return <MainPageComponent counter={counter} user={user} visits={visits} />;
-};
+}
 
 export default MainPageContainer;
