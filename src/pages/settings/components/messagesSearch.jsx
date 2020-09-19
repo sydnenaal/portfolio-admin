@@ -7,13 +7,14 @@ import { selectMessagesSearch } from "selectors";
 import "../style.sass";
 import { setLanguage } from "ducks";
 
-const MessagesSearch = () => {
+function MessagesSearch() {
   const searchFor = useSelector(selectMessagesSearch);
   const dispatch = useDispatch();
 
   const handleChangeSearch = useCallback(
     (e, data) => {
       const { value } = data;
+
       dispatch(setLanguage(value));
       localStorage.setItem("lang", value);
     },
@@ -34,6 +35,6 @@ const MessagesSearch = () => {
       </Menu>
     </div>
   );
-};
+}
 
 export default MessagesSearch;

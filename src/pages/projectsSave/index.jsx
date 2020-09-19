@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "semantic-ui-react";
 import { useIntl } from "react-intl";
 
@@ -10,22 +10,32 @@ import AddPictureForm from "./components/addPictureForm";
 import AddTextForm from "./components/addTextForm";
 import Card from "containers/card";
 
-const ProjectSavePageComponent = ({
-  onBack,
-  isTextModalShow,
-  isPictureModalShow,
-  handleToggleTextModal,
-  handleTogglePictureModal,
-}) => {
+function ProjectSavePageComponent() {
   const {
     messages: { titles },
   } = useIntl();
+
+  const history = useHistory();
+  const [isTextModalShow, setIsTextModalShow] = useState(false);
+  const [isPictureModalShow, setIsPictureModalShow] = useState(false);
+
+  const handleClickBack = useCallback(() => {
+    history.goBack();
+  }, [history]);
+
+  const handleToggleTextModal = useCallback(() => {
+    setIsTextModalShow((curState) => !curState);
+  }, []);
+
+  const handleTogglePictureModal = useCallback(() => {
+    setIsPictureModalShow((curState) => !curState);
+  }, []);
 
   return (
     <PageWithHeader title={titles.projects} subtitle={"read"}>
       <div className="projectsSaveBody">
         <div className="projectsSaveActions">
-          <Button onClick={onBack}>Назад</Button>
+          <Button onClick={handleClickBack}>Назад</Button>
           <Button onClick={handleTogglePictureModal}>Добавить картинку</Button>
           <Button onClick={handleToggleTextModal}>Добавить текст</Button>
         </div>
@@ -49,6 +59,6 @@ const ProjectSavePageComponent = ({
       </Modal>
     </PageWithHeader>
   );
-};
+}
 
 export default ProjectSavePageComponent;

@@ -1,30 +1,29 @@
 import { notificationSettings } from "constants/notificationSettings";
 import { store } from "react-notifications-component";
 
-export const showNotifyByResponseStatusCode = (status, messages) => {
-  const messageData = messages && status && messages[status];
+export function showNotifyByResponseStatusCode(status, messages) {
+  const messageData = (() => {
+    if (messages && status) {
+      return messages[status];
+    }
+  })();
 
-  messageData &&
-    store.addNotification({
-      ...notificationSettings,
-      title: messageData.type === "success" ? "Успех" : "Ошибка",
-      message: messageData.message,
-      type: messageData.type,
-    });
-};
+  if (messageData) {
+    const { type, message } = messageData;
+    const title = type === "success" ? "Успех" : "Ошибка";
 
-export const helpUserNotify = () => {
-  if (!localStorage.getItem("mailNotify")) {
-    localStorage.setItem("mailNotify", "showed");
-    store.addNotification({
-      ...notificationSettings,
-      title: "Подсказка",
-      message:
-        "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши",
-      type: "info",
-      dismiss: {
-        duration: 25000,
-      },
-    });
+    store.addNotification({ ...notificationSettings, title, message, type });
   }
-};
+}
+
+export function helpUserNotify() {
+  if (!localStorage.getItem("mailNotify")) {
+    const message =
+      "Воспользуйтесь меню быстрого доступа, кликнув по сообщению правой кнопкой мыши";
+    const dismiss = { duration: 25000 };
+    const params = { title: "Подсказка", type: "info", message, dismiss };
+
+    localStorage.setItem("mailNotify", "showed");
+    store.addNotification({ ...notificationSettings, ...params });
+  }
+}

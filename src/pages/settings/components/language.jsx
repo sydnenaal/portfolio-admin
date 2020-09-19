@@ -4,17 +4,17 @@ import { Menu, Dropdown } from "semantic-ui-react";
 
 import { languageOptions } from "constants/settingsConstants";
 import { selectLanguage } from "selectors";
-
 import "../style.sass";
 import { setLanguage } from "ducks";
 
-const Language = ({ locale }) => {
+function Language({ locale }) {
   const language = useSelector(selectLanguage);
   const dispatch = useDispatch();
 
   const handleChangeLanguage = useCallback(
-    (e, data) => {
+    (_, data) => {
       const { value } = data;
+
       dispatch(setLanguage(value));
       localStorage.setItem("lang", value);
     },
@@ -35,6 +35,6 @@ const Language = ({ locale }) => {
       </Menu>
     </div>
   );
-};
+}
 
 export default Language;

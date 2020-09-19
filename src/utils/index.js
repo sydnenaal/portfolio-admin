@@ -2,4 +2,3 @@ export * from "./dateParse";
 export * from "./cryptHandler";
 export * from "./getTabSortedMessages";
 export * from "./notifications";
-export * from "./requestWrapper";

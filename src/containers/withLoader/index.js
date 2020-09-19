@@ -1,17 +1,18 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Loader } from "semantic-ui-react";
 
 import { selectRequestStack } from "selectors";
 
-const WithLoader = ({ children, title }) => {
+function WithLoader({ children, title }) {
   const requestStack = useSelector(selectRequestStack);
-  const loading = useMemo(() => requestStack.indexOf(title) !== -1, [
-    title,
-    requestStack,
-  ]);
+  const loading = requestStack.indexOf(title) !== -1;
 
-  return <>{loading ? <Loader active inline="centered" /> : children}</>;
-};
+  if (loading) {
+    return <Loader active inline="centered" />;
+  }
+
+  return children;
+}
 
 export default WithLoader;

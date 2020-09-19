@@ -1,51 +1,72 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
 import { setContactData } from "api";
+import { useRequest, useSettingsExpander } from "hooks";
 import { selectContacts } from "selectors";
+
+const initialState = {
+  behance: "",
+  facebook: "",
+  instagram: "",
+};
+
+function reducer(state, action) {
+  const { type, payload } = action;
+  const validTypes = ["behance", "facebook", "instagram"];
+
+  if (type === "clear") {
+    return initialState;
+  }
+
+  if (type === "all") {
+    return { ...payload };
+  }
+
+  if (type in validTypes) {
+    return { ...state, [type]: payload };
+  }
+
+  return state;
+}
 
 const UserData = ({ locale }) => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
-
-  const [isUserDataChangeShow, setIsUserDataChangeShow] = useState(false);
-  const [behance, setBehance] = useState("");
-  const [facebook, setFacebook] = useState("");
-  const [instagram, setInstagram] = useState("");
+  const [state, localDispatch] = useReducer(reducer, initialState);
+  const requestWrapper = useRequest();
+  const { behance, facebook, instagram } = state;
+  const {
+    contentStyle,
+    chevronStyle,
+    handleToggleExpander,
+  } = useSettingsExpander();
 
   useEffect(() => {
     if (contacts) {
-      setBehance(contacts.behance);
-      setInstagram(contacts.instagram);
-      setFacebook(contacts.facebook);
+      localDispatch({ type: "all", payload: contacts });
     }
   }, [contacts]);
 
-  const handleSubmit = () => {
-    const fetchData = {
-      title: "setContacts",
-      data: { behance, instagram, facebook },
-    };
-    dispatch(setContactData(fetchData));
-  };
-  const handleOpenPasswordChange = useCallback(
-    () => setIsUserDataChangeShow(!isUserDataChangeShow),
-    [isUserDataChangeShow]
-  );
-  const handleChangeBehance = (e) => setBehance(e.target.value);
-  const handleChangeInstagram = (e) => setInstagram(e.target.value);
-  const handleChangeFacebook = (e) => setFacebook(e.target.value);
+  function handleSubmit() {
+    const data = { behance, instagram, facebook };
+    const params = { ...setContactData, title: "setContacts", body: { data } };
 
-  const contentStyle = { maxHeight: `${isUserDataChangeShow ? 300 : 0}px` };
-  const chevronStyle = {
-    transform: `rotate(${isUserDataChangeShow ? 180 : 0}deg)`,
-  };
+    dispatch(requestWrapper(params));
+    localDispatch({ type: "clear" });
+  }
+
+  const handleChange = useCallback((e) => {
+    const { type } = this;
+
+    localDispatch({ type, payload: e.target.value });
+  }, []);
 
   return (
     <div>
-      <div className="passwordChangeHeader" onClick={handleOpenPasswordChange}>
+      <div className="passwordChangeHeader" onClick={handleToggleExpander}>
         <p>{locale.settings.userData}</p>
         <div className="chevronIcon" style={chevronStyle}>
           <Icon name="chevron down" />
@@ -57,7 +78,7 @@ const UserData = ({ locale }) => {
             <Input
               size="small"
               fluid
-              onChange={handleChangeBehance}
+              onChange={handleChange.bind({ type: "behance" })}
               value={behance}
               placeholder="Behance"
             />
@@ -68,7 +89,7 @@ const UserData = ({ locale }) => {
             <Input
               size="small"
               fluid
-              onChange={handleChangeInstagram}
+              onChange={handleChange.bind({ type: "instagram" })}
               value={instagram}
               placeholder="Instagram"
             />
@@ -78,7 +99,7 @@ const UserData = ({ locale }) => {
             <Input
               size="small"
               fluid
-              onChange={handleChangeFacebook}
+              onChange={handleChange.bind({ type: "facebook" })}
               value={facebook}
               placeholder="Facebook"
             />

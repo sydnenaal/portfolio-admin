@@ -1,44 +1,45 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
 import { setUserName } from "api";
+import { useSettingsExpander } from "hooks";
 
-const ChangePassword = ({ locale }) => {
+function ChangePassword({ locale }) {
   const dispatch = useDispatch();
 
-  const [isUsernameChangeShow, setIsUsernameChangeShow] = useState(false);
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
+  const {
+    contentStyle,
+    chevronStyle,
+    handleToggleExpander,
+  } = useSettingsExpander();
 
-  const handleChangeName = useCallback((e) => setName(e.target.value), []);
-  const handleChangeSurname = useCallback(
-    (e) => setSurname(e.target.value),
-    []
-  );
+  const handleChangeName = useCallback((e) => {
+    setName(e.target.value);
+  }, []);
+
+  const handleChangeSurname = useCallback((e) => {
+    setSurname(e.target.value);
+  }, []);
 
   const handleSubmit = useCallback(() => {
     const fetchData = {
       title: "changeUsername",
       username: `${name} ${surname}`,
     };
+
     dispatch(setUserName(fetchData));
     setName("");
     setSurname("");
-    setIsUsernameChangeShow(false);
+    handleToggleExpander();
   }, [name, surname, dispatch]);
-  const handleOpenUsernameChange = () =>
-    setIsUsernameChangeShow(!isUsernameChangeShow);
-
-  const contentStyle = { maxHeight: `${isUsernameChangeShow ? 300 : 0}px` };
-  const chevronStyle = {
-    transform: `rotate(${isUsernameChangeShow ? 180 : 0}deg)`,
-  };
 
   return (
     <div>
-      <div className="passwordChangeHeader" onClick={handleOpenUsernameChange}>
+      <div className="passwordChangeHeader" onClick={handleToggleExpander}>
         <p>Сменить имя пользователя</p>
 
         <div className="chevronIcon" style={chevronStyle}>
@@ -75,6 +76,6 @@ const ChangePassword = ({ locale }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ChangePassword;

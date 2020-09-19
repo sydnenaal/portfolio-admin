@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { Form, TextArea } from "semantic-ui-react";
 
-const AddTextForm = () => {
+function AddTextForm() {
   return (
     <div className="form_textArea">
       <Form>
@@ -9,6 +9,6 @@ const AddTextForm = () => {
       </Form>
     </div>
   );
-};
+}
 
-export default AddTextForm;
+export default memo(AddTextForm);

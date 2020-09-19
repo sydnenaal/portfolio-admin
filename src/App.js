@@ -15,7 +15,7 @@ const messages = {
   ru: messages_ru,
 };
 
-const App = () => {
+function App() {
   const language = useSelector(selectLanguage);
 
   return (
@@ -28,6 +28,6 @@ const App = () => {
       </IntlProvider>
     </>
   );
-};
+}
 
 export default App;

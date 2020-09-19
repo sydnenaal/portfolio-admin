@@ -4,17 +4,17 @@ import { Menu, Dropdown } from "semantic-ui-react";
 
 import { projectsOptions } from "constants/settingsConstants";
 import { selectProjectSearch } from "selectors";
-
-import "../style.sass";
 import { setLanguage } from "ducks";
+import "../style.sass";
 
-const ProjectsSearch = () => {
+function ProjectsSearch() {
   const searchFor = useSelector(selectProjectSearch);
   const dispatch = useDispatch();
 
   const handleChangeSearch = useCallback(
     (e, data) => {
       const { value } = data;
+
       dispatch(setLanguage(value));
       localStorage.setItem("lang", value);
     },
@@ -35,6 +35,6 @@ const ProjectsSearch = () => {
       </Menu>
     </div>
   );
-};
+}
 
 export default ProjectsSearch;

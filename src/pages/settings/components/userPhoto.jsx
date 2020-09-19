@@ -4,7 +4,7 @@ import { store } from "react-notifications-component";
 
 import { notificationSettings } from "constants/notificationSettings";
 
-const Reset = ({ locale }) => {
+function Reset({ locale }) {
   const handleReset = useCallback(() => {
     try {
       localStorage.clear();
@@ -32,6 +32,6 @@ const Reset = ({ locale }) => {
       </div>
     </div>
   );
-};
+}
 
 export default Reset;

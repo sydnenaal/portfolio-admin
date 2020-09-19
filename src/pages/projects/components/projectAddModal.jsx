@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useMemo, useCallback, memo, useReducer } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
@@ -6,40 +6,55 @@ import { Input } from "semantic-ui-react";
 import { insertProjects } from "api";
 
 import Modal from "containers/modal";
+import { useEffect } from "react";
 
-const AddProjectForm = ({ modalState, handleToggleModal }) => {
+const initialState = {
+  name: "",
+  type: "",
+  client: "",
+};
+
+function formReducer(state, action) {
+  const { type, payload } = action;
+  const validTypes = ["name", "type", "client"];
+
+  if (type === "clear") {
+    return initialState;
+  }
+
+  if (type in validTypes) {
+    return { ...state, [type]: payload };
+  }
+
+  return state;
+}
+
+function AddProjectForm({ modalState, handleToggleModal }) {
   const dispatch = useDispatch();
-  const source = axios.CancelToken.source();
+  const { token: cancelToken, cancel } = useMemo(axios.CancelToken.source, []);
+  const [state, localDispatch] = useReducer(formReducer, initialState);
+  const { name, type, client } = state;
 
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [client, setClient] = useState("");
+  useEffect(() => cancel, []);
 
-  const handleChangeName = useCallback((e) => setName(e.target.value), []);
-  const handleChangeType = useCallback((e) => setType(e.target.value), []);
-  const handleChangeClient = useCallback((e) => setClient(e.target.value), []);
+  const handleChange = useCallback(function (e) {
+    const { type } = this;
+
+    localDispatch({ type, payload: e.target.value });
+  }, []);
 
   const handleSuccess = useCallback(() => {
+    const data = { ...state, createDate: Date.now() };
     const requestData = {
-      cancelToken: source.token,
+      cancelToken,
       title: "insertProject",
-      body: {
-        data: {
-          name,
-          type,
-          client,
-          createDate: Date.now(),
-        },
-      },
+      body: { data },
     };
 
     dispatch(insertProjects(requestData));
-
-    setName("");
-    setType("");
-    setClient("");
+    localDispatch({ type: "clear" });
     handleToggleModal();
-  }, [dispatch, name, type, client, handleToggleModal, source.token]);
+  }, [dispatch, localDispatch, handleToggleModal, cancelToken]);
 
   return (
     <Modal
@@ -55,7 +70,7 @@ const AddProjectForm = ({ modalState, handleToggleModal }) => {
             fluid
             placeholder="Название"
             value={name}
-            onChange={handleChangeName}
+            onChange={handleChange.bind({ type: "name" })}
           />
         </div>
         <div className="ProjectFormField">
@@ -63,7 +78,7 @@ const AddProjectForm = ({ modalState, handleToggleModal }) => {
             fluid
             placeholder="Тип проекта"
             value={type}
-            onChange={handleChangeType}
+            onChange={handleChange.bind({ type: "type" })}
           />
         </div>
         <div className="ProjectFormField">
@@ -71,12 +86,12 @@ const AddProjectForm = ({ modalState, handleToggleModal }) => {
             fluid
             placeholder="Клиент"
             value={client}
-            onChange={handleChangeClient}
+            onChange={handleChange.bind({ type: "client" })}
           />
         </div>
       </div>
     </Modal>
   );
-};
+}
 
-export default AddProjectForm;
+export default memo(AddProjectForm);

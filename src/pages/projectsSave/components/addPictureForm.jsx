@@ -1,17 +1,19 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, memo } from "react";
 import { Button } from "semantic-ui-react";
 
 const inputStyle = { display: "none" };
 
-const AddPictureForm = () => {
+function AddPictureForm() {
   const [uploadedImage, setUploadedImage] = useState();
   const inputRef = useRef();
 
-  const handleClick = useCallback(() => inputRef.current.click(), [inputRef]);
-  const handleChangeInput = useCallback(
-    (e) => setUploadedImage(e.target.value),
-    []
-  );
+  const handleClick = useCallback(() => {
+    inputRef.current.click();
+  }, [inputRef]);
+
+  const handleChangeInput = useCallback((e) => {
+    setUploadedImage(e.target.value);
+  }, []);
 
   return (
     <div className="form-text">
@@ -26,6 +28,6 @@ const AddPictureForm = () => {
       />
     </div>
   );
-};
+}
 
-export default AddPictureForm;
+export default memo(AddPictureForm);

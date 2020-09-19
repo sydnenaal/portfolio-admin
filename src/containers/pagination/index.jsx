@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useIntl } from "react-intl";
 import { Dropdown, Menu, Icon } from "semantic-ui-react";
 
 import { paginationOptions } from "constants/tableConstants";
 
-const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
+function TablePagination({ pageSize, handlers, pageCount, page }) {
   const {
     messages: { table },
   } = useIntl();
 
-  const {
-    handleChangePageSize,
-    handleChangePage,
-    handleChevronLeft,
-    handleChevronRight,
-  } = handlers;
+  const { handleChangePageSize, handleChangePage } = handlers;
+
+  const handleChevronLeft = useCallback(() => {
+    if (page > 1) {
+      handleChangePage(page - 1);
+    }
+  }, [page]);
+
+  const handleChevronRight = useCallback(() => {
+    if (page < pageCount) {
+      handleChangePage(page + 1);
+    }
+  }, [page]);
 
   const buttons = [];
 
@@ -30,7 +37,6 @@ const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
         buttons.push(i);
       }
     } else if (page > pageCount - 2) {
-      console.log("there");
       for (let i = pageCount - 4; i <= pageCount; i++) {
         buttons.push(i);
       }
@@ -85,6 +91,6 @@ const TablePagination = ({ pageSize, handlers, pageCount, page }) => {
       </Menu>
     </div>
   );
-};
+}
 
 export default TablePagination;

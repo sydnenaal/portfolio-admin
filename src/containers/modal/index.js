@@ -1,14 +1,14 @@
 import React from "react";
 import { Modal, Button } from "semantic-ui-react";
 
-const ModalWindow = ({
+function ModalWindow({
   handleClose,
   isOpen,
   title,
   children,
   handleSuccess,
   size,
-}) => {
+}) {
   return (
     <>
       <Modal open={isOpen} onClose={handleClose} size={size}>
@@ -21,6 +21,6 @@ const ModalWindow = ({
       </Modal>
     </>
   );
-};
+}
 
 export default ModalWindow;

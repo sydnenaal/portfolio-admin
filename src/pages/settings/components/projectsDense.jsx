@@ -6,16 +6,21 @@ import "../style.sass";
 import { setIsDense } from "ducks";
 import { selectIsDenseProjects } from "selectors";
 
-const ProjectsDense = () => {
+function ProjectsDense() {
   const isDense = useSelector(selectIsDenseProjects);
   const dispatch = useDispatch();
 
   const handleChangeIsDense = useCallback(() => {
     const isDense = !!localStorage.getItem("isDense");
+
     dispatch(setIsDense(!isDense));
-    isDense
-      ? localStorage.removeItem("isDense")
-      : localStorage.setItem("isDense", "true");
+
+    if (isDense) {
+      localStorage.removeItem("isDense");
+      return;
+    }
+
+    localStorage.setItem("isDense", "true");
   }, [dispatch]);
 
   return (
@@ -24,6 +29,6 @@ const ProjectsDense = () => {
       <Radio slider checked={isDense} onChange={handleChangeIsDense} />
     </div>
   );
-};
+}
 
 export default ProjectsDense;

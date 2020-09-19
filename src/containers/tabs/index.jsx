@@ -1,14 +1,14 @@
-import React from "react";
+import React, { memo } from "react";
 
 import "./style.sass";
 
-const Tabs = ({ tabs = [], children }) => {
+function Tabs({ tabs = [], children }) {
   return (
     <div className="ui-tabs">
       <div className="ui-tabs_tabsContainer">{tabs}</div>
       <div className="ui-tabs_content">{children}</div>
     </div>
   );
-};
+}
 
-export default React.memo(Tabs);
+export default memo(Tabs);

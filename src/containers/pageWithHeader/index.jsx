@@ -1,45 +1,79 @@
-import React, { memo, useEffect, useMemo, useCallback } from "react";
-import axios from "axios";
+import React, { memo, useEffect, useMemo, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
-import { Icon, Dropdown } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 
 import { drawerItems } from "constants/drawerConstants";
 import { themeStyle } from "constants/themingStyles";
 import { selectUserData, selectTheme } from "selectors";
-import { getUserData } from "api";
+import { getUserData, setUserData } from "api";
 import "./style.sass";
 import userPlaceholder from "assets/userPlaceholder.png";
+import { BarsIcon, DrawerItem } from "./components";
+import { useRequest } from "hooks";
 
-import BarsIcon from "./components/barsIcon";
+const dropdownParams = [
+  {
+    key: "0",
+    text: "Profile",
+    icon: "user",
+    value: "profile",
+  },
+  {
+    key: "1",
+    text: "Logout",
+    icon: "sign-out",
+    value: "logout",
+  },
+];
 
-const PageWithHeaderComponent = ({
-  drawerVisible,
-  handleDrawerVisible,
-  title,
-  subtitle,
-  children,
-}) => {
+function PageWithHeaderComponent({ title, subtitle, children }) {
   const {
     messages: { titles },
   } = useIntl();
 
   const history = useHistory();
-  const { pathname } = history.location;
-
   const theme = useSelector(selectTheme);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
+  const requestWrapper = useRequest();
+  const screenWidth = document.documentElement.clientWidth;
+  const drawerStyle = useMemo(() => {
+    const startWidth = screenWidth < 500 ? "0px" : "70px";
+    return { maxWidth: drawerVisible ? "220px" : startWidth };
+  }, [drawerVisible, screenWidth]);
+  const styleByTheme = useMemo(() => themeStyle[theme], [theme]);
+  const [isVisible, setIsVisible] = useState(false);
+  const userOptions = useMemo(() => {
+    const actions = [
+      () => console.log("click profile"),
+      () => {
+        localStorage.removeItem("token");
+        history.push("/auth");
+      },
+    ];
+
+    return dropdownParams.map((item) => ({
+      ...item,
+      onClick: actions[item.key],
+    }));
+  }, [history]);
+
+  const handleChangeIsVisible = useCallback(() => {
+    setIsVisible((isVisible) => !isVisible);
+  }, []);
 
   useEffect(() => {
-    let source = axios.CancelToken.source();
+    const params = { ...getUserData, title: "getUserData" };
 
-    dispatch(getUserData({ cancelToken: source.token, title: "getUserData" }));
+    function handleSuccess(response) {
+      const { data } = response;
 
-    return () => {
-      source.cancel();
-    };
+      dispatch(setUserData(data));
+    }
+
+    dispatch(requestWrapper(params, handleSuccess));
   }, [dispatch]);
 
   function handleClick() {
@@ -48,50 +82,27 @@ const PageWithHeaderComponent = ({
       history.push("/auth");
     } else {
       history.push(this.path);
-      handleDrawerVisible();
+      handleChangeIsVisible();
     }
   }
-  const handleMouseLeave = useCallback(() => {
-    drawerVisible && handleDrawerVisible();
-  }, [drawerVisible, handleDrawerVisible]);
 
-  const screenWidth = document.documentElement.clientWidth;
-  const itemStyle = useMemo(() => ({ backgroundColor: "#333" }), []);
-  const drawerStyle = useMemo(() => {
-    const startWidth = screenWidth < 500 ? "0px" : "70px";
-    return { maxWidth: drawerVisible ? "220px" : startWidth };
-  }, [drawerVisible, screenWidth]);
-  const styleByTheme = useMemo(() => themeStyle[theme], [theme]);
-  const userOptions = useMemo(
-    () => [
-      {
-        key: "0",
-        text: "Profile",
-        icon: "user",
-        value: "profile",
-        onClick: () => console.log("click profile"),
-      },
-      {
-        key: "1",
-        text: "Logout",
-        icon: "sign-out",
-        value: "logout",
-        onClick: () => {
-          localStorage.removeItem("token");
-          history.push("/auth");
-        },
-      },
-    ],
-    [history]
-  );
+  const handleMouseLeave = useCallback(() => {
+    setIsVisible((isVisible) => {
+      if (isVisible) {
+        return false;
+      }
+
+      return isVisible;
+    });
+  }, []);
 
   return (
     <div className="drawer">
       <div className="staticElements">
         <div className="header" style={styleByTheme}>
           <BarsIcon
-            handleDrawerVisible={handleDrawerVisible}
-            drawerVisible={drawerVisible}
+            handleDrawerVisible={handleChangeIsVisible}
+            drawerVisible={isVisible}
             color={styleByTheme.color}
           />
           <div className="headerContent">
@@ -116,7 +127,6 @@ const PageWithHeaderComponent = ({
           </div>
         </div>
       </div>
-
       <div className="pageWithHeader">
         <div
           className="sidebar"
@@ -124,18 +134,7 @@ const PageWithHeaderComponent = ({
           onMouseLeave={handleMouseLeave}
         >
           {drawerItems(titles).map((item, index) => (
-            <div
-              className="sidebar-item"
-              onClick={handleClick.bind(item)}
-              style={pathname === item.path ? itemStyle : {}}
-              key={index}
-            >
-              <div className="sidebar-item__icon">
-                <Icon name={item.icon} size="big" />
-              </div>
-
-              <div className="sidebar-item__title">{item.title}</div>
-            </div>
+            <DrawerItem handleClick={handleClick} item={item} key={index} />
           ))}
         </div>
         <div className="body" style={styleByTheme}>
@@ -144,6 +143,6 @@ const PageWithHeaderComponent = ({
       </div>
     </div>
   );
-};
+}
 
 export default memo(PageWithHeaderComponent);

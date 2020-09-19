@@ -1,10 +1,13 @@
-import React, { memo } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, memo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
 
+import { getContactData } from "api";
+import { useRequest } from "hooks";
+import { selectContacts } from "selectors";
+import { setContacts } from "ducks/reducers";
 import "./style.sass";
 import { selectTheme } from "selectors";
-
 import PageWithHeader from "containers/pageWithHeader";
 import { themeStyle } from "constants/themingStyles";
 import {
@@ -15,10 +18,24 @@ import {
 } from "./components";
 import Card from "containers/card";
 
-const SettingsPageComponent = () => {
+function SettingsPageComponent() {
   const { messages } = useIntl();
-
   const theme = useSelector(selectTheme);
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  const queryWrapper = useRequest();
+
+  useEffect(() => {
+    if (!contacts) {
+      const params = { ...getContactData, title: "getContacts" };
+
+      function handleSuccess(response) {
+        dispatch(setContacts(response.data));
+      }
+
+      dispatch(queryWrapper(params, handleSuccess));
+    }
+  }, [contacts, dispatch]);
 
   return (
     <PageWithHeader title={messages.titles.settings}>
@@ -66,6 +83,6 @@ const SettingsPageComponent = () => {
       </div>
     </PageWithHeader>
   );
-};
+}
 
 export default memo(SettingsPageComponent);
