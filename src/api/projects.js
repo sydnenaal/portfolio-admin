@@ -1,60 +1,19 @@
-import { dateParse } from "utils";
-import { setProjects } from "ducks";
 import { apiServices } from "api";
-import { queryWrapper } from "utils";
 
-export const insertProjects = ({ cancelToken, title, body }) =>
-  queryWrapper({
-    cancelToken: cancelToken,
-    title: title,
-    method: "put",
-    url: `${apiServices}/projects/insert`,
-    body: body,
-    successCallback: (dispatch, response) => {
-      const responseWithChecked = response.data.map((item) => ({
-        ...item,
-        isChecked: false,
-        createDate: dateParse(item.createDate),
-      }));
+export const insertProjects = {
+  method: "put",
+  url: `${apiServices}/projects/insert`,
+};
 
-      dispatch(setProjects(responseWithChecked));
-    },
-  });
+export const deleteProjects = {
+  method: "delete",
+  url: `${apiServices}/projects/delete`,
+};
 
-export const deleteProjects = ({ cancelToken, title, data }) =>
-  queryWrapper({
-    cancelToken: cancelToken,
-    title: title,
-    method: "delete",
-    url: `${apiServices}/projects/delete`,
-    body: data,
-    successCallback: (dispatch, response) => {
-      const responseWithChecked = response.data.map((item) => ({
-        ...item,
-        isChecked: false,
-        createDate: dateParse(item.createDate),
-      }));
-
-      dispatch(setProjects(responseWithChecked));
-    },
-  });
-
-export const getProjects = ({ cancelToken, title }) =>
-  queryWrapper({
-    cancelToken: cancelToken,
-    title: title,
-    url: `${apiServices}/projects`,
-    method: "get",
-    errorMessages: {
-      500: { message: "Не удалось загрузить проекты", type: "danger" },
-    },
-    successCallback: (dispatch, response) => {
-      const responseWithChecked = response.data.map((item) => ({
-        ...item,
-        isChecked: false,
-        createDate: dateParse(item.createDate),
-      }));
-
-      dispatch(setProjects(responseWithChecked));
-    },
-  });
+export const getProjects = {
+  url: `${apiServices}/projects`,
+  method: "get",
+  errorMessages: {
+    500: { message: "Не удалось загрузить проекты", type: "danger" },
+  },
+};

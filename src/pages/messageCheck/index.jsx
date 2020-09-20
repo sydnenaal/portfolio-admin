@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback } from "react";
-import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
@@ -10,6 +9,8 @@ import WithLoader from "containers/withLoader";
 import { dateParse } from "utils";
 import Card from "containers/card";
 import { selectActiveMessage } from "selectors";
+import { useRequest } from "hooks";
+import { setActiveMessage } from "ducks";
 import { getMessage, setPriorityMessages, setActualityMessages } from "api";
 
 import "./style.sass";
@@ -26,6 +27,7 @@ function MessageCheckPageComponent() {
   const history = useHistory();
   const { message } = useParams();
   const dispatch = useDispatch();
+  const queryWrapper = useRequest();
 
   const handleClickBack = useCallback(() => {
     history.goBack();
@@ -47,11 +49,15 @@ function MessageCheckPageComponent() {
 
   useEffect(() => {
     const data = { _id: message };
-    const params = { data, cancelToken, title: "getMessage" };
+    const params = { ...getMessage, body: { data }, title: "getMessage" };
 
-    dispatch(getMessage(params));
+    function handleSuccess(response) {
+      const { data } = response;
 
-    return cancel;
+      dispatch(setActiveMessage(data));
+    }
+
+    dispatch(queryWrapper(params, handleSuccess));
   }, [dispatch, message]);
 
   return (

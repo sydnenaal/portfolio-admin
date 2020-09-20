@@ -1,12 +1,12 @@
-import React, { useMemo, useCallback, memo, useReducer } from "react";
-import axios from "axios";
+import React, { useCallback, memo, useReducer } from "react";
 import { useDispatch } from "react-redux";
 import { Input } from "semantic-ui-react";
 
 import { insertProjects } from "api";
-
+import { dateParse } from "utils";
+import { setProjects } from "ducks";
 import Modal from "containers/modal";
-import { useEffect } from "react";
+import { useRequest } from "hooks";
 
 const initialState = {
   name: "",
@@ -31,11 +31,9 @@ function formReducer(state, action) {
 
 function AddProjectForm({ modalState, handleToggleModal }) {
   const dispatch = useDispatch();
-  const { token: cancelToken, cancel } = useMemo(axios.CancelToken.source, []);
+  const requestWrapper = useRequest();
   const [state, localDispatch] = useReducer(formReducer, initialState);
   const { name, type, client } = state;
-
-  useEffect(() => cancel, []);
 
   const handleChange = useCallback(function (e) {
     const { type } = this;
@@ -45,16 +43,27 @@ function AddProjectForm({ modalState, handleToggleModal }) {
 
   const handleSuccess = useCallback(() => {
     const data = { ...state, createDate: Date.now() };
-    const requestData = {
-      cancelToken,
+    const params = {
+      ...insertProjects,
       title: "insertProject",
       body: { data },
     };
 
-    dispatch(insertProjects(requestData));
+    function handleSuccessRequest(response) {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+        createDate: dateParse(item.createDate),
+      }));
+
+      dispatch(setProjects(responseWithChecked));
+    }
+
+    dispatch(requestWrapper(params, handleSuccessRequest));
     localDispatch({ type: "clear" });
     handleToggleModal();
-  }, [dispatch, localDispatch, handleToggleModal, cancelToken]);
+  }, [dispatch, localDispatch, handleToggleModal]);
 
   return (
     <Modal

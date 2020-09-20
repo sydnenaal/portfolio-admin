@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useIntl } from "react-intl";
 import { Card, Input, Button } from "semantic-ui-react";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import "./style.sass";
@@ -15,14 +14,13 @@ import { themeStyle } from "constants/themingStyles";
 import { selectTheme, selectProjects, selectIsDenseProjects } from "selectors";
 import { getProjects, deleteProjects } from "api";
 import { setProjects } from "ducks";
+import { useRequest } from "hooks";
 
 const countSelected = (array) =>
   array.reduce((acc, { isChecked }) => acc + Number(isChecked), 0);
 
 const getCheckedProjects = (projects) =>
   projects.filter(({ isChecked }) => isChecked).map(({ _id }) => _id);
-
-const source = axios.CancelToken.source();
 
 function ProjectsPageComponent({}) {
   const {
@@ -31,15 +29,19 @@ function ProjectsPageComponent({}) {
 
   const theme = useSelector(selectTheme);
   const projectsData = useSelector(selectProjects);
-  const isMobileMode = document.documentElement.clientWidth < 500;
-
   const projects = useSelector(selectProjects);
   const isDense = useSelector(selectIsDenseProjects);
   const dispatch = useDispatch();
   const history = useHistory();
+  const queryWrapper = useRequest();
   const [modalState, setModalState] = useState(false);
   const [filter, setFilter] = useState("");
   const [checked, setChecked] = useState(0);
+  const isMobileMode = useMemo(() => {
+    const { clientWidth } = document.documentElement;
+
+    return clientWidth < 500;
+  }, []);
 
   const handleClickEdit = useCallback(() => {
     history.push("/projects/0");
@@ -70,16 +72,27 @@ function ProjectsPageComponent({}) {
     return data.filter(filterAllData);
   }, []);
 
+  function checkProjects(response) {
+    const { data } = response;
+    const responseWithChecked = data.map((item) => ({
+      ...item,
+      isChecked: false,
+      createDate: dateParse(item.createDate),
+    }));
+
+    dispatch(setProjects(responseWithChecked));
+  }
+
   const handleDeleteProjects = useCallback(() => {
     const checked = getCheckedProjects(projects);
     const fetchData = {
+      ...deleteProjects,
       title: "deleteProjects",
-      cancelToken: source.token,
-      data: { data: checked },
+      body: { data: checked },
     };
 
-    dispatch(deleteProjects(fetchData));
-  }, [projects, source]);
+    dispatch(queryWrapper(fetchData, checkProjects));
+  }, [projects]);
 
   const handleCheck = useCallback(
     (id) => {
@@ -109,20 +122,16 @@ function ProjectsPageComponent({}) {
   }
 
   useEffect(() => {
-    const source = axios.CancelToken.source();
-
     if (!projects) {
-      const fetchData = {
+      const params = {
+        ...getProjects,
         title: "getProjects",
-        cancelToken: source.token,
       };
 
-      dispatch(getProjects(fetchData));
+      dispatch(queryWrapper(params, checkProjects));
     }
 
     setChecked(countSelected(projects));
-
-    return source.cancel;
   }, [dispatch, projects]);
 
   return (

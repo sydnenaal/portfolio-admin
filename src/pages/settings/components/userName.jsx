@@ -4,11 +4,11 @@ import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
 import { setUserName } from "api";
-import { useSettingsExpander } from "hooks";
+import { useSettingsExpander, useRequest } from "hooks";
 
 function ChangePassword({ locale }) {
   const dispatch = useDispatch();
-
+  const queryWrapper = useRequest();
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const {
@@ -26,12 +26,14 @@ function ChangePassword({ locale }) {
   }, []);
 
   const handleSubmit = useCallback(() => {
+    const data = { username: `${name} ${surname}` };
     const fetchData = {
+      ...setUserName,
       title: "changeUsername",
-      username: `${name} ${surname}`,
+      body: { data },
     };
 
-    dispatch(setUserName(fetchData));
+    dispatch(queryWrapper(fetchData));
     setName("");
     setSurname("");
     handleToggleExpander();

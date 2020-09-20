@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
 import "../style.sass";
+import { encryptData } from "utils";
 import { changePassword } from "api";
-import { useSettingsExpander } from "hooks";
+import { useSettingsExpander, useRequest } from "hooks";
 
 const initialState = {
   oldPassword: "",
@@ -29,6 +30,7 @@ function reducer(state, action) {
 
 function ChangePassword({ locale }) {
   const dispatch = useDispatch();
+  const queryWrapper = useRequest();
   const [state, localDispatch] = useReducer(reducer, initialState);
   const { oldPassword, password, repeatPassword } = state;
   const [error, setError] = useState(false);
@@ -59,12 +61,16 @@ function ChangePassword({ locale }) {
     }
 
     const data = {
+      password: encryptData(password),
+      oldPassword: encryptData(oldPassword),
+    };
+    const params = {
+      ...changePassword,
       title: "changePassword",
-      password: password,
-      oldPassword: oldPassword,
+      body: { data },
     };
 
-    dispatch(changePassword(data));
+    dispatch(queryWrapper(params));
     localDispatch({ type: "clear" });
     handleToggleExpander();
   }, [password, oldPassword, dispatch]);
