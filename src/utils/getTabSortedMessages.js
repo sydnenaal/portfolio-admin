@@ -1,11 +1,9 @@
 import { tabsNames, tabFilter } from "constants/messagesConstants";
-import { setTabSortedMessages } from "ducks";
 
-export const sortMessages = ({ messages, dispatch }) => {
-  const tabs = {};
-  tabsNames.forEach((item) => {
-    tabs[item] = messages.filter(tabFilter[item]);
-  });
+export function sortMessages(messages) {
+  return tabsNames.reduce((acc, item) => {
+    const filtered = messages.filter(tabFilter[item]);
 
-  dispatch(setTabSortedMessages(tabs));
-};
+    return { ...acc, [item]: filtered };
+  }, {});
+}

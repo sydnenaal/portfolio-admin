@@ -17,7 +17,7 @@ import { getMessages, setPriorityMessages, setActualityMessages } from "api";
 import { tabsNames, tabFilter } from "constants/messagesConstants";
 import { helpUserNotify, sortMessages } from "utils";
 import { useRequest } from "hooks";
-import { setMessages } from "ducks";
+import { setMessages, setTabSortedMessages } from "ducks";
 
 const checkedMessagesReducer = (state, action) => {
   const { messages, count, checked, activeTab } = state;
@@ -115,40 +115,101 @@ function MailPageComponent() {
     handleSetImportantMessages,
   ]);
 
-  const messagesAction = ({ action, title, reduxAction }) => () => {
-    const queryData = {
-      title: title,
-      cancelToken: source.token,
-      data: { messages: state.checked, action: action },
+  const handleSetUsualMessages = useCallback(() => {
+    const data = { messages: state.checked, action: false };
+    const params = {
+      ...setPriorityMessages,
+      title: "setPriority",
+      body: { data },
     };
 
-    reduxDispatch(reduxAction(queryData));
-    localDispatch({ type: "UPDATE_MESSAGES", payload: messages });
-  };
+    function handleSuccess(response) {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      const sortedMessages = sortMessages(responseWithChecked);
 
-  const handleSetUsualMessages = messagesAction({
-    action: false,
-    title: "setPriority",
-    reduxAction: setPriorityMessages,
-  });
+      reduxDispatch(setMessages(responseWithChecked));
+      reduxDispatch(setTabSortedMessages(sortedMessages));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
+    }
 
-  const handleSetImportantMessages = messagesAction({
-    action: true,
-    title: "setPriority",
-    reduxAction: setPriorityMessages,
-  });
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, []);
 
-  const handleDeleteMessages = messagesAction({
-    action: true,
-    title: "setActuality",
-    reduxAction: setActualityMessages,
-  });
+  const handleSetImportantMessages = useCallback(() => {
+    const data = { messages: state.checked, action: true };
+    const params = {
+      ...setPriorityMessages,
+      title: "setPriority",
+      body: { data },
+    };
 
-  const handleReturnMessages = messagesAction({
-    action: false,
-    title: "setActuality",
-    reduxAction: setActualityMessages,
-  });
+    function handleSuccess(response) {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      const sortedMessages = sortMessages(responseWithChecked);
+
+      reduxDispatch(setMessages(responseWithChecked));
+      reduxDispatch(setTabSortedMessages(sortedMessages));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
+    }
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, []);
+
+  const handleDeleteMessages = useCallback(() => {
+    const data = { messages: state.checked, action: true };
+    const params = {
+      ...setActualityMessages,
+      title: "setActuality",
+      body: { data },
+    };
+
+    function handleSuccess(response) {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      const sortedMessages = sortMessages(responseWithChecked);
+
+      reduxDispatch(setTabSortedMessages(sortedMessages));
+      reduxDispatch(setMessages(responseWithChecked));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
+    }
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, []);
+
+  const handleReturnMessages = useCallback(() => {
+    const data = { messages: state.checked, action: false };
+    const params = {
+      ...setActualityMessages,
+      title: "setActuality",
+      body: { data },
+    };
+
+    function handleSuccess(response) {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      const sortedMessages = sortMessages(responseWithChecked);
+
+      reduxDispatch(setTabSortedMessages(sortedMessages));
+      reduxDispatch(setMessages(responseWithChecked));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
+    }
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, []);
 
   const handleCheckAllMessages = () => localDispatch({ type: "CHECK_ALL" });
   const handleDropChecksMessages = () => localDispatch({ type: "DROP_CHECKS" });

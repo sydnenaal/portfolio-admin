@@ -14,7 +14,8 @@ import Card from "containers/card";
 import Message from "./message";
 import Pagination from "containers/pagination";
 
-export function Content({ dispatch, checked, filter }) {
+export function Content({ checked, filter }) {
+  const dispatch = useDispatch();
   const tabs = useSelector(selectSortedMessages);
   const activeTab = useSelector(selectActiveTab);
   const content = tabs[activeTab];
@@ -39,11 +40,6 @@ export function Content({ dispatch, checked, filter }) {
     setPage(1);
   }
 
-  const handlers = {
-    handleChangePageSize,
-    handleChangePage: setPage,
-  };
-
   return (
     <Card>
       <>
@@ -65,7 +61,8 @@ export function Content({ dispatch, checked, filter }) {
         </div>
         <div className="messagesPagination">
           <Pagination
-            handlers={handlers}
+            handleChangePageSize={handleChangePageSize}
+            handleChangePage={setPage}
             pageSize={pageSize}
             page={page}
             pageCount={pageCount}

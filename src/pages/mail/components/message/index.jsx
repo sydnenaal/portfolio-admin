@@ -1,29 +1,88 @@
-import React, { memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Icon, Checkbox } from "semantic-ui-react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import Card from "containers/card";
 import { dateParse } from "utils";
-
 import "./style.sass";
 import AdaptiveContainer from "./adaptiveContainer";
+import { setActiveMessage } from "ducks";
+import { setPriorityMessages, setActualityMessages } from "api";
+import { useRequest } from "hooks";
 
 const Message = ({
-  handleSetPriority,
-  isOpen,
-  setIsOpen,
-  isRead,
+  _id,
   isImportant,
   isChecked,
-  handleCheckMessage,
-  handleClickOnMessage,
+  index,
+  isRead,
   client,
-  handleDeleteOnAnimationEnd,
   date,
-  handleDeleteMessage,
-  render,
-  deleteAnimationTrigger,
   text,
 }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const queryWrapper = useRequest();
+  const [render, setRender] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteAnimationTrigger, setDeleteAnimationTrigger] = useState(false);
+
+  const handleCheckMessage = useCallback(
+    (_, data) =>
+      dispatch({
+        type: data.checked ? "CHECK_SINGLE" : "DROP_SINGLE_CHECK",
+        payload: _id,
+      }),
+    [_id, dispatch]
+  );
+
+  const handleSetPriority = useCallback(() => {
+    const data = { messages: [_id], action: !isImportant };
+    const params = {
+      ...setPriorityMessages,
+      title: "setPriority",
+      body: { data },
+    };
+
+    setIsOpen(false);
+    reduxDispatch(queryWrapper(params));
+  }, []);
+
+  const handleDeleteMessage = useCallback(() => {
+    setDeleteAnimationTrigger(true);
+  }, []);
+
+  const handleClickOnMessage = useCallback(() => {
+    const activeMessage = { email, text, client, date };
+
+    reduxDispatch(setActiveMessage(activeMessage));
+    history.push(`mail/${_id}`);
+  }, [email, text, client, date, _id]);
+
+  const handleDeleteOnAnimationEnd = useCallback(
+    (e) => {
+      if (e.animationName === "fadeOut") {
+        const data = { messages: [_id], action: true };
+        const params = {
+          ...setActualityMessages,
+          title: "setPriority",
+          body: { data },
+        };
+
+        setRender(false);
+        setIsOpen(false);
+        reduxDispatch(queryWrapper(params));
+      }
+    },
+    [_id]
+  );
+
+  useEffect(() => {
+    const delay = ((index + 1) / 3) * 100;
+    setTimeout(() => setRender(true), delay);
+  }, [index]);
+
   return (
     <>
       <div className="messageComponent-hover">
