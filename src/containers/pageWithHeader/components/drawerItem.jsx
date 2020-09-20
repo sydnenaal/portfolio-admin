@@ -1,5 +1,6 @@
 import React, { useMemo, memo } from "react";
 import { Icon } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 
 import "./style.sass";
 

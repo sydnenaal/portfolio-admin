@@ -4,12 +4,16 @@ import { Dropdown, Menu, Icon } from "semantic-ui-react";
 
 import { paginationOptions } from "constants/tableConstants";
 
-function TablePagination({ pageSize, handlers, pageCount, page }) {
+function TablePagination({
+  pageSize,
+  pageCount,
+  page,
+  handleChangePageSize,
+  handleChangePage,
+}) {
   const {
     messages: { table },
   } = useIntl();
-
-  const { handleChangePageSize, handleChangePage } = handlers;
 
   const handleChevronLeft = useCallback(() => {
     if (page > 1) {

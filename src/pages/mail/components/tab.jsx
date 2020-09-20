@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { themeStyle } from "constants/themingStyles";
-import { setTab, setMessages } from "ducks";
+import { setTab, setMessages, setTabSortedMessages } from "ducks";
 import { sortMessages } from "utils";
 import {
   selectTheme,
@@ -26,9 +26,11 @@ export function Content({ checked, filter }) {
 
   useEffect(() => {
     if (content) {
+      const startIndex = (page - 1) * pageSize;
+      const finishIndex = page * pageSize;
       const slicedContent = content
-        .filter((item) => item.client.indexOf(filter) !== -1)
-        .slice((page - 1) * pageSize, page * pageSize);
+        .filter(({ client }) => client.indexOf(filter) !== -1)
+        .slice(startIndex, finishIndex);
 
       setDisplayedMessages(slicedContent);
       setPageCount(Math.ceil(content.length / pageSize));
@@ -78,16 +80,19 @@ export function Tab({ title, messagesCounter, locale }) {
   const theme = useSelector(selectTheme);
   const messages = useSelector(selectMessages);
   const dispatch = useDispatch();
-  const isActive = activeTab === title;
-  const activeColor = theme === "dark" ? "white" : "grey";
-  const borderColor = isActive ? activeColor : "transparent";
-  const tabStyle = { borderBottom: `2px solid ${borderColor}` };
+  const tabStyle = useMemo(() => {
+    const activeColor = theme === "dark" ? "white" : "grey";
+    const borderColor = activeTab === title ? activeColor : "transparent";
+
+    return { borderBottom: `2px solid ${borderColor}` };
+  }, [theme, activeTab, title]);
 
   function handleClick() {
     const newMessages = messages.map((item) => ({ ...item, isChecked: false }));
+    const sorted = sortMessages(newMessages);
 
     dispatch(setMessages(newMessages));
-    sortMessages({ messages: newMessages, dispatch });
+    dispatch(setTabSortedMessages(sorted));
     dispatch(setTab(title));
   }
 

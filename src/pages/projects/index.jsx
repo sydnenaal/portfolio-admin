@@ -17,11 +17,21 @@ import { setProjects } from "ducks";
 import { useRequest } from "hooks";
 import { dateParse } from "utils";
 
-const countSelected = (array) =>
-  array.reduce((acc, { isChecked }) => acc + Number(isChecked), 0);
+function countSelected(array) {
+  if (!array) {
+    return 0;
+  }
 
-const getCheckedProjects = (projects) =>
-  projects.filter(({ isChecked }) => isChecked).map(({ _id }) => _id);
+  return array.reduce((acc, { isChecked }) => acc + Number(isChecked), 0);
+}
+
+function getCheckedProjects(projects) {
+  if (!projects) {
+    return [];
+  }
+
+  return projects.filter(({ isChecked }) => isChecked).map(({ _id }) => _id);
+}
 
 function ProjectsPageComponent() {
   const {
