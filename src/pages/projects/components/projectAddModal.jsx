@@ -63,7 +63,7 @@ function AddProjectForm({ modalState, handleToggleModal }) {
     dispatch(requestWrapper(params, handleSuccessRequest));
     localDispatch({ type: "clear" });
     handleToggleModal();
-  }, [dispatch, localDispatch, handleToggleModal]);
+  }, [dispatch, localDispatch, handleToggleModal, requestWrapper, state]);
 
   return (
     <Modal

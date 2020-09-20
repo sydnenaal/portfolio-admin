@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
@@ -37,7 +37,7 @@ function ChangePassword({ locale }) {
     setName("");
     setSurname("");
     handleToggleExpander();
-  }, [name, surname, dispatch]);
+  }, [name, surname, dispatch, handleToggleExpander, queryWrapper]);
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import { serverPath, apiServices } from "api";
+import { serverPath, apiServices } from "constants/apiConstants";
 
 export const checkAuth = {
   url: `${serverPath}/auth`,

@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, memo, useMemo } from "react";
+import React, {
+  useEffect,
+  useReducer,
+  memo,
+  useMemo,
+  useCallback,
+} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Input } from "semantic-ui-react";
 import { useIntl } from "react-intl";
@@ -19,7 +25,15 @@ import { helpUserNotify, sortMessages } from "utils";
 import { useRequest } from "hooks";
 import { setMessages, setTabSortedMessages } from "ducks";
 
-const checkedMessagesReducer = (state, action) => {
+const initialState = {
+  messages: [],
+  checked: [],
+  count: 0,
+  activeTab: "",
+  search: "",
+};
+
+const messagesReducer = (state, action) => {
   const { messages, count, checked, activeTab } = state;
   const checkAll = () => {
     const checkedItems = messages
@@ -66,19 +80,13 @@ function MailPageComponent() {
   const activeTab = useSelector(selectActiveTab);
   const messages = useSelector(selectMessages);
   const queryWrapper = useRequest();
+  const { clientWidth } = document.documentElement;
   const buttonsSize = useMemo(() => {
-    const { clientWidth } = document.documentElement;
-
     return clientWidth > 500 ? "small" : "tiny";
-  }, []);
+  }, [clientWidth]);
   const reduxDispatch = useDispatch();
-  const [state, localDispatch] = useReducer(checkedMessagesReducer, {
-    messages,
-    checked: [],
-    count: 0,
-    activeTab,
-    search: "",
-  });
+  const [state, localDispatch] = useReducer(messagesReducer, initialState);
+
   const renderTabs = useMemo(() => {
     function getTabFromTabName(title, key) {
       const messagesCounter = tabs[title] ? tabs[title].length.toString() : "0";
@@ -88,7 +96,108 @@ function MailPageComponent() {
     }
 
     return tabsNames.map(getTabFromTabName);
-  }, [tabsNames, mail, tabs]);
+  }, [mail, tabs]);
+
+  const handleSuccess = useCallback(
+    (response) => {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }));
+      const sortedMessages = sortMessages(responseWithChecked);
+
+      reduxDispatch(setMessages(responseWithChecked));
+      reduxDispatch(setTabSortedMessages(sortedMessages));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
+    },
+    [reduxDispatch]
+  );
+
+  const handleSetUsualMessages = useCallback(() => {
+    const data = { messages: state.checked, action: false };
+    const params = {
+      ...setPriorityMessages,
+      title: "setPriority",
+      body: { data },
+    };
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, [handleSuccess, reduxDispatch, queryWrapper, state.checked]);
+
+  const handleSetImportantMessages = useCallback(() => {
+    const data = { messages: state.checked, action: true };
+    const params = {
+      ...setPriorityMessages,
+      title: "setPriority",
+      body: { data },
+    };
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, [handleSuccess, reduxDispatch, queryWrapper, state.checked]);
+
+  const handleDeleteMessages = useCallback(() => {
+    const data = { messages: state.checked, action: true };
+    const params = {
+      ...setActualityMessages,
+      title: "setActuality",
+      body: { data },
+    };
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, [handleSuccess, reduxDispatch, queryWrapper, state.checked]);
+
+  const handleReturnMessages = useCallback(() => {
+    const data = { messages: state.checked, action: false };
+    const params = {
+      ...setActualityMessages,
+      title: "setActuality",
+      body: { data },
+    };
+
+    reduxDispatch(queryWrapper(params, handleSuccess));
+  }, [handleSuccess, reduxDispatch, queryWrapper, state.checked]);
+
+  const handleCheckAllMessages = useCallback(() => {
+    localDispatch({ type: "CHECK_ALL" });
+  }, []);
+
+  const handleDropChecksMessages = useCallback(() => {
+    localDispatch({ type: "DROP_CHECKS" });
+  }, []);
+
+  const handleChangeSearch = useCallback((e) => {
+    localDispatch({ type: "SET_SEARCH", payload: e.target.value });
+  }, []);
+
+  useEffect(() => {
+    localDispatch({ type: "DROP_CHECKS" });
+    localDispatch({ type: "SET_ACTIVE_TAB", payload: activeTab });
+  }, [activeTab]);
+
+  useEffect(() => {
+    localDispatch({ type: "UPDATE_MESSAGES", payload: messages });
+  }, [messages]);
+
+  useEffect(() => {
+    const queryParams = {
+      ...getMessages,
+      title: "getMessages",
+    };
+
+    function handleSuccess(response) {
+      const { data } = response;
+      const sorted = sortMessages(data);
+
+      reduxDispatch(setMessages(data));
+      reduxDispatch(setTabSortedMessages(sorted));
+      localDispatch({ type: "UPDATE_MESSAGES", payload: data });
+      helpUserNotify();
+    }
+
+    reduxDispatch(queryWrapper(queryParams, handleSuccess));
+  }, [reduxDispatch, queryWrapper]);
+
   const buttonInfo = useMemo(() => {
     switch (activeTab) {
       case "trash":
@@ -115,137 +224,15 @@ function MailPageComponent() {
     handleSetImportantMessages,
   ]);
 
-  const handleSetUsualMessages = useCallback(() => {
-    const data = { messages: state.checked, action: false };
-    const params = {
-      ...setPriorityMessages,
-      title: "setPriority",
-      body: { data },
-    };
-
-    function handleSuccess(response) {
-      const { data } = response;
-      const responseWithChecked = data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-      const sortedMessages = sortMessages(responseWithChecked);
-
-      reduxDispatch(setMessages(responseWithChecked));
-      reduxDispatch(setTabSortedMessages(sortedMessages));
-      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
-    }
-
-    reduxDispatch(queryWrapper(params, handleSuccess));
-  }, []);
-
-  const handleSetImportantMessages = useCallback(() => {
-    const data = { messages: state.checked, action: true };
-    const params = {
-      ...setPriorityMessages,
-      title: "setPriority",
-      body: { data },
-    };
-
-    function handleSuccess(response) {
-      const { data } = response;
-      const responseWithChecked = data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-      const sortedMessages = sortMessages(responseWithChecked);
-
-      reduxDispatch(setMessages(responseWithChecked));
-      reduxDispatch(setTabSortedMessages(sortedMessages));
-      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
-    }
-
-    reduxDispatch(queryWrapper(params, handleSuccess));
-  }, []);
-
-  const handleDeleteMessages = useCallback(() => {
-    const data = { messages: state.checked, action: true };
-    const params = {
-      ...setActualityMessages,
-      title: "setActuality",
-      body: { data },
-    };
-
-    function handleSuccess(response) {
-      const { data } = response;
-      const responseWithChecked = data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-      const sortedMessages = sortMessages(responseWithChecked);
-
-      reduxDispatch(setTabSortedMessages(sortedMessages));
-      reduxDispatch(setMessages(responseWithChecked));
-      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
-    }
-
-    reduxDispatch(queryWrapper(params, handleSuccess));
-  }, []);
-
-  const handleReturnMessages = useCallback(() => {
-    const data = { messages: state.checked, action: false };
-    const params = {
-      ...setActualityMessages,
-      title: "setActuality",
-      body: { data },
-    };
-
-    function handleSuccess(response) {
-      const { data } = response;
-      const responseWithChecked = data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-      const sortedMessages = sortMessages(responseWithChecked);
-
-      reduxDispatch(setTabSortedMessages(sortedMessages));
-      reduxDispatch(setMessages(responseWithChecked));
-      localDispatch({ type: "UPDATE_MESSAGES", payload: responseWithChecked });
-    }
-
-    reduxDispatch(queryWrapper(params, handleSuccess));
-  }, []);
-
-  const handleCheckAllMessages = () => localDispatch({ type: "CHECK_ALL" });
-  const handleDropChecksMessages = () => localDispatch({ type: "DROP_CHECKS" });
-  const handleChangeSearch = (e) =>
-    localDispatch({ type: "SET_SEARCH", payload: e.target.value });
-
-  useEffect(() => {
-    localDispatch({ type: "DROP_CHECKS" });
-    localDispatch({ type: "SET_ACTIVE_TAB", payload: activeTab });
-  }, [activeTab]);
-
-  useEffect(() => {
-    const queryParams = {
-      ...getMessages,
-      title: "getMessages",
-    };
-
-    function handleSuccess() {
-      dispatch(setMessages(response.data));
-      sortMessages({ messages: response.data, dispatch: dispatch });
-      localDispatch({ type: "UPDATE_MESSAGES", payload: response });
-      helpUserNotify();
-    }
-
-    reduxDispatch(queryWrapper(queryParams, handleSuccess));
-  }, [reduxDispatch]);
-
   return (
     <PageWithHeader title={titles.mail}>
       <div className="mailBody">
         <div className="mailActions">
           <div className="search">
             <Input
-              value={search}
+              value={state.search}
               onChange={handleChangeSearch}
-              fluid={screenWidth < 500}
+              fluid={clientWidth < 500}
               placeholder={mail.searchPlaceholder}
               icon="search"
             />
@@ -255,7 +242,7 @@ function MailPageComponent() {
             <Button
               size={buttonsSize}
               className="actionButton"
-              onClick={handleCheckAll}
+              onClick={handleCheckAllMessages}
             >
               {mail.buttons.checkAll}
             </Button>
@@ -272,7 +259,7 @@ function MailPageComponent() {
               size={buttonsSize}
               className="actionButton"
               onClick={buttonInfo.handler}
-              disabled={checkedCount === 0}
+              disabled={state.count === 0}
             >
               {buttonInfo.message}
             </Button>
@@ -281,7 +268,7 @@ function MailPageComponent() {
               size={buttonsSize}
               className="actionButton"
               onClick={handleDeleteMessages}
-              disabled={checkedCount === 0}
+              disabled={state.count === 0}
             >
               {mail.buttons[activeTab === "trash" ? "remove" : "removeToTrash"]}
             </Button>
@@ -290,7 +277,7 @@ function MailPageComponent() {
 
         <Tabs tabs={renderTabs}>
           <WithLoader title="getMessages">
-            <Content filter={search} dispatch={dispatch} checked={checked} />
+            <Content filter={state.search} checked={state.checked} />
           </WithLoader>
         </Tabs>
       </div>

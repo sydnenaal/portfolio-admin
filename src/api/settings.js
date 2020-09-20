@@ -1,4 +1,4 @@
-import { apiServices } from "api";
+import { apiServices } from "constants/apiConstants";
 
 export const changePassword = {
   method: "post",
@@ -22,7 +22,7 @@ export const setUserName = {
 export const setUserPhoto = {
   method: "post",
   url: `${apiServices}/users/setPhoto`,
-  body: { data: { photo } },
+  body: { data: "photo" },
   errorMessages: {
     500: { message: "Не удалось сменить фото", type: "danger" },
     200: { message: "Данные пользователя успешно изменены", type: "success" },

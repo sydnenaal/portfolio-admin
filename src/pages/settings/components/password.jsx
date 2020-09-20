@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useReducer, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Icon, Input, Button } from "semantic-ui-react";
 
@@ -73,7 +73,14 @@ function ChangePassword({ locale }) {
     dispatch(queryWrapper(params));
     localDispatch({ type: "clear" });
     handleToggleExpander();
-  }, [password, oldPassword, dispatch]);
+  }, [
+    password,
+    oldPassword,
+    dispatch,
+    handleToggleExpander,
+    queryWrapper,
+    repeatPassword,
+  ]);
 
   return (
     <div>

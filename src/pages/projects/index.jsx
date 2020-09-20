@@ -15,6 +15,7 @@ import { selectTheme, selectProjects, selectIsDenseProjects } from "selectors";
 import { getProjects, deleteProjects } from "api";
 import { setProjects } from "ducks";
 import { useRequest } from "hooks";
+import { dateParse } from "utils";
 
 const countSelected = (array) =>
   array.reduce((acc, { isChecked }) => acc + Number(isChecked), 0);
@@ -22,7 +23,7 @@ const countSelected = (array) =>
 const getCheckedProjects = (projects) =>
   projects.filter(({ isChecked }) => isChecked).map(({ _id }) => _id);
 
-function ProjectsPageComponent({}) {
+function ProjectsPageComponent() {
   const {
     messages: { titles, projects: formatProjects },
   } = useIntl();
@@ -45,43 +46,49 @@ function ProjectsPageComponent({}) {
 
   const handleClickEdit = useCallback(() => {
     history.push("/projects/0");
-  }, []);
+  }, [history]);
 
   const handleToggleModal = useCallback(() => {
-    setModalState(!modalState);
+    setModalState((modalState) => !modalState);
   }, []);
 
   const handleChangeFilter = useCallback((e) => {
     setFilter(e.target.value);
   }, []);
 
-  const handleFilterData = useCallback((data) => {
-    function filterValues(value) {
-      const stringifyValue = value.toString().toLowerCase();
-      const indexOfRule = stringifyValue.indexOf(filter.toLowerCase());
+  const handleFilterData = useCallback(
+    (data) => {
+      function filterValues(value) {
+        const stringifyValue = value.toString().toLowerCase();
+        const indexOfRule = stringifyValue.indexOf(filter.toLowerCase());
 
-      return indexOfRule !== -1;
-    }
+        return indexOfRule !== -1;
+      }
 
-    function filterAllData(item) {
-      const validValues = Object.values(item).filter(filterValues);
+      function filterAllData(item) {
+        const validValues = Object.values(item).filter(filterValues);
 
-      return validValues.length > 0;
-    }
+        return validValues.length > 0;
+      }
 
-    return data.filter(filterAllData);
-  }, []);
+      return data.filter(filterAllData);
+    },
+    [filter]
+  );
 
-  function checkProjects(response) {
-    const { data } = response;
-    const responseWithChecked = data.map((item) => ({
-      ...item,
-      isChecked: false,
-      createDate: dateParse(item.createDate),
-    }));
+  const checkProjects = useCallback(
+    (response) => {
+      const { data } = response;
+      const responseWithChecked = data.map((item) => ({
+        ...item,
+        isChecked: false,
+        createDate: dateParse(item.createDate),
+      }));
 
-    dispatch(setProjects(responseWithChecked));
-  }
+      dispatch(setProjects(responseWithChecked));
+    },
+    [dispatch]
+  );
 
   const handleDeleteProjects = useCallback(() => {
     const checked = getCheckedProjects(projects);
@@ -92,7 +99,7 @@ function ProjectsPageComponent({}) {
     };
 
     dispatch(queryWrapper(fetchData, checkProjects));
-  }, [projects]);
+  }, [projects, dispatch, queryWrapper, checkProjects]);
 
   const handleCheck = useCallback(
     (id) => {
@@ -111,15 +118,18 @@ function ProjectsPageComponent({}) {
       dispatch(setProjects(checkedProjects));
       setChecked(countSelected(checkedProjects));
     },
-    [projects]
+    [projects, dispatch]
   );
 
-  function handleCheckAll(isChecked) {
-    const checkedProjects = projects.map((item) => ({ ...item, isChecked }));
+  const handleCheckAll = useCallback(
+    (isChecked) => {
+      const checkedProjects = projects.map((item) => ({ ...item, isChecked }));
 
-    dispatch(setProjects(checkedProjects));
-    setChecked(countSelected(checkedProjects));
-  }
+      dispatch(setProjects(checkedProjects));
+      setChecked(countSelected(checkedProjects));
+    },
+    [dispatch, projects]
+  );
 
   useEffect(() => {
     if (!projects) {
@@ -132,7 +142,7 @@ function ProjectsPageComponent({}) {
     }
 
     setChecked(countSelected(projects));
-  }, [dispatch, projects]);
+  }, [dispatch, projects, queryWrapper, checkProjects]);
 
   return (
     <PageWithHeader title={titles.projects}>

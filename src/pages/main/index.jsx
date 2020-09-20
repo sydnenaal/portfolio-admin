@@ -42,7 +42,7 @@ function MainPageComponent() {
     }
 
     dispatch(queryWrapper(params, handleSuccess));
-  }, [dispatch]);
+  }, [dispatch, queryWrapper]);
 
   return (
     <PageWithHeader title={titles.home}>

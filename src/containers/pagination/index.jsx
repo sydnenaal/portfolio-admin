@@ -15,13 +15,13 @@ function TablePagination({ pageSize, handlers, pageCount, page }) {
     if (page > 1) {
       handleChangePage(page - 1);
     }
-  }, [page]);
+  }, [page, handleChangePage]);
 
   const handleChevronRight = useCallback(() => {
     if (page < pageCount) {
       handleChangePage(page + 1);
     }
-  }, [page]);
+  }, [page, handleChangePage, pageCount]);
 
   const buttons = [];
 

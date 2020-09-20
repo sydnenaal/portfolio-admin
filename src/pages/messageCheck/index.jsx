@@ -31,21 +31,21 @@ function MessageCheckPageComponent() {
 
   const handleClickBack = useCallback(() => {
     history.goBack();
-  }, []);
+  }, [history]);
 
   const handleDelete = useCallback(() => {
     const data = { messages: [message], action: true };
 
     dispatch(setActualityMessages({ data }));
     history.goBack();
-  }, [history]);
+  }, [history, dispatch, message]);
 
   const handleSetPriority = useCallback(() => {
     const data = { messages: [message], action: true };
 
     dispatch(setPriorityMessages({ data }));
     history.goBack();
-  }, [history]);
+  }, [history, dispatch, message]);
 
   useEffect(() => {
     const data = { _id: message };
@@ -58,7 +58,7 @@ function MessageCheckPageComponent() {
     }
 
     dispatch(queryWrapper(params, handleSuccess));
-  }, [dispatch, message]);
+  }, [dispatch, message, queryWrapper]);
 
   return (
     <PageWithHeader title={titles.mail} subtitle={"read"}>

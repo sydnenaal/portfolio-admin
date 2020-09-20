@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { Button } from "semantic-ui-react";
 import { useIntl } from "react-intl";
+import { useHistory } from "react-router-dom";
 
 import "./style.sass";
-
 import PageWithHeader from "containers/pageWithHeader";
 import Modal from "containers/modal";
 import AddPictureForm from "./components/addPictureForm";

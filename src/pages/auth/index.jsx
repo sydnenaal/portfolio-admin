@@ -7,6 +7,8 @@ import "./style.sass";
 import { selectRequestStack } from "selectors";
 import { checkAuth } from "api/auth";
 import { useRequest } from "hooks";
+import { setUserData } from "ducks";
+import { encryptData } from "utils";
 
 function AuthPageComponent() {
   const history = useHistory();
@@ -16,9 +18,9 @@ function AuthPageComponent() {
   const requestWrapper = useRequest();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const isLoading = useMemo(() => requestStack.indexOf("auth") !== -1, [
-    requestStack,
-  ]);
+  const isLoading = useMemo(() => {
+    return requestStack.indexOf("auth") !== -1;
+  }, [requestStack]);
   const from = useMemo(
     () => ({ pathname: location.state.from.pathname || "" }),
     [location]
@@ -30,7 +32,7 @@ function AuthPageComponent() {
 
   const handleChangePassword = useCallback((e) => {
     setPassword(e.target.value);
-  });
+  }, []);
 
   function handleLogin() {
     const data = encryptData(JSON.stringify({ login, password }));

@@ -7,7 +7,8 @@ import { useHistory } from "react-router-dom";
 import { drawerItems } from "constants/drawerConstants";
 import { themeStyle } from "constants/themingStyles";
 import { selectUserData, selectTheme } from "selectors";
-import { getUserData, setUserData } from "api";
+import { setUserData } from "ducks";
+import { getUserData } from "api";
 import "./style.sass";
 import userPlaceholder from "assets/userPlaceholder.png";
 import { BarsIcon, DrawerItem } from "./components";
@@ -38,13 +39,15 @@ function PageWithHeaderComponent({ title, subtitle, children }) {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const requestWrapper = useRequest();
+  const [isVisible, setIsVisible] = useState(false);
   const screenWidth = document.documentElement.clientWidth;
   const drawerStyle = useMemo(() => {
     const startWidth = screenWidth < 500 ? "0px" : "70px";
-    return { maxWidth: drawerVisible ? "220px" : startWidth };
-  }, [drawerVisible, screenWidth]);
+
+    return { maxWidth: isVisible ? "220px" : startWidth };
+  }, [isVisible, screenWidth]);
   const styleByTheme = useMemo(() => themeStyle[theme], [theme]);
-  const [isVisible, setIsVisible] = useState(false);
+
   const userOptions = useMemo(() => {
     const actions = [
       () => console.log("click profile"),
@@ -74,7 +77,7 @@ function PageWithHeaderComponent({ title, subtitle, children }) {
     }
 
     dispatch(requestWrapper(params, handleSuccess));
-  }, [dispatch]);
+  }, [requestWrapper, dispatch]);
 
   function handleClick() {
     if (this.path === "/auth") {

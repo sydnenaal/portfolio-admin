@@ -1,4 +1,4 @@
-import { apiServices } from "api";
+import { apiServices } from "constants/apiConstants";
 
 export const setActualityMessages = {
   url: `${apiServices}/messages/actuality`,

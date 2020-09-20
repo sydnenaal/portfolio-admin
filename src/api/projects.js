@@ -1,4 +1,4 @@
-import { apiServices } from "api";
+import { apiServices } from "constants/apiConstants";
 
 export const insertProjects = {
   method: "put",

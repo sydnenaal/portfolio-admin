@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback } from "react";
+import React, { useState, memo, useMemo, useCallback } from "react";
 import clsx from "clsx";
 
 const AdaptiveContainer = ({
@@ -48,10 +48,13 @@ const AdaptiveContainer = ({
     [startPosition]
   );
 
-  const handlePreventContextMenu = useCallback((e) => {
-    e.preventDefault();
-    setIsOpen((isOpen) => !isOpen);
-  }, []);
+  const handlePreventContextMenu = useCallback(
+    (e) => {
+      e.preventDefault();
+      setIsOpen((isOpen) => !isOpen);
+    },
+    [setIsOpen]
+  );
 
   const handleTouchStart = useCallback((e) => {
     setStartPosition(e.touches[0].clientX);
@@ -65,7 +68,7 @@ const AdaptiveContainer = ({
 
       return isOpen;
     });
-  }, []);
+  }, [setIsOpen]);
 
   const handleTouchEnd = useCallback(
     (e) => {

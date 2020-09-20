@@ -35,7 +35,7 @@ function SettingsPageComponent() {
 
       dispatch(queryWrapper(params, handleSuccess));
     }
-  }, [contacts, dispatch]);
+  }, [contacts, dispatch, queryWrapper]);
 
   return (
     <PageWithHeader title={messages.titles.settings}>

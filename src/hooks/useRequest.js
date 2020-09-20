@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 
-import { showNotifyByResponseStatusCode } from "./notifications";
+import { showNotifyByResponseStatusCode } from "utils";
 import { selectRequestStack } from "selectors";
 import { setRequestStack } from "ducks";
 
@@ -45,10 +45,10 @@ export default function useRequest() {
       requestStack = selectRequestStack(getState());
       dispatch(setRequestStack(requestStack.filter((item) => item !== title)));
     },
-    []
+    [cancelToken]
   );
 
-  useEffect(() => cancel, []);
+  useEffect(() => cancel, [cancel]);
 
   return queryAction;
 }

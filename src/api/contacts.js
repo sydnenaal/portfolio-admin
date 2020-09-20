@@ -1,4 +1,4 @@
-import { apiServices, serverPath } from "api";
+import { apiServices, serverPath } from "constants/apiConstants";
 
 export const setContactData = {
   url: `${apiServices}/contacts/set`,

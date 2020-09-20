@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { Icon, Checkbox } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -18,6 +18,7 @@ const Message = ({
   index,
   isRead,
   client,
+  email,
   date,
   text,
 }) => {
@@ -46,8 +47,8 @@ const Message = ({
     };
 
     setIsOpen(false);
-    reduxDispatch(queryWrapper(params));
-  }, []);
+    dispatch(queryWrapper(params));
+  }, [dispatch, _id, isImportant, queryWrapper]);
 
   const handleDeleteMessage = useCallback(() => {
     setDeleteAnimationTrigger(true);
@@ -56,9 +57,9 @@ const Message = ({
   const handleClickOnMessage = useCallback(() => {
     const activeMessage = { email, text, client, date };
 
-    reduxDispatch(setActiveMessage(activeMessage));
+    dispatch(setActiveMessage(activeMessage));
     history.push(`mail/${_id}`);
-  }, [email, text, client, date, _id]);
+  }, [email, text, client, date, _id, dispatch, history]);
 
   const handleDeleteOnAnimationEnd = useCallback(
     (e) => {
@@ -72,10 +73,10 @@ const Message = ({
 
         setRender(false);
         setIsOpen(false);
-        reduxDispatch(queryWrapper(params));
+        dispatch(queryWrapper(params));
       }
     },
-    [_id]
+    [_id, dispatch, queryWrapper]
   );
 
   useEffect(() => {
