@@ -23,7 +23,7 @@ const customRoute = ({ path, getToken }) => ({ children, ...props }) => {
 };
 
 const ProtectedRoute = customRoute({
-  path: "/auth",
+  path: "/authentication",
   getToken: () => localStorage.getItem("token"),
 });
 
@@ -55,7 +55,7 @@ const Routes = () => {
         <SettingsPageComponent />
       </ProtectedRoute>
 
-      <AuthRoute path="/auth">
+      <AuthRoute path="/authentication">
         <AuthComponent />
       </AuthRoute>
 

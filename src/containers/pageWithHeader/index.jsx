@@ -53,7 +53,7 @@ function PageWithHeaderComponent({ title, subtitle, children }) {
       () => console.log("click profile"),
       () => {
         localStorage.removeItem("token");
-        history.push("/auth");
+        history.push("/authentication");
       },
     ];
 
@@ -80,9 +80,9 @@ function PageWithHeaderComponent({ title, subtitle, children }) {
   }, [requestWrapper, dispatch]);
 
   function handleClick() {
-    if (this.path === "/auth") {
+    if (this.path === "/authentication") {
       localStorage.removeItem("token");
-      history.push("/auth");
+      history.push("/authentication");
     } else {
       history.push(this.path);
       handleChangeIsVisible();

@@ -22,6 +22,6 @@ export const drawerItems = (titles) => [
   {
     icon: "log out",
     title: titles.logout,
-    path: "/auth",
+    path: "/authentication",
   },
 ];
